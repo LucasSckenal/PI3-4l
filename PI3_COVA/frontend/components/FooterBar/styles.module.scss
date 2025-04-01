@@ -1,21 +1,52 @@
 .FooterBar {
-    display:flex;
+    display: flex;
     flex-direction: row;
     width: 90%;
-    height: 50px;
-
-    
+    height: 60px; // Aumentado para dar espaço ao efeito
+  
     .bar {
-        display:flex;
-        flex-direction: row;
-        width: 100%;
-        justify-content: space-around;
-        background: var(--DetailsBgReverse);
-        border-radius: 50px;
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-around;
+      background: var(--DetailsBgReverse);
+      border-radius: 50px;
+      align-items: center;
+      position: relative;
+      padding: 10px 0; // Espaço para o efeito sair um pouco da barra
+  
+      li {
+        list-style: none;
+        font-size: 24px;
+        transition: transform 0.2s ease, color 0.2s ease;
+        cursor: pointer;
+        position: relative; // Para posicionar o círculo corretamente
+        display: flex;
         align-items: center;
-        
-        li {
-            list-style: none;
+        justify-content: center;
+  
+        &:hover {
+          transform: scale(1.2);
         }
+      }
+  
+      .selected {
+        transform: scale(1.4);
+        color: var(--PrimaryColor);
+  
+        &::before {
+          content: "";
+          position: absolute;
+          width: 250%;
+          height: 250%;
+          background-color: var(--DetailsBgReverse);
+          border-radius: 50%;
+          z-index: -1;
+          left: 50%;
+          transform: translateX(-50%);
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+      }
     }
-}
+  }
+  
