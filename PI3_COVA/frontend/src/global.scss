@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans+Condensed:wght@200;300;400;500;600;700;800;900&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  // Cores do Site
+
+  --Cyan: #3CC2AC;
+  --Blue: #3C81C2;
+  --BlueLight: #45C5DF;
+  --Green: #3CC27F;
+  --Purple: #3C57C2;
+  --Yellow: #E6FF2B;
+  --Red: #FA3E3E;
+  --Grey: #494949;
+  --Black: #2D2D2D;
+  --White: #ECF3F4;
+  --Bg: #2D2D2D;
+  --TextGeneral: #494949;
+  --TextGeneralAlt: #ECF3F4;
+  --DetailsBg: #2D2D2D;
+  --DetailsBgReverse: #494949;
+  --FormsBtnHover: #0056b3;
+  --Aside: #d9d9d9;
+  --InputCheckBox: #cbd0d1;
+  --GraphsContainer: #d4d4d4;
+  --DropButton: #d4d4d4;
+  --Modal: #d4d4d4;
+  --ModalBtn: #ECF3F4;
+  --ModalBtnAlt: #2D2D2D;
+
+  // Utilidades
+
+  --BoxShadow: 0px 4px 24px rgba(168, 168, 168, 0.25);
+  --BoxShadow2: 0px 4px 24px rgba(168, 168, 168, 0.80);
+  --BorderRadius: 8px;
+
+  // Palhetas de cores Graficos
+
+  --TempGraphC: #de7c21;
+  --TempGraphT: #d40d77;
+  --TempGraphCRgba: rgba(222, 124, 33, 0.8);
+  --TempGraphTRgba: rgba(212, 13, 119, 0.8);
+  --HumidGraphStartC: rgba(40, 71, 209, 1); 
+  --HumidGraphEndC: rgba(26, 33, 173, 1);
+  --HumidGraphStartT: rgba(106, 17, 194, 1);
+  --HumidGraphEndT: rgba(66, 16, 122, 1);
+  --HumidGraphRgba: rgba(74, 33, 222, 0.8);
+  --Pm25GraphStart: rgba(94, 60, 32, 1);
+  --Pm25GraphEnd: rgba(38, 21, 6, 1);
+  --Pm25GraphRgba: rgba(38, 21, 6, 0.8); 
+}
+
+[data-theme='light'] {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme='dark'] {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+[data-theme='dark'] {
+  --Cyan: #3CC2AC;
+  --Blue: #3C81C2;
+  --BlueLight: #45C5DF;
+  --Green: #3CC27F;
+  --Purple: #3C57C2;
+  --Yellow: #E6FF2B;
+  --Red: #FA3E3E;
+  --Grey: #494949;
+  --Black: #2D2D2D;
+  --White: #ECF3F4;
+  --Bg: #2D2D2D;
+  --TextGeneral: #ECF3F4;
+  --TextGeneralAlt: #ECF3F4;
+  --DetailsBg: #494949;
+  --DetailsBgReverse: #2D2D2D;
+  --FormsBtnHover: #0056b3;
+  --Aside: #494949;
+  --InputCheckBox: #757575;
+  --GraphsContainer: #494949;
+  --DropButton: #494949;
+  --Modal: #2D2D2D;
+  --ModalBtn: #494949;
+  --ModalBtnAlt: #ECF3F4;
+
+  // Utilidades
+  
+  --BoxShadow2: 0px 4px 24px rgba(168, 168, 168, 0.25);
+}
+
+p,
+a,
+button,
+input,
+select,
+span,
+h1,
+h2,
+li,
+ul,
+h3,
+h4,
+textarea {
+  font-family: "Reddit Sans Condensed", sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: var(--BorderRadius);
+  border: none;
+  min-height: 20px;
+  height: auto;
+  color: var(--TextGeneral);
+  background: var(--Aside);
+}
+
+input {
+  color: var(--TextGeneral)
+}
+
+select {
+  color: var(--TextGeneral);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--TextGeneral);
+  text-align: center;
+  border-radius: 4px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  option {
+    background-color: var(--Modal);
+  }
+
+  &:hover {
+    background: rgba(168, 168, 168, 0.25);
+    box-shadow: 10px 0px 24px rgba(168, 168, 168, 0.25);
+    cursor: pointer;
+  }
+}
+
+body {
+  background: var(--Bg);
+}

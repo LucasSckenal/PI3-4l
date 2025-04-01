@@ -1,0 +1,21 @@
+.FooterBar {
+    display:flex;
+    flex-direction: row;
+    width: 90%;
+    height: 50px;
+
+    
+    .bar {
+        display:flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+        background: var(--DetailsBgReverse);
+        border-radius: 50px;
+        align-items: center;
+        
+        li {
+            list-style: none;
+        }
+    }
+}
