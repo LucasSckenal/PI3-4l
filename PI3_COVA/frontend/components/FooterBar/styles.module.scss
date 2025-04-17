@@ -3,13 +3,16 @@
     flex-direction: row;
     width: 90%;
     height: 60px; // Aumentado para dar espaço ao efeito
+    position: absolute;
+    bottom: 5%;
+
   
     .bar {
       display: flex;
       flex-direction: row;
       width: 100%;
       justify-content: space-around;
-      background: var(--DetailsBgReverse);
+      background: var(--DetailsBg);
       border-radius: 50px;
       align-items: center;
       position: relative;
@@ -33,18 +36,20 @@
       .selected {
         transform: scale(1.4);
         color: var(--PrimaryColor);
+        box-shadow:
+          0px -12px 20px rgba(0, 0, 0, 0.2), // sombra em cima
+          0px 12px 20px rgba(0, 0, 0, 0.2);  // sombra embaixo
   
         &::before {
           content: "";
           position: absolute;
           width: 250%;
           height: 250%;
-          background-color: var(--DetailsBgReverse);
+          background-color: var(--DetailsBg);
           border-radius: 50%;
           z-index: -1;
           left: 50%;
           transform: translateX(-50%);
-          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
       }
     }

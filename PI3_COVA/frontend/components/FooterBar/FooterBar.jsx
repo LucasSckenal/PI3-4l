@@ -1,30 +1,41 @@
 import { useState } from "react";
-import { IoHome, IoPerson, IoReceiptSharp, IoSettingsSharp, IoChatbubbles } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import {
+  IoHome,
+  IoPerson,
+  IoReceiptSharp,
+  IoSettingsSharp,
+  IoChatbubbles
+} from "react-icons/io5";
 import styles from "./styles.module.scss";
 
 const FooterBar = () => {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(2);
+  const navigate = useNavigate();
 
-  const handleSelect = (index) => {
+  const navItems = [
+    { icon: <IoReceiptSharp />, path: "history" },
+    { icon: <IoChatbubbles />, path: "chat" },
+    { icon: <IoHome />, path: "/" },
+    { icon: <IoPerson />, path: "profile" },
+    { icon: <IoSettingsSharp />, path: "settings" }
+  ];
+
+  const handleSelect = (index, path) => {
     setActiveIndex(index);
+    navigate(path);
   };
 
   return (
     <footer className={styles.FooterBar}>
       <ul className={styles.bar}>
-        {[
-          <IoReceiptSharp />,
-          <IoChatbubbles />,
-          <IoHome />,
-          <IoPerson />,
-          <IoSettingsSharp />
-        ].map((icon, index) => (
+        {navItems.map((item, index) => (
           <li
             key={index}
             className={activeIndex === index ? styles.selected : ""}
-            onClick={() => handleSelect(index)}
+            onClick={() => handleSelect(index, item.path)}
           >
-            {icon}
+            {item.icon}
           </li>
         ))}
       </ul>
@@ -32,4 +43,4 @@ const FooterBar = () => {
   );
 };
 
-export default FooterBar;
+export default FooterBar
