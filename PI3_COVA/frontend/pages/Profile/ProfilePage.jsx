@@ -1,10 +1,25 @@
 
 const ProfilePage = () => {
   return (
-    <div>
-        <p>Profilepage todo</p>
-    </div>
+    <main>
+       
+    </main>
   )
 }
+
+/*
+OBRIGATÓRIO:
+nome
+foto
+gênero
+idade
+tipo sanguíneo
+peso
+altura
+
+OPCIONAL:
+email
+celular
+*/
 
 export default ProfilePage

@@ -17,9 +17,9 @@ const ChatPage = () => {
         <p className={styles.pIa}>
           Olá! Sou sua assistente médica.{" "}
           <span className={styles.spanIa}>
-            Me conte seus sintomas com uma mensagem de voz ou texto
+            Me conte seus sintomas
           </span>{" "}
-          e vou gerar um relatório para agilizar seu atendimento.
+          com uma mensagem de voz ou texto e vou gerar um relatório para agilizar seu atendimento.
         </p>
       </div>
       <div className={styles.inputBar}>
