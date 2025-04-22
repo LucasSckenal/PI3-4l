@@ -1,9 +1,9 @@
 
 const SettingsPage = () => {
   return (
-    <div>
+    <main>
       
-    </div>
+    </main>
   )
 }
 
