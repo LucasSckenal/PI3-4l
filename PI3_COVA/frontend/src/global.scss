@@ -9,14 +9,8 @@
 
 :root {
   // Cores do Site
-
-  --Cyan: #3CC2AC;
-  --Blue: #3C81C2;
-  --BlueLight: #45C5DF;
-  --Green: #3CC27F;
-  --Purple: #3C57C2;
-  --Yellow: #E6FF2B;
   --Red: #FA3E3E;
+  --Purple: #7516ce;
   --Grey: #494949;
   --Black: #2D2D2D;
   --White: #ECF3F4;
@@ -39,21 +33,6 @@
   --BoxShadow: 0px 4px 24px rgba(168, 168, 168, 0.25);
   --BoxShadow2: 0px 4px 24px rgba(168, 168, 168, 0.80);
   --BorderRadius: 8px;
-
-  // Palhetas de cores Graficos
-
-  --TempGraphC: #de7c21;
-  --TempGraphT: #d40d77;
-  --TempGraphCRgba: rgba(222, 124, 33, 0.8);
-  --TempGraphTRgba: rgba(212, 13, 119, 0.8);
-  --HumidGraphStartC: rgba(40, 71, 209, 1); 
-  --HumidGraphEndC: rgba(26, 33, 173, 1);
-  --HumidGraphStartT: rgba(106, 17, 194, 1);
-  --HumidGraphEndT: rgba(66, 16, 122, 1);
-  --HumidGraphRgba: rgba(74, 33, 222, 0.8);
-  --Pm25GraphStart: rgba(94, 60, 32, 1);
-  --Pm25GraphEnd: rgba(38, 21, 6, 1);
-  --Pm25GraphRgba: rgba(38, 21, 6, 0.8); 
 }
 
 [data-theme='light'] {

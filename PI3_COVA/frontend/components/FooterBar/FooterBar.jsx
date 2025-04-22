@@ -1,28 +1,37 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import {
   IoHome,
   IoPerson,
   IoReceiptSharp,
   IoSettingsSharp,
-  IoChatbubbles
+  IoChatbubbles,
 } from "react-icons/io5";
+
 import styles from "./styles.module.scss";
 
 const FooterBar = () => {
-  const [activeIndex, setActiveIndex] = useState(2);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const navItems = [
-    { icon: <IoReceiptSharp />, path: "history" },
-    { icon: <IoChatbubbles />, path: "chat" },
-    { icon: <IoHome />, path: "/" },
-    { icon: <IoPerson />, path: "profile" },
-    { icon: <IoSettingsSharp />, path: "settings" }
-  ];
+  const navItems = useMemo(
+    () => [
+      { icon: <IoReceiptSharp />, path: "/history" },
+      { icon: <IoChatbubbles />, path: "/chat" },
+      { icon: <IoHome />, path: "/" },
+      { icon: <IoPerson />, path: "/profile" },
+      { icon: <IoSettingsSharp />, path: "/settings" },
+    ],
+    []
+  );
 
-  const handleSelect = (index, path) => {
-    setActiveIndex(index);
+  const activeIndex = useMemo(() => {
+    return navItems.findIndex((item) =>
+      matchPath(item.path, location.pathname)
+    );
+  }, [location.pathname, navItems]);
+
+  const handleSelect = (path) => {
     navigate(path);
   };
 
@@ -32,8 +41,8 @@ const FooterBar = () => {
         {navItems.map((item, index) => (
           <li
             key={index}
-            className={activeIndex === index ? styles.selected : ""}
-            onClick={() => handleSelect(index, item.path)}
+            className={index === activeIndex ? styles.selected : ""}
+            onClick={() => handleSelect(item.path)}
           >
             {item.icon}
           </li>
@@ -43,4 +52,4 @@ const FooterBar = () => {
   );
 };
 
-export default FooterBar
+export default FooterBar;

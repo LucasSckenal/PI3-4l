@@ -1,57 +1,56 @@
 .FooterBar {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  height: 60px; 
+  position: absolute;
+  bottom: 5%;
+
+
+  .bar {
     display: flex;
     flex-direction: row;
-    width: 90%;
-    height: 60px; // Aumentado para dar espaço ao efeito
-    position: absolute;
-    bottom: 5%;
+    width: 100%;
+    justify-content: space-around;
+    background: var(--DetailsBgReverse);
+    border-radius: 50px;
+    align-items: center;
+    position: relative;
+    padding: 10px 0; 
 
-  
-    .bar {
+    li {
+      list-style: none;
+      font-size: 24px;
+      transition: transform 0.2s ease, color 0.2s ease;
+      cursor: pointer;
+      position: relative; 
       display: flex;
-      flex-direction: row;
-      width: 100%;
-      justify-content: space-around;
-      background: var(--DetailsBg);
-      border-radius: 50px;
       align-items: center;
-      position: relative;
-      padding: 10px 0; // Espaço para o efeito sair um pouco da barra
-  
-      li {
-        list-style: none;
-        font-size: 24px;
-        transition: transform 0.2s ease, color 0.2s ease;
-        cursor: pointer;
-        position: relative; // Para posicionar o círculo corretamente
-        display: flex;
-        align-items: center;
-        justify-content: center;
-  
-        &:hover {
-          transform: scale(1.2);
-        }
+      justify-content: center;
+
+      &:hover {
+        transform: scale(1.2);
       }
-  
-      .selected {
-        transform: scale(1.4);
-        color: var(--PrimaryColor);
-        box-shadow:
-          0px -12px 20px rgba(0, 0, 0, 0.2), // sombra em cima
-          0px 12px 20px rgba(0, 0, 0, 0.2);  // sombra embaixo
-  
-        &::before {
-          content: "";
-          position: absolute;
-          width: 250%;
-          height: 250%;
-          background-color: var(--DetailsBg);
-          border-radius: 50%;
-          z-index: -1;
-          left: 50%;
-          transform: translateX(-50%);
-        }
+    }
+
+    .selected {
+      transform: scale(1.4);
+      color: var(--PrimaryColor);
+      box-shadow:
+        0px -12px 20px rgba(0, 0, 0, 0.2), 
+        0px 12px 20px rgba(0, 0, 0, 0.2); 
+
+      &::before {
+        content: "";
+        position: absolute;
+        width: 250%;
+        height: 250%;
+        background-color: var(--DetailsBgReverse);
+        border-radius: 50%;
+        z-index: -1;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
   }
-  
+}

@@ -8,9 +8,11 @@
     flex-direction: column;
 
     .innerContainer {
+        display: flex;
+        justify-content: center;
         margin-bottom: 60px;
         height: 78vh;
+        width: 100vw;
     }
 
 }
-

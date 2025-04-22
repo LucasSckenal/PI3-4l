@@ -1,0 +1,41 @@
+.Header {
+ display: flex;
+ flex-direction: row;
+ justify-content: space-around;
+ align-items: center;
+ width: 100%;
+ height: 5%;
+ text-align: center;
+
+ .backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 25%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  background-color: var(--TextGeneralAlt);
+  border-radius: 50px;
+  background: none;
+
+  .btnSbg {
+   min-height: 30px;
+   min-width: 30px;
+  }
+ }
+
+ .title {
+  min-width: 50%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--TextGeneralAlt);
+ }
+
+ .logo {
+  min-width: 30px;
+  height: auto;
+  max-width: 50px;
+  width: 25%;
+ }
+}
