@@ -1,56 +1,78 @@
 .FooterBar {
+ display: flex;
+ justify-content: center;
+ width: 100%;
+ height: 80px;
+ position: fixed;
+ bottom: 5%;
+ z-index: 100;
+
+ .bar {
   display: flex;
-  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
   width: 90%;
-  height: 60px; 
-  position: absolute;
-  bottom: 5%;
+  background-color: var(--DetailsBg);
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  padding: 12px 0;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
+  position: relative;
 
-
-  .bar {
+  li {
+    font-size: 24px;
+    color: #aaa;
+    cursor: pointer;
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-around;
-    background: var(--DetailsBg);
-    border-radius: 50px;
     align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
     position: relative;
-    padding: 10px 0; 
-
-    li {
-      list-style: none;
-      font-size: 24px;
-      transition: transform 0.2s ease, color 0.2s ease;
-      cursor: pointer;
-      position: relative; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      &:hover {
-        transform: scale(1.2);
-      }
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+  
+  .selected {
+    color: white;
+    scale: 1.2;
+    transform: translateY(-20px);
+    z-index: 2;
+  
+    &::before {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-color: #7f41e2;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
     }
-
-    .selected {
-      transform: scale(1.4);
-      color: var(--PrimaryColor);
-      box-shadow:
-        0px -12px 20px rgba(0, 0, 0, 0.2), 
-        0px 12px 20px rgba(0, 0, 0, 0.2); 
-
-      &::before {
-        content: "";
-        position: absolute;
-        width: 250%;
-        height: 250%;
-        background-color: var(--DetailsBg);
-        border-radius: 50%;
-        z-index: -1;
-        left: 50%;
-        transform: translateX(-50%);
-      }
+  
+    &::after {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 100px;
+      background-color: var(--Bg); 
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px;
+      z-index: -2;
+      transition: all 0.3s ease;
     }
   }
+ }
 }

@@ -3,9 +3,9 @@ import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import {
   IoHome,
   IoPerson,
-  IoReceiptSharp,
   IoSettingsSharp,
   IoChatbubbles,
+  IoFileTrayFull,
 } from "react-icons/io5";
 
 import styles from "./styles.module.scss";
@@ -16,7 +16,7 @@ const FooterBar = () => {
 
   const navItems = useMemo(
     () => [
-      { icon: <IoReceiptSharp />, path: "/history" },
+      { icon: <IoFileTrayFull />, path: "/history" },
       { icon: <IoChatbubbles />, path: "/chat" },
       { icon: <IoHome />, path: "/" },
       { icon: <IoPerson />, path: "/profile" },
