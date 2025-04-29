@@ -1,0 +1,30 @@
+.modal{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--DetailsBg);
+    border-radius: 8px;
+    height: 30%;
+    width: 45%;
+    min-width: 200px;
+    gap: var(--Gap2);
+
+    .buttons{
+        display:flex;
+        flex-direction: row;
+        gap: var(--Gap);
+
+        .button{
+            border: 1px solid var(--TextGeneralReverse);
+            background: var(--DetailsBg);
+            color: var(--TextGeneralReverse);
+        }
+
+        .button2{
+            border: 1px solid var(--TextGeneralReverse);
+            background: var(--DetailsBg);
+            color: var(--TextGeneralReverse);
+        }
+    }
+}

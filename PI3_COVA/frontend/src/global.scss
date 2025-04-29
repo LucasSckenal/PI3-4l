@@ -14,9 +14,10 @@
   --Grey: #494949;
   --Black: #2D2D2D;
   --White: #ECF3F4;
-  --Bg: #2D2D2D;
+  --Bg: #e6e1ee;
   --TextGeneral: #494949;
-  --TextGeneralAlt: #ECF3F4;
+  --TextGeneralAlt: #000000;
+  --TextGeneralReverse: #ECF3F4;
   --DetailsBg: #2D2D2D;
   --DetailsBgReverse: #494949;
   --FormsBtnHover: #0056b3;
@@ -33,6 +34,8 @@
   --BoxShadow: 0px 4px 24px rgba(168, 168, 168, 0.25);
   --BoxShadow2: 0px 4px 24px rgba(168, 168, 168, 0.80);
   --BorderRadius: 8px;
+  --Gap: 8px;
+  --Gap2: 16px;
 }
 
 [data-theme='light'] {
@@ -57,6 +60,7 @@
   --Bg: #2D2D2D;
   --TextGeneral: #ECF3F4;
   --TextGeneralAlt: #ECF3F4;
+  --TextGeneralReverse: #2D2D2D;
   --DetailsBg: #494949;
   --DetailsBgReverse: #2D2D2D;
   --FormsBtnHover: #0056b3;

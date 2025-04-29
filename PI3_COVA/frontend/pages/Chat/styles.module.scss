@@ -24,6 +24,7 @@
 
   .pIa {
    text-align: center;
+   color: var(--TextGeneralAlt);
   }
 
   .spanIa {
@@ -42,6 +43,7 @@
   width: 90%;
   height: 30px;
   gap: 8px;
+  color: var(--TextGeneral);
 
   .inputTextField {
    display: flex;
@@ -49,28 +51,52 @@
    height: 45px;
    min-width: 150px;
    border-radius: 50px;
-   border: 0;
+   border: 1px solid var(--DetailsBg);
    padding: 10px;
-   color: var(--TextGeneralAlt);
+   color: var(--TextGeneral);
+   background-color: var(--Bg);
   }
 
   .inputAudioBtn {
    display: flex;
    align-items: center;
    border-radius: 100%;
-   border: 1px solid var(--DetailsBgReverse);
-   background-color: var(--PrimaryBg);
+   border: 1px solid var(--DetailsBg);
+   background-color: transparent;
    height: 55px;
+  
+    &:hover {
+      transform: scale(1.1); 
+    }
   }
 
+
   .inputAudioBtnRecording {
-   display: flex;
-   align-items: center;
-   border-radius: 100%;
-   border: 2px solid red;
-   background-color: var(--PrimaryBg);
-   height: 55px;
+    display: flex;
+    align-items: center;
+    border-radius: 100%;
+    border: 2px solid red;
+    background-color: transparent;
+    height: 55px;
+    
+    animation: pulse 1.5s infinite;
   }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    }
+  }
+  
 
   .inputSendBtn {
    display: flex;
