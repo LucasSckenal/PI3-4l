@@ -65,7 +65,7 @@
     }
 
     input:checked + .Slider {
-      background-color: var(--Purple);
+      background-color: var(--PreferredColor);
 
       &:before {
         transform: translateX(26px);
@@ -76,12 +76,12 @@
   .Button {
     padding: 0.6rem 1.2rem;
     background: none;
-    border: 1px solid red;
+    border: 1px solid var(--Red);
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.3s;
-    color: red;
+    color: var(--Red);
     font-family: var(--TextGeneral);
   }
 }

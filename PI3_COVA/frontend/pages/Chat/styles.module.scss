@@ -2,10 +2,11 @@
  display: flex;
  flex-direction: column;
  align-items: center;
- padding-top: 20%;
- width: 100%;
+ padding-top: 5%;
  height: 100%;
  min-height: 78vh;
+ overflow:hidden !important;
+ gap: 50px;
 
  .IaContainer {
   display: flex;
@@ -14,12 +15,13 @@
   align-items: center;
   width: 90%;
 
-
   .ia {
    display: flex;
    width: auto;
    height: 20rem;
    vertical-align: center;
+   pointer-events: none;
+   filter: drop-shadow(0px 0px 7px rgb(0, 89, 255));
   }
 
   .pIa {
@@ -28,21 +30,20 @@
   }
 
   .spanIa {
-    color: var(--Purple);
+    color: var(--PreferredColor);
     font-weight: bold;
   }
  }
 
  .inputBar {
   display: flex;
-  position: absolute;
   bottom: 220px;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   width: 90%;
   height: 30px;
-  gap: 8px;
+  gap: var(--Gap);
   color: var(--TextGeneral);
 
   .inputTextField {

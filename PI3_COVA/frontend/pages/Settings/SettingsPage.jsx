@@ -27,7 +27,7 @@ const SettingsPage = () => {
           <span className={styles.Slider}></span>
         </label>
       </div>
-      <Divider width={"90%"} />
+      <Divider width={"90%"} maxWidth={"250px"} />
 
       <SimpleModal
         title="Modal 1"
@@ -45,7 +45,7 @@ const SettingsPage = () => {
           Limpar histórico de conversa
         </button>
       </div>
-      <Divider width={"90%"} />
+      <Divider width={"90%"} maxWidth={"250px"} />
 
       <SimpleModal
         title="Modal 2"
@@ -63,7 +63,6 @@ const SettingsPage = () => {
           Deslogar da conta
         </button>
       </div>
-      <Divider width={"90%"} />
     </div>
   );
 };

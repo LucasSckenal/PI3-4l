@@ -9,8 +9,8 @@
 
 :root {
   // Cores do Site
-  --Red: #FA3E3E;
-  --Purple: #7516ce;
+  --Red: #ca0000;
+  --Purple: #7f41e2;
   --Grey: #494949;
   --Black: #2D2D2D;
   --White: #ECF3F4;
@@ -31,6 +31,7 @@
   --ModalBtnAlt: #2D2D2D;
   --Confirmation: #3CC27F;
   --Decline: #FA3E3E;
+  --PreferredColor: #7f41e2;
 
   // Utilidades
 
@@ -39,6 +40,7 @@
   --BorderRadius: 8px;
   --Gap: 8px;
   --Gap2: 16px;
+  --Gap3: 50px
 }
 
 [data-theme='light'] {
@@ -54,7 +56,7 @@
   --Blue: #3C81C2;
   --BlueLight: #45C5DF;
   --Green: #3CC27F;
-  --Purple: #3C57C2;
+  --Purple: #7f41e2;
   --Yellow: #E6FF2B;
   --Red: #FA3E3E;
   --Grey: #494949;
