@@ -3,6 +3,10 @@
   margin-top: 16px;
   color: var(--TextGeneralAlt);
 
+    p, h2 {
+      pointer-events: none;
+    }
+
     .GreetingText{
       display: flex;
       flex-direction: column;
@@ -18,18 +22,24 @@
       .HeroBanner {
         display: flex;
         justify-content: space-around;
-        align-items: center;
+        align-items: end;
         width: 90vw;
         height: 27vh;
         border: 1px solid var(--TextGeneral);
         border-radius: 16px;
+        color: var(--TextGeneralReverse);
+        box-shadow: 2px 2px 10px var(--PreferredColor);
+        padding-bottom: 10px;
 
         .chatButton {
-          width: 50px;
+          display: flex;
+          width: 90%;
           height: 50px;
+          align-items: center;
+          justify-content: space-evenly;
           border: 1px solid var(--TextGeneral);
-          border-radius: 50%;
-          background: none;
+          border-radius: 16px;
+          background: var(--PreferredColor);
           color: var(--TextGeneral);
         }
       }
@@ -42,7 +52,8 @@
 
     
         .CarroselViewport {
-          width: 350px; 
+          width: 350px;
+          height: 45px; 
           overflow: hidden;
         }
     
@@ -57,7 +68,7 @@
           height: 45px;
           border-radius: 16px;
           color: var(--TextGeneralAlt);
-          border: 1px solid var(--DetailsBgReverse);
+          border: 1px 0px solid var(--DetailsBgReverse);
           display: flex;
           align-items: center;
           justify-content: center;

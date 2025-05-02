@@ -1,10 +1,20 @@
 import { useState, useEffect, useRef } from "react";
+
+import { IoArrowForwardSharp } from "react-icons/io5";
+
 import styles from "./styles.module.scss";
 
 const HomePage = () => {
   const user = {
-    name: "Jhon PI",
+    name: "Johng Lee",
   };
+  
+  const history = {
+    first: "25-05-01",
+    second: "25-04-25",
+    third: "25-04-20",
+    fourth: "25-04-19",
+  }
 
   const items = ["PI", "Estresse", "Insônia", "Depressão", "TDAH", "Fobia"];
   const itemWidth = 120; 
@@ -64,8 +74,7 @@ const HomePage = () => {
       
       <div className={styles.InnerContainer}>
       <div className={styles.HeroBanner}>
-        <p>COMECE A SE DIAGNOSTICAR AGORA!</p>
-        <button className={styles.chatButton}>→</button>
+        <button className={styles.chatButton}> COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30}/></button>
       </div>
 
       <div className={styles.Carrosel}>
@@ -94,10 +103,10 @@ const HomePage = () => {
           <button className={styles.ViewMoreButton}>Ver todos</button>
         </div>
         <div className={styles.InnerHistory}>
-          <div className={styles.box}>1.</div>
-          <div className={styles.box}>2.</div>
-          <div className={styles.box}>3.</div>
-          <div className={styles.box}>4.</div>
+          <div className={styles.box}>1. {history.first}</div>
+          <div className={styles.box}>2. {history.second}</div>
+          <div className={styles.box}>3. {history.third}</div>
+          <div className={styles.box}>4. {history.fourth}</div>
         </div>
       </div>
 
