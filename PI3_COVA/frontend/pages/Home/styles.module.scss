@@ -1,0 +1,123 @@
+.MainContainer {
+  
+  margin-top: 16px;
+  color: var(--TextGeneralAlt);
+
+    .GreetingText{
+      display: flex;
+      flex-direction: column;
+      padding-left: 2%;
+    }
+
+    .InnerContainer{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+        
+      .HeroBanner {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 90vw;
+        height: 27vh;
+        border: 1px solid var(--TextGeneral);
+        border-radius: 16px;
+
+        .chatButton {
+          width: 50px;
+          height: 50px;
+          border: 1px solid var(--TextGeneral);
+          border-radius: 50%;
+          background: none;
+          color: var(--TextGeneral);
+        }
+      }
+    
+      .Carrosel {
+        margin-top: 24px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+    
+        .CarroselViewport {
+          width: 350px; 
+          overflow: hidden;
+        }
+    
+        .CarroselTrack {
+          display: flex;
+          width: max-content;
+          transition: transform 0.5s ease-in-out;
+        }
+    
+        .CarroselItem {
+          width: 90px;
+          height: 45px;
+          border-radius: 16px;
+          color: var(--TextGeneralAlt);
+          border: 1px solid var(--DetailsBgReverse);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 1rem;
+          opacity: 0.3;
+          transform: scale(0.85);
+          margin: 0 15px;
+          transition: all 0.4s ease-in-out;
+          flex-shrink: 0;
+        }
+    
+        .CenterItem {
+          transform: scale(1.1);
+          opacity: 1;
+          border: 2px solid var(--PreferredColor);
+        }
+    
+        .SideItem {
+          opacity: 0.5;
+          transform: scale(0.9);
+        }
+      }
+    }
+
+    .History{
+      display: flex;
+      flex-direction: column;
+      gap: var(--Gap2);
+      color: var(--TextGeneralAlt);
+
+        .HistoryHeader{
+            display: flex;
+            flex-direction: row;
+            align-items: center !important;
+            justify-content: space-between;
+            margin-top: 3vh;
+            font-size: 16px;
+
+            .ViewMoreButton{
+                color: rgb(138, 138, 138);
+                background: none;
+            }
+        }
+
+        .InnerHistory{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+          width: 90vw;
+          gap: 20px;
+          
+          .box{
+            width: 42vw;
+            border: 1.5px solid var(--PreferredColor);
+            border-radius: 8px;
+            padding: 5px;
+          }
+        }
+    }
+  }
+  
