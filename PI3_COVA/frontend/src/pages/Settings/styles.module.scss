@@ -64,13 +64,25 @@
       }
     }
 
-    input:checked + .Slider {
+    input:checked+.Slider {
       background-color: var(--PreferredColor);
 
       &:before {
         transform: translateX(26px);
       }
     }
+  }
+  
+  .ButtonColor {
+    padding: 0.6rem 1.2rem;
+    background: none;
+    border: 1px solid var(--PreferredColor);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    color: var(--PreferredColor);
+    font-family: var(--TextGeneral);
   }
 
   .Button {
@@ -83,5 +95,21 @@
     transition: background-color 0.3s;
     color: var(--Red);
     font-family: var(--TextGeneral);
+  }
+
+  .ColorModalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .ColorInput {
+    width: 60px;
+    height: 60px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
   }
 }

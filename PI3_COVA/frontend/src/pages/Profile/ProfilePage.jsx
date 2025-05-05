@@ -1,44 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
+import EditProfileModal from "../../components/EditProfileModal/EditProfileModal"; // Importa o modal
 import styles from "./styles.module.scss";
-import { FaUser, FaBirthdayCake, FaPhone, FaInstagram, FaEnvelope, FaEye, FaArrowLeft } from "react-icons/fa";
+import { useAccount } from "../../contexts/Account/AccountProvider";
+import defaultProfileIcon from "../../public/UserDefault.webp";
 
 const ProfilePage = () => {
+  const { userData, loading } = useAccount();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if (loading || !userData) {
+    return <div>Carregando perfil...</div>;
+  }
+
+  const handleEditProfile = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className={styles.profileCard}>
       <div className={styles.header}>
         <div className={styles.avatar}>
-          <FaUser />
+          <img
+            src={userData.photo ? userData.photo : defaultProfileIcon}
+            alt="Foto de perfil"
+            className={styles.avatarImg}
+          />
         </div>
-        
       </div>
-    
+
       <div className={styles.infoSection}>
-        <button className={styles.editButton}>Edit profile</button>
+        <button onClick={handleEditProfile} className={styles.editButton}>
+          Edit profile
+        </button>
         <div className={styles.infoItem}>
-          <FaUser />
-          <span>Anna Avetisyan</span>
+          <span>{`${userData.nome} ${userData.sobrenome}`}</span>
         </div>
         <div className={styles.infoItem}>
-          <FaBirthdayCake />
-          <span>Birthday</span>
+          <span>{userData.nascimento}</span>
         </div>
         <div className={styles.infoItem}>
-          <FaPhone />
-          <span>818 123 4567</span>
+          <span>{userData.celular}</span>
         </div>
         <div className={styles.infoItem}>
-          <FaInstagram />
-          <span>Instagram account</span>
+          <span>{userData.genero}</span>
         </div>
         <div className={styles.infoItem}>
-          <FaEnvelope />
-          <span>info@aplusdesign.co</span>
-        </div>
-        <div className={styles.infoItem}>
-          <FaEye />
-          <span>Password</span>
+          <span>{userData.email}</span>
         </div>
       </div>
+
+      {/* Modal de Edição */}
+      {isModalOpen && <EditProfileModal isOpen={isModalOpen} onClose={handleCloseModal} />}
     </div>
   );
 };

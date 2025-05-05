@@ -1,0 +1,210 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  gap: var(--Gap);
+  justify-content: center;
+  align-items: center;
+
+  p,
+  label,
+  span {
+    color: var(--TextGeneral);
+  }
+
+  input {
+    background-color: var(--TextGeneralReverse);
+  }
+
+  .bgImg {
+    position: absolute;
+    max-width: 100vw;
+    pointer-events: none;
+  }
+
+  .title {
+    margin-top: 120px;
+    font-size: 24px;
+    color: var(--TextGeneral);
+  }
+
+  .inputLogin {
+    width: 75vw;
+    height: 5vh;
+    border-radius: 16px;
+    padding: 10px;
+  }
+
+  .navigateBtn {
+    color: var(--PreferredColor);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--PreferredColor);
+      text-decoration: underline;
+    }
+  }
+
+  .bottomLogin {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: var(--Gap);
+  }
+
+  .loginBtn {
+    width: 50vw;
+    border: 1px solid var(--TextGeneral);
+    background: none;
+
+    &:hover {
+      background-color: var(--PreferredColor);
+      color: var(--TextGeneralReverse);
+      transform: scale(1.1);
+    }
+  }
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    position: relative;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: var(--PreferredColor);
+  }
+
+  .redirect {
+    display: flex;
+    flex-direction: row;
+    gap: var(--Gap);
+  }
+
+  .bottomPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--Gap2);
+
+    .google {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 3px;
+      height: 3px;
+      background: none;
+      width: 50px;
+      height: 50px;
+      border: 1px solid var(--TextGeneral);
+      border-radius: 50%;
+
+      img {
+        width: 50px;
+        height: 50px;
+      }
+
+      &:hover {
+        scale: 1.1;
+        background-color: var(--PreferredColor);
+      }
+    }
+  }
+
+  .labelUpload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 75vw;
+    font-weight: bold;
+    gap: 5px;
+  }
+
+  .previewImg {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-top: 10px;
+    border: 2px solid var(--PreferredColor);
+  }
+
+  select {
+    width: 75vw;
+    height: 5vh;
+    border-radius: 16px;
+    padding: 10px;
+    background-color: var(--TextGeneralReverse);
+    color: var(--TextGeneral);
+  }
+
+  .profilePhotoWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .profilePhotoLabel {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .profilePhoto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .addIcon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #007bff;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    border: 2px solid white;
+  }
+
+  .hiddenInput {
+    display: none;
+  }
+
+  .registerBtn {
+    margin-top: 20px;
+    color: white;
+    width: 50vw;
+    border: 1px solid var(--TextGeneral);
+    background: none;
+
+    &:hover {
+      background-color: var(--PreferredColor);
+      color: var(--TextGeneralReverse);
+      transform: scale(1.1);
+    }
+  }
+}

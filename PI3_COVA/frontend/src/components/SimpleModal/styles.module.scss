@@ -1,27 +1,51 @@
-.modal {
-  position: absolute;
-  top: 50%;
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
   background: var(--DetailsBg);
   border-radius: 8px;
-  height: 30%;
-  width: 45%;
+  padding: 20px;
+  width: 50vw;
   min-width: 200px;
-  gap: var(--Gap2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--Gap);
+}
 
-  .buttons {
-    display: flex;
-    flex-direction: row;
-    gap: var(--Gap);
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: var(--Gap);
+}
 
-    .button,
-    .button2 {
-      background: var(--DetailsBg);
-      border: 1px solid transparent;
-      color: inherit;
-    }
-  }
+.button,
+.button2 {
+  background: var(--DetailsBg);
+  border: 1px solid transparent;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover,
+.button2:hover {
+  opacity: 0.8;
+}
+
+.closeButton {
+  margin-top: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }

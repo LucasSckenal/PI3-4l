@@ -1,134 +1,134 @@
 .MainContainer {
-  
+
   margin-top: 16px;
   color: var(--TextGeneralAlt);
 
-    p, h2 {
-      pointer-events: none;
-    }
+  p,
+  h2 {
+    pointer-events: none;
+  }
 
-    .GreetingText{
-      display: flex;
-      flex-direction: column;
-      padding-left: 2%;
-    }
+  .GreetingText {
+    display: flex;
+    flex-direction: column;
+    padding-left: 2%;
+  }
 
-    .InnerContainer{
+  .InnerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .HeroBanner {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-        
-      .HeroBanner {
+      justify-content: space-around;
+      align-items: end;
+      width: 90vw;
+      height: 27vh;
+      border: 1px solid var(--TextGeneral);
+      border-radius: 16px;
+      color: var(--TextGeneralReverse);
+      box-shadow: 2px 2px 10px var(--PreferredColor);
+      padding-bottom: 10px;
+
+      .chatButton {
         display: flex;
-        justify-content: space-around;
-        align-items: end;
-        width: 90vw;
-        height: 27vh;
+        width: 90%;
+        height: 50px;
+        align-items: center;
+        justify-content: space-evenly;
         border: 1px solid var(--TextGeneral);
         border-radius: 16px;
-        color: var(--TextGeneralReverse);
-        box-shadow: 2px 2px 10px var(--PreferredColor);
-        padding-bottom: 10px;
-
-        .chatButton {
-          display: flex;
-          width: 90%;
-          height: 50px;
-          align-items: center;
-          justify-content: space-evenly;
-          border: 1px solid var(--TextGeneral);
-          border-radius: 16px;
-          background: var(--PreferredColor);
-          color: var(--TextGeneral);
-        }
-      }
-    
-      .Carrosel {
-        margin-top: 24px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-
-    
-        .CarroselViewport {
-          width: 350px;
-          height: 45px; 
-          overflow: hidden;
-        }
-    
-        .CarroselTrack {
-          display: flex;
-          width: max-content;
-          transition: transform 0.5s ease-in-out;
-        }
-    
-        .CarroselItem {
-          width: 90px;
-          height: 45px;
-          border-radius: 16px;
-          color: var(--TextGeneralAlt);
-          border: 1px 0px solid var(--DetailsBgReverse);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 600;
-          font-size: 1rem;
-          opacity: 0.3;
-          transform: scale(0.85);
-          margin: 0 15px;
-          transition: all 0.4s ease-in-out;
-          flex-shrink: 0;
-        }
-    
-        .CenterItem {
-          transform: scale(1.1);
-          opacity: 1;
-          border: 2px solid var(--PreferredColor);
-        }
-    
-        .SideItem {
-          opacity: 0.5;
-          transform: scale(0.9);
-        }
+        background: var(--PreferredColor);
+        color: var(--TextGeneral);
       }
     }
 
-    .History{
+    .Carrosel {
+      margin-top: 24px;
+      width: 100%;
       display: flex;
-      flex-direction: column;
-      gap: var(--Gap2);
-      color: var(--TextGeneralAlt);
+      justify-content: center;
 
-        .HistoryHeader{
-            display: flex;
-            flex-direction: row;
-            align-items: center !important;
-            justify-content: space-between;
-            margin-top: 3vh;
-            font-size: 16px;
 
-            .ViewMoreButton{
-                color: rgb(138, 138, 138);
-                background: none;
-            }
-        }
+      .CarroselViewport {
+        width: 350px;
+        height: 45px;
+        overflow: hidden;
+      }
 
-        .InnerHistory{
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-wrap: wrap;
-          width: 90vw;
-          gap: 20px;
-          
-          .box{
-            width: 42vw;
-            border: 1.5px solid var(--PreferredColor);
-            border-radius: 8px;
-            padding: 5px;
-          }
-        }
+      .CarroselTrack {
+        display: flex;
+        width: max-content;
+        transition: transform 0.5s ease-in-out;
+      }
+
+      .CarroselItem {
+        width: 90px;
+        height: 45px;
+        border-radius: 16px;
+        color: var(--TextGeneralAlt);
+        border: 1px 0px solid var(--DetailsBgReverse);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1rem;
+        opacity: 0.3;
+        transform: scale(0.85);
+        margin: 0 15px;
+        transition: all 0.4s ease-in-out;
+        flex-shrink: 0;
+      }
+
+      .CenterItem {
+        transform: scale(1.1);
+        opacity: 1;
+        border: 2px solid var(--PreferredColor);
+      }
+
+      .SideItem {
+        opacity: 0.5;
+        transform: scale(0.9);
+      }
     }
   }
-  
+
+  .History {
+    display: flex;
+    flex-direction: column;
+    gap: var(--Gap2);
+    color: var(--TextGeneralAlt);
+
+    .HistoryHeader {
+      display: flex;
+      flex-direction: row;
+      align-items: center !important;
+      justify-content: space-between;
+      margin-top: 3vh;
+      font-size: 16px;
+
+      .ViewMoreButton {
+        color: rgb(138, 138, 138);
+        background: none;
+      }
+    }
+
+    .InnerHistory {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 90vw;
+      gap: 20px;
+
+      .box {
+        width: 42vw;
+        border-bottom: 1.5px solid var(--PreferredColor);
+        border-radius: 8px;
+        padding: 5px;
+      }
+    }
+  }
+}

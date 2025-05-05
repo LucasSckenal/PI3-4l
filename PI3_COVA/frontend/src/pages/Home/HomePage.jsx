@@ -1,23 +1,22 @@
 import { useState, useEffect, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { IoArrowForwardSharp } from "react-icons/io5";
-
+import { useAccount } from "../../contexts/Account/AccountProvider";
 import styles from "./styles.module.scss";
 
 const HomePage = () => {
-  const user = {
-    name: "Johng Lee",
-  };
-  
+  const navigate = useNavigate();
+  const { userData, loading } = useAccount();
+
   const history = {
     first: "25-05-01",
     second: "25-04-25",
     third: "25-04-20",
     fourth: "25-04-19",
-  }
+  };
 
   const items = ["PI", "Estresse", "Insônia", "Depressão", "TDAH", "Fobia"];
-  const itemWidth = 120; 
+  const itemWidth = 120;
   const visibleItems = 3;
   const offsetToCenter = (itemWidth * visibleItems) / 2 - itemWidth / 2;
 
@@ -29,7 +28,7 @@ const HomePage = () => {
     items[1],
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(2); 
+  const [currentIndex, setCurrentIndex] = useState(2);
   const [transitioning, setTransitioning] = useState(true);
   const trackRef = useRef(null);
 
@@ -59,40 +58,49 @@ const HomePage = () => {
   }, [currentIndex, duplicatedItems.length]);
 
   const getClassName = (index) => {
-    if (index === currentIndex) return `${styles.CarroselItem} ${styles.CenterItem}`;
+    if (index === currentIndex)
+      return `${styles.CarroselItem} ${styles.CenterItem}`;
     if (index === currentIndex - 1 || index === currentIndex + 1)
       return `${styles.CarroselItem} ${styles.SideItem}`;
     return `${styles.CarroselItem}`;
   };
 
+  if (loading) return <div>Carregando...</div>;
+
   return (
     <div className={styles.MainContainer}>
       <div className={styles.GreetingText}>
         <p>Bem-vindo</p>
-        <h2>{user.name}</h2>
-      </div>
-      
-      <div className={styles.InnerContainer}>
-      <div className={styles.HeroBanner}>
-        <button className={styles.chatButton}> COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30}/></button>
+        <h2>{userData?.nome + " " + userData?.sobrenome || "Usuário"}</h2>
       </div>
 
-      <div className={styles.Carrosel}>
-        <div className={styles.CarroselViewport}>
-          <div
-            ref={trackRef}
-            className={styles.CarroselTrack}
-            style={{
-              transform: `translateX(-${currentIndex * itemWidth - offsetToCenter}px)`,
-              transition: transitioning ? "transform 0.5s ease-in-out" : "none",
-            }}
-          >
-            {duplicatedItems.map((item, index) => (
-              <div key={index} className={getClassName(index)}>
-                {item}
-              </div>
-            ))}
-          </div>
+      <div className={styles.InnerContainer}>
+        <div className={styles.HeroBanner}>
+          <button className={styles.chatButton}>
+            COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30} />
+          </button>
+        </div>
+
+        <div className={styles.Carrosel}>
+          <div className={styles.CarroselViewport}>
+            <div
+              ref={trackRef}
+              className={styles.CarroselTrack}
+              style={{
+                transform: `translateX(-${
+                  currentIndex * itemWidth - offsetToCenter
+                }px)`,
+                transition: transitioning
+                  ? "transform 0.5s ease-in-out"
+                  : "none",
+              }}
+            >
+              {duplicatedItems.map((item, index) => (
+                <div key={index} className={getClassName(index)}>
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -100,7 +108,9 @@ const HomePage = () => {
       <div className={styles.History}>
         <div className={styles.HistoryHeader}>
           <p>Histórico recente: </p>
-          <button className={styles.ViewMoreButton}>Ver todos</button>
+          <button className={styles.ViewMoreButton} onClick={() => {
+            navigate("/history");
+          }}>Ver todos</button>
         </div>
         <div className={styles.InnerHistory}>
           <div className={styles.box}>1. {history.first}</div>
@@ -109,7 +119,6 @@ const HomePage = () => {
           <div className={styles.box}>4. {history.fourth}</div>
         </div>
       </div>
-
     </div>
   );
 };

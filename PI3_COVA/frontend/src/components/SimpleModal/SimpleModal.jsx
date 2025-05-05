@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 
 const SimpleModal = ({
@@ -11,36 +11,51 @@ const SimpleModal = ({
   borderColor2,
   isOpen,
   isClose,
+  onConfirm,
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
+
+  useEffect(() => {
+    setIsVisible(isOpen);
+  }, [isOpen]);
 
   const handleClose = () => {
     setIsVisible(false);
     if (isClose) isClose();
   };
 
+  const handleClickOutside = (e) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
+
   if (!isVisible) return null;
 
   return (
-    <div className={styles.modal}>
-      <p>{title}</p>
-      <div className={styles.buttons}>
-        <button
-          className={styles.button}
-          style={{ color: textColor, border: borderColor }}
-        >
-          {Text}
-        </button>
-        <button
-          className={styles.button2}
-          style={{ color: textColor2, border: borderColor2 }}
-        >
-          {Text2}
-        </button>
+    <div className={styles.modalOverlay} onClick={handleClickOutside}>
+      <div className={styles.modalContent}>
+        <p>{title}</p>
+        <div className={styles.buttons}>
+          <button
+            className={styles.button}
+            style={{ color: textColor, border: borderColor }}
+            onClick={() => {
+              if (onConfirm) onConfirm();
+              handleClose();
+            }}
+          >
+            {Text}
+          </button>
+          <button
+            className={styles.button2}
+            style={{ color: textColor2, border: borderColor2 }}
+            onClick={handleClose}
+          >
+            {Text2}
+          </button>
+        </div>
       </div>
-      <button className={styles.closeButton} onClick={handleClose}>
-        Close
-      </button>
     </div>
   );
 };

@@ -1,75 +1,85 @@
 .profileCard {
-    width: 100%;
-    background: var(--Bg);
-    overflow: hidden;
-    color: var(--TextGeneral);
-  }
-  
-  .header {
-    background: var(--PreferredColor);
-    padding: 80px 20px 20px;
-    position: relative;
-    text-align: center;
-    color: var(--TextGeneral);
-    border-bottom-left-radius: 50%;
-    border-bottom-right-radius: 50%;
+  width: 100%;
+  background: var(--Bg);
+  overflow: hidden;
+  color: var(--TextGeneral);
+}
 
-    .avatar {
-      background: var(--Bg);
+.header {
+  background: var(--PreferredColor);
+  padding: 80px 20px 20px;
+  position: relative;
+  text-align: center;
+  color: var(--TextGeneral);
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+
+  .avatar {
+    background: var(--Bg);
+    width: 102px;
+    height: 102px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--TextGeneral);
+    border: 1px solid var(--PreferredColor);
+    font-size: 32px;
+    position: absolute;
+    bottom: -36px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    .avatarImg {
       width: 102px;
       height: 102px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--TextGeneral);
       border: 1px solid var(--PreferredColor);
-      font-size: 32px;
-      position: absolute;
-      bottom: -36px;
-      left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-  }
-  
-  .infoSection {
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   gap: var(--Gap2); 
-    margin-top: 48px;
-   
-    .infoItem {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--DetailsBg);
-      width: 50%;
-      font-size: 14px;
-  
-      svg {
-        color: var(--PreferredColor);
+
+      &:hover {
+        transform: scale(1.2);
       }
     }
   }
-  
-  .editButton {
-    margin: 20px auto;
-    display: block;
-    width: 40%;
-    border: none;
-    border-radius: 25px;
-    background: var(--PreferredColor);
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s;
-  
-    &:hover {
-      opacity: 0.9;
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--Gap2);
+  margin-top: 48px;
+
+  .infoItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--DetailsBg);
+    width: 50%;
+    font-size: 14px;
+
+    svg {
+      color: var(--PreferredColor);
     }
   }
-  
+}
+
+.editButton {
+  margin: 20px auto;
+  display: block;
+  width: 40%;
+  border: none;
+  border-radius: 25px;
+  background: var(--PreferredColor);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
