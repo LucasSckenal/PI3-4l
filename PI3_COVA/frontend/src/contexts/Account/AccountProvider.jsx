@@ -1,16 +1,24 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../api/firebase";
 
 const AccountContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAccount = () => {
   const context = useContext(AccountContext);
   if (!context) {
     throw new Error("useAccount deve ser usado dentro de um AccountProvider");
   }
   return context;
+};
+
+const isValidPhoto = (photo) => {
+  // Verifica se é uma string base64 ou URL válida
+  return typeof photo === "string" && (
+    photo.startsWith("data:image") || photo.startsWith("http")
+  );
 };
 
 const AccountProvider = ({ children }) => {
@@ -29,25 +37,52 @@ const AccountProvider = ({ children }) => {
         const userDocRef = doc(db, "Users", user.uid);
         const userDoc = await getDoc(userDocRef);
 
-        if (userDoc.exists()) {
-          const data = userDoc.data();
+        let data;
 
-          if (data.photo && typeof data.photo === "string") {
-            data.photo = data.photo.replace(/\s/g, "");
-          }
+        if (userDoc.exists()) {
+          data = userDoc.data();
+
+          const photoSource =
+            isValidPhoto(data.photo) ? data.photo :
+            isValidPhoto(user.photoURL) ? user.photoURL : "";
+
+          data = {
+            uid: user.uid,
+            name: data.name || user.displayName || "",
+            email: data.email || user.email || "",
+            photo: photoSource,
+            birthDate: data.birthDate || "",
+            gender: data.gender || "",
+            phone: data.phone || "",
+            location: data.location || "",
+          };
 
           setUserData(data);
         } else {
-          console.warn("Documento do usuário não encontrado no Firestore.");
+          const photoSource = isValidPhoto(user.photoURL) ? user.photoURL : "";
+
+          data = {
+            uid: user.uid,
+            name: user.displayName || "",
+            email: user.email || "",
+            photo: photoSource,
+            birthDate: "",
+            gender: "",
+            phone: "",
+            location: "",
+          };
+
+          await setDoc(userDocRef, data);
+          setUserData(data);
         }
       } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
+        console.error("Erro ao buscar/criar dados do usuário:", error);
       } finally {
         setLoading(false);
       }
     });
 
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, []);
 
   return (

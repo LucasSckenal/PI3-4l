@@ -71,12 +71,12 @@ const HomePage = () => {
     <div className={styles.MainContainer}>
       <div className={styles.GreetingText}>
         <p>Bem-vindo</p>
-        <h2>{userData?.nome + " " + userData?.sobrenome || "Usuário"}</h2>
+        <h2>{userData?.name || "Usuário"}</h2>
       </div>
 
       <div className={styles.InnerContainer}>
         <div className={styles.HeroBanner}>
-          <button className={styles.chatButton}>
+          <button className={styles.chatButton} onClick={() => {navigate("/chat")}}>
             COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30} />
           </button>
         </div>

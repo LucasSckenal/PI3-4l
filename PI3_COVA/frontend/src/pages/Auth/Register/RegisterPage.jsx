@@ -12,7 +12,6 @@ import defaultProfileIcon from "../../../public/UserDefault.webp";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-
   const [photoPreview, setPhotoPreview] = useState(null);
 
   const handlePhotoChange = (e) => {
@@ -25,31 +24,31 @@ const RegisterPage = () => {
   };
 
   const handleRegister = async () => {
-    const inputs = document.querySelectorAll(`.${styles.inputLogin}`);
+    const inputs = document.querySelectorAll(`.${styles.inputRegister}`);
     const values = Array.from(inputs).map((input) => input.value.trim());
 
     const [
-      nome,
-      sobrenome,
-      nascimento,
-      genero,
+      firstName,
+      lastName,
+      birthDate,
+      gender,
       email,
-      celular,
-      localizacao,
-      senha,
-      confirmarSenha,
+      phone,
+      location,
+      password,
+      confirmPassword,
     ] = values;
 
     if (
-      !nome ||
-      !sobrenome ||
-      !nascimento ||
-      !genero ||
+      !firstName ||
+      !lastName ||
+      !birthDate ||
+      !gender ||
       !email ||
-      !celular ||
-      !localizacao ||
-      !senha ||
-      !confirmarSenha
+      !phone ||
+      !location ||
+      !password ||
+      !confirmPassword
     ) {
       toast.error("Preencha todos os campos.");
       return;
@@ -61,17 +60,17 @@ const RegisterPage = () => {
       return;
     }
 
-    if (senha.length < 6) {
+    if (password.length < 6) {
       toast.error("Senha com no mínimo 6 caracteres.");
       return;
     }
 
-    if (senha !== confirmarSenha) {
+    if (password !== confirmPassword) {
       toast.error("Senhas não coincidem.");
       return;
     }
 
-    if (celular.replace(/\D/g, "").length < 8) {
+    if (phone.replace(/\D/g, "").length < 8) {
       toast.error("Número de celular inválido.");
       return;
     }
@@ -80,21 +79,19 @@ const RegisterPage = () => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        senha
+        password
       );
-
       const user = userCredential.user;
 
-      // Adicionando no Firestore
+      // Adicionando no Firestore (com campos em inglês e nome completo)
       await setDoc(doc(db, "Users", user.uid), {
         uid: user.uid,
-        nome,
-        sobrenome,
-        nascimento,
-        genero,
+        name: `${firstName} ${lastName}`,
+        birthDate,
+        gender,
         email,
-        celular,
-        localizacao,
+        phone,
+        location,
         photo: photoPreview || defaultProfileIcon,
         createdAt: new Date().toISOString(),
       });
@@ -133,42 +130,29 @@ const RegisterPage = () => {
         />
       </div>
 
-      <input className={styles.inputLogin} placeholder="Nome" type="text" />
+      <div className={styles.namesInput}>
+        <input className={styles.inputRegister} placeholder="Nome" type="text" />
+        <input className={styles.inputRegister} placeholder="Sobrenome" type="text" />
+      </div>
+
       <input
-        className={styles.inputLogin}
-        placeholder="Sobrenome"
-        type="text"
-      />
-      <input
-        className={styles.inputLogin}
+        className={styles.inputRegister}
         placeholder="Data de nascimento"
         type="date"
       />
 
-      <select className={styles.inputLogin}>
+      <select className={styles.inputRegister}>
         <option value="">Selecione o gênero</option>
-        <option value="masculino">Masculino</option>
-        <option value="feminino">Feminino</option>
-        <option value="outro">Outro</option>
+        <option value="male">Masculino</option>
+        <option value="female">Feminino</option>
+        <option value="other">Outro</option>
       </select>
 
-      <input className={styles.inputLogin} placeholder="Email" type="email" />
-      <input className={styles.inputLogin} placeholder="Celular" type="tel" />
-      <input
-        className={styles.inputLogin}
-        placeholder="Localização"
-        type="text"
-      />
-      <input
-        className={styles.inputLogin}
-        placeholder="Senha"
-        type="password"
-      />
-      <input
-        className={styles.inputLogin}
-        placeholder="Confirmar senha"
-        type="password"
-      />
+      <input className={styles.inputRegister} placeholder="Email" type="email" />
+      <input className={styles.inputRegister} placeholder="Celular" type="tel" />
+      <input className={styles.inputRegister} placeholder="Localização" type="text" />
+      <input className={styles.inputRegister} placeholder="Senha" type="password" />
+      <input className={styles.inputRegister} placeholder="Confirmar senha" type="password" />
 
       <button className={styles.registerBtn} onClick={handleRegister}>
         Registrar

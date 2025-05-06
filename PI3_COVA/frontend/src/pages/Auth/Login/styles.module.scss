@@ -14,7 +14,8 @@
   }
 
   input {
-    background-color: var(--TextGeneralReverse);
+    background-color: var(--Bg);
+    border: 1px solid (--TextGeneral);
   }
 
   .bgImg {

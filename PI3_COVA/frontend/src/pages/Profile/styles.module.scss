@@ -23,7 +23,6 @@
     align-items: center;
     justify-content: center;
     color: var(--TextGeneral);
-    border: 1px solid var(--PreferredColor);
     font-size: 32px;
     position: absolute;
     bottom: -36px;
@@ -35,10 +34,11 @@
       width: 102px;
       height: 102px;
       border-radius: 50%;
+      background-color: var(--Bg);
       border: 1px solid var(--PreferredColor);
 
       &:hover {
-        transform: scale(1.2);
+        transform: scale(1.1);
       }
     }
   }
@@ -74,7 +74,7 @@
   border: none;
   border-radius: 25px;
   background: var(--PreferredColor);
-  color: #fff;
+  color: var(--White);
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s;

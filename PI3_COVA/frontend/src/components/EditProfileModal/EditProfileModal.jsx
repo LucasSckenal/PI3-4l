@@ -8,11 +8,10 @@ import styles from "./styles.module.scss";
 const EditProfileModal = ({ onClose }) => {
   const { userData } = useAccount();
   const [formData, setFormData] = useState({
-    nome: "",
-    sobrenome: "",
-    genero: "",
-    celular: "",
-    localizacao: "",
+    name: "",
+    gender: "",
+    phone: "",
+    location: "",
     photo: "",
     password: "",
   });
@@ -23,11 +22,10 @@ const EditProfileModal = ({ onClose }) => {
     if (userData) {
       setFormData((prev) => ({
         ...prev,
-        nome: userData.nome || "",
-        sobrenome: userData.sobrenome || "",
-        genero: userData.genero || "",
-        celular: userData.celular || "",
-        localizacao: userData.localizacao || "",
+        name: userData.name || "",
+        gender: userData.gender || "",
+        phone: userData.phone || "",
+        location: userData.location || "",
         photo: userData.photo || "",
       }));
     }
@@ -58,11 +56,10 @@ const EditProfileModal = ({ onClose }) => {
 
       const userRef = doc(db, "Users", user.uid);
       await updateDoc(userRef, {
-        nome: formData.nome,
-        sobrenome: formData.sobrenome,
-        genero: formData.genero,
-        celular: formData.celular,
-        localizacao: formData.localizacao,
+        name: formData.name,
+        gender: formData.gender,
+        phone: formData.phone,
+        location: formData.location,
         photo: formData.photo,
       });
 
@@ -70,23 +67,26 @@ const EditProfileModal = ({ onClose }) => {
         await updatePassword(user, formData.password);
       }
 
-      alert("Perfil atualizado com sucesso!");
+      alert("Profile updated successfully!");
       onClose();
     } catch (err) {
-      alert("Erro ao atualizar perfil: " + err.message);
+      alert("Error updating profile: " + err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={(e) => {
+    <div
+      className={styles.modalOverlay}
+      onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose();
         }
-      }}>
+      }}
+    >
       <div className={styles.modal}>
-        <h2>Editar Perfil</h2>
+        <h2>Edit Profile</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.avatarLabel}>
             <img src={formData.photo || "/default-avatar.png"} alt="avatar" />
@@ -94,53 +94,46 @@ const EditProfileModal = ({ onClose }) => {
           </label>
 
           <input
-            name="nome"
+            name="name"
             type="text"
-            placeholder="Nome"
-            value={formData.nome}
+            placeholder="Full Name"
+            value={formData.name}
             onChange={handleChange}
             required
           />
           <input
-            name="sobrenome"
+            name="phone"
             type="text"
-            placeholder="Sobrenome"
-            value={formData.sobrenome}
+            placeholder="Phone"
+            value={formData.phone}
             onChange={handleChange}
           />
           <input
-            name="celular"
+            name="location"
             type="text"
-            placeholder="Celular"
-            value={formData.celular}
+            placeholder="Location"
+            value={formData.location}
             onChange={handleChange}
           />
-          <input
-            name="localizacao"
-            type="text"
-            placeholder="Localização"
-            value={formData.localizacao}
-            onChange={handleChange}
-          />
-          <select name="genero" value={formData.genero} onChange={handleChange}>
-            <option value="">Selecione o Gênero</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Feminino">Feminino</option>
-            <option value="Outro">Outro</option>
+          <select name="gender" value={formData.gender} onChange={handleChange}>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
           </select>
           <input
             name="password"
             type="password"
-            placeholder="Nova Senha (opcional)"
+            placeholder="New Password (optional)"
             value={formData.password}
             onChange={handleChange}
           />
           <div className={styles.buttons}>
             <button type="submit" disabled={loading}>
-              {loading ? "Salvando..." : "Salvar"}
+              {loading ? "Saving..." : "Save"}
             </button>
             <button type="button" onClick={onClose} className={styles.cancel}>
-              Cancelar
+              Cancel
             </button>
           </div>
         </form>
