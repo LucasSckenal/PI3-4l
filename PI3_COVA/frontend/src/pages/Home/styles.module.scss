@@ -31,6 +31,10 @@
       color: var(--TextGeneralReverse);
       box-shadow: 2px 2px 10px var(--PreferredColor);
       padding-bottom: 10px;
+      background-image: url(../../public/ChatHeroBannerBlur.png);
+      background-size: cover;
+      background-position: center;
+      background-color: var(--PreferredColor);
 
       .chatButton {
         display: flex;

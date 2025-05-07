@@ -1,0 +1,36 @@
+.InnerChatContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 1rem;
+    padding-bottom: 35px;
+  }
+  
+  .messagesContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+    padding-top: 10px;
+  }
+  
+  .message {
+    max-width: 70%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    word-wrap: break-word;
+  }
+  
+  .user {
+    align-self: flex-end;
+    background-color: var(--PreferredColor);
+    color: var(--TextOnPreferred, #fff);
+  }
+  
+  .ai {
+    align-self: flex-start;
+    background-color: var(--DetailsBg);
+    color: var(--TextGeneral);
+  }
+  

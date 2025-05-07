@@ -1,19 +1,78 @@
-import { useState } from "react";
-import { IoMic, IoSend } from "react-icons/io5";
-
+// src/pages/Chat/ChatPage.jsx
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  serverTimestamp,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "../../api/Firebase";
+import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import styles from "./styles.module.scss";
 import Ia from "../../public/IaChat.gif";
+
 const ChatPage = () => {
+  const { chatId } = useParams();
+  const isNewChat = !chatId;
+  const navigate = useNavigate();
   const [isRecording, setIsRecording] = useState(false);
+  const [inputText, setInputText] = useState("");
+  const [messages, setMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+
+  // Carrega as mensagens caso seja chat existente
+  useEffect(() => {
+    if (!isNewChat) {
+      const chatRef = doc(db, "chats", chatId);
+      const msgsCol = collection(chatRef, "messages");
+      const unsub = onSnapshot(msgsCol, (snap) => {
+        setMessages(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+        scrollToBottom();
+      });
+      return unsub;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatId]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleMicClick = () => {
     setIsRecording((prev) => !prev);
+    // TODO: implementar gravação de áudio
+  };
+
+  const handleSend = async () => {
+    if (!inputText.trim()) return;
+
+    let id = chatId;
+    if (isNewChat) {
+      // cria novo chat
+      const newChatRef = doc(collection(db, "chats"));
+      id = newChatRef.id;
+      await setDoc(newChatRef, { createdAt: serverTimestamp() });
+      navigate(`/chat/${id}`);
+    }
+
+    // salva mensagem com sender: 'user'
+    const chatRef = doc(db, "chats", id);
+    await addDoc(collection(chatRef, "messages"), {
+      type: "text",
+      text: inputText,
+      sender: "user",
+      createdAt: serverTimestamp(),
+    });
+    setInputText("");
   };
 
   return (
     <main className={styles.ChatContainer}>
       <div className={styles.IaContainer}>
-        <img src={Ia} className={styles.ia} />
+        <img src={Ia} className={styles.ia} alt="Assistente IA" />
         <p className={styles.pIa}>
           Olá! Sou sua assistente médica.{" "}
           <span className={styles.spanIa}>Me conte seus sintomas</span> com uma
@@ -21,30 +80,30 @@ const ChatPage = () => {
           atendimento.
         </p>
       </div>
-      <div className={styles.inputBar}>
-        <input
-          type="text"
-          className={styles.inputTextField}
-          placeholder="Escreva seu problema aqui"
-        />
 
-        <button
-          className={
-            isRecording ? styles.inputAudioBtnRecording : styles.inputAudioBtn
-          }
-          onClick={handleMicClick}
-        >
-          <IoMic
-            className={
-              isRecording ? styles.innerBtnsRecording : styles.innerBtns
-            }
-          />
-        </button>
+      {!isNewChat && (
+        <div className={styles.messagesContainer}>
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`${styles.message} ${
+                msg.sender === "user" ? styles.user : styles.ai
+              }`}
+            >
+              {msg.text}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+      )}
 
-        <button className={styles.inputSendBtn}>
-          <IoSend className={styles.innerBtns} />
-        </button>
-      </div>
+      <MessageInputBar
+        inputText={inputText}
+        onChangeText={setInputText}
+        isRecording={isRecording}
+        onMicClick={handleMicClick}
+        onSendClick={handleSend}
+      />
     </main>
   );
 };

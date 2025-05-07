@@ -1,16 +1,19 @@
+// src/routes/AppRoutes.jsx
 import { Routes, Route } from "react-router-dom";
-import MainPage from "../components/MainPage/MainPage"; // <- ou ajuste o caminho
+import { useContext } from "react";
+import { ToastContainer } from "react-toastify";
+import { ThemeContext } from "../contexts/ThemeProvider/ThemeProvider";
+
+import MainPage from "../components/MainPage/MainPage";
 import HomePage from "../pages/Home/HomePage";
-import ChatPage from "../pages/Chat/ChatPage";
+import ChatPage from "../pages/Chat/ChatPage";               // página de início de chat (nova conversa)
+import InnerChatPage from "../pages/InnerChat/InnerChatPage"; // página de visualização de conversa existente
 import HistoryPage from "../pages/History/HistoryPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 import SettingsPage from "../pages/Settings/SettingsPage";
 import PrivateRoute from "./PrivateRoutes";
 import LoginPage from "../pages/Auth/Login/LoginPage";
 import RegisterPage from "../pages/Auth/Register/RegisterPage";
-import { ToastContainer } from "react-toastify";
-import { ThemeContext } from "../contexts/ThemeProvider/ThemeProvider";
-import { useContext } from "react";
 
 const AppRoutes = () => {
   const { theme } = useContext(ThemeContext);
@@ -29,9 +32,20 @@ const AppRoutes = () => {
         pauseOnHover
         theme={theme}
       />
+
       <Routes>
+        {/* Rota pública */}
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
+         <Route
+            path="chat/:chatId"
+            element={
+              <PrivateRoute>
+                <InnerChatPage />
+              </PrivateRoute>
+            }
+          />
+        {/* Rotas privadas a partir de / */}
         <Route
           path="/"
           element={
@@ -48,6 +62,8 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
+
+          {/* Iniciar nova conversa */}
           <Route
             path="chat"
             element={
@@ -56,6 +72,10 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
+
+          {/* Visualizar conversa existente */}
+         
+
           <Route
             path="history"
             element={

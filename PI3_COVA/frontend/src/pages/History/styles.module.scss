@@ -1,0 +1,33 @@
+.HistoryContainer{
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ text-align: center;
+ height: 95%;
+ overflow: scroll;
+ scrollbar-width: none;
+ padding-top: 20%;
+ 
+    .chatList{
+     display: flex;
+     flex-direction: column;
+     gap: var(--Gap2);      
+     
+        .chatItem{
+         display: flex;
+         align-items: center;
+         height: 50px;
+         background: var(--DetailsBg);
+         border-radius: 16px;
+         padding: 10px;
+         list-style: none;
+         cursor: pointer;
+         p{
+            color: var(--PreferredColor);
+         }
+            
+        }
+    }
+
+}

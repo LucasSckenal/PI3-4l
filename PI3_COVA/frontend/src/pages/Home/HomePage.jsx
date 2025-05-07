@@ -2,18 +2,37 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowForwardSharp } from "react-icons/io5";
 import { useAccount } from "../../contexts/Account/AccountProvider";
+import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { db } from "../../api/Firebase";
+import ChatHeroBannerBlur from "../../public/ChatHeroBannerBlur.png";
 import styles from "./styles.module.scss";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { userData, loading } = useAccount();
 
-  const history = {
-    first: "25-05-01",
-    second: "25-04-25",
-    third: "25-04-20",
-    fourth: "25-04-19",
-  };
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, "chats"),
+      orderBy("createdAt", "desc"),
+      limit(4)
+    );
+
+    const unsub = onSnapshot(q, (snap) => {
+      const results = snap.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          createdAt: data.createdAt?.toDate().toLocaleDateString("pt-BR") || "Data desconhecida",
+        };
+      });
+      setHistory(results);
+    });
+
+    return unsub;
+  }, []);
 
   const items = ["PI", "Estresse", "Insônia", "Depressão", "TDAH", "Fobia"];
   const itemWidth = 120;
@@ -76,7 +95,12 @@ const HomePage = () => {
 
       <div className={styles.InnerContainer}>
         <div className={styles.HeroBanner}>
-          <button className={styles.chatButton} onClick={() => {navigate("/chat")}}>
+          <button
+            className={styles.chatButton}
+            onClick={() => {
+              navigate("/chat");
+            }}
+          >
             COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30} />
           </button>
         </div>
@@ -108,15 +132,28 @@ const HomePage = () => {
       <div className={styles.History}>
         <div className={styles.HistoryHeader}>
           <p>Histórico recente: </p>
-          <button className={styles.ViewMoreButton} onClick={() => {
-            navigate("/history");
-          }}>Ver todos</button>
+          <button
+            className={styles.ViewMoreButton}
+            onClick={() => {
+              navigate("/history");
+            }}
+          >
+            Ver todos
+          </button>
         </div>
         <div className={styles.InnerHistory}>
-          <div className={styles.box}>1. {history.first}</div>
-          <div className={styles.box}>2. {history.second}</div>
-          <div className={styles.box}>3. {history.third}</div>
-          <div className={styles.box}>4. {history.fourth}</div>
+          {history.length > 0 ? (
+            history.map((item, index) => (
+              <div
+                key={item.id}
+                className={styles.box}
+                onClick={() => navigate(`/chat/${item.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                {index + 1}. {item.createdAt}
+              </div>))
+            ) : (
+            <div className={styles.box}>Nenhum histórico encontrado.</div>)}
         </div>
       </div>
     </div>
