@@ -10,6 +10,7 @@ import { ThemeProvider } from "./contexts/ThemeProvider/ThemeProvider";
 import AppRoutes from "./routes/Routes";
 import { AuthProvider } from "./contexts/AuthProvider/AuthProvider";
 import AccountProvider from "./contexts/Account/AccountProvider";
+import { IaProvider } from "./contexts/IaProvider/IaProvider";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -17,7 +18,9 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <AccountProvider>
           <BrowserRouter>
-            <AppRoutes />
+            <IaProvider>
+              <AppRoutes/>
+            </IaProvider>
           </BrowserRouter>
         </AccountProvider>
       </AuthProvider>

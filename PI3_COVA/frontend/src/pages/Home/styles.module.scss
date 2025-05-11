@@ -35,6 +35,16 @@
       background-size: cover;
       background-position: center;
       background-color: var(--PreferredColor);
+      cursor: pointer;
+      opacity: 0.8;
+
+      &:hover{
+        opacity: 1;
+        .chatButton{
+          transform: scale(1.05);
+        }
+      }
+      
 
       .chatButton {
         display: flex;
@@ -45,7 +55,7 @@
         border: 1px solid var(--TextGeneral);
         border-radius: 16px;
         background: var(--PreferredColor);
-        color: var(--TextGeneral);
+        color: var(--White);
       }
     }
 
@@ -116,6 +126,10 @@
       .ViewMoreButton {
         color: rgb(138, 138, 138);
         background: none;
+
+        &:hover{
+          color: var(--TextGeneral);
+        }
       }
     }
 
@@ -132,6 +146,13 @@
         border-bottom: 1.5px solid var(--PreferredColor);
         border-radius: 8px;
         padding: 5px;
+        &:hover{
+              background-color: var(--PreferredColor);
+              transform: scale(1.05);
+              p{
+              color: var(--TextGeneral);
+            }
+        }
       }
     }
   }

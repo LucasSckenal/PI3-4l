@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoArrowForwardSharp } from "react-icons/io5";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db } from "../../api/Firebase";
 import ChatHeroBannerBlur from "../../public/ChatHeroBannerBlur.png";
 import styles from "./styles.module.scss";
@@ -10,12 +11,14 @@ import styles from "./styles.module.scss";
 const HomePage = () => {
   const navigate = useNavigate();
   const { userData, loading } = useAccount();
-
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
+
     const q = query(
-      collection(db, "chats"),
+      collection(db, "Users", userId, "chats"),
       orderBy("createdAt", "desc"),
       limit(4)
     );
@@ -34,11 +37,11 @@ const HomePage = () => {
     return unsub;
   }, []);
 
+  // Carrossel
   const items = ["PI", "Estresse", "Insônia", "Depressão", "TDAH", "Fobia"];
   const itemWidth = 120;
   const visibleItems = 3;
   const offsetToCenter = (itemWidth * visibleItems) / 2 - itemWidth / 2;
-
   const duplicatedItems = [
     items[items.length - 2],
     items[items.length - 1],
@@ -56,7 +59,6 @@ const HomePage = () => {
       setCurrentIndex((prev) => prev + 1);
       setTransitioning(true);
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -94,12 +96,10 @@ const HomePage = () => {
       </div>
 
       <div className={styles.InnerContainer}>
-        <div className={styles.HeroBanner}>
+        <div className={styles.HeroBanner} onClick={() => navigate("/chat")}>
           <button
             className={styles.chatButton}
-            onClick={() => {
-              navigate("/chat");
-            }}
+            onClick={() => navigate("/chat")}
           >
             COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30} />
           </button>
@@ -134,9 +134,7 @@ const HomePage = () => {
           <p>Histórico recente: </p>
           <button
             className={styles.ViewMoreButton}
-            onClick={() => {
-              navigate("/history");
-            }}
+            onClick={() => navigate("/history")}
           >
             Ver todos
           </button>
@@ -151,9 +149,11 @@ const HomePage = () => {
                 style={{ cursor: "pointer" }}
               >
                 {index + 1}. {item.createdAt}
-              </div>))
-            ) : (
-            <div className={styles.box}>Nenhum histórico encontrado.</div>)}
+              </div>
+            ))
+          ) : (
+            <div className={styles.box}>Nenhum histórico encontrado.</div>
+          )}
         </div>
       </div>
     </div>

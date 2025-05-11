@@ -20,23 +20,19 @@ const ProfilePage = () => {
     setIsModalOpen(false);
   };
 
-  // Função para determinar a fonte da imagem
   const getProfileImageSource = () => {
     if (!userData.photo) {
       return defaultProfileIcon;
     }
     
-    // Verifica se é uma URL (começa com http/https)
     if (userData.photo.startsWith('http://') || userData.photo.startsWith('https://')) {
       return userData.photo;
     }
     
-    // Verifica se é base64 (começa com data:image)
     if (userData.photo.startsWith('data:image')) {
       return userData.photo;
     }
     
-    // Se não for nenhum dos casos acima, assume que é um caminho relativo ou usa o ícone padrão
     return defaultProfileIcon;
   };
 
@@ -49,7 +45,7 @@ const ProfilePage = () => {
             alt="Foto de perfil"
             className={styles.avatarImg}
             onError={(e) => {
-              e.target.src = defaultProfileIcon; // Fallback em caso de erro ao carregar a imagem
+              e.target.src = defaultProfileIcon; 
             }}
           />
         </div>
@@ -60,19 +56,19 @@ const ProfilePage = () => {
           Edit profile
         </button>
         <div className={styles.infoItem}>
-          <span>{`${userData?.name}`}</span>
+          Nome: <span>{`${userData?.name}`}</span>
+        </div>
+          <div className={styles.infoItem}>
+          Email: <span>{userData?.email}</span>
         </div>
         <div className={styles.infoItem}>
-          <span>{userData?.birthDate}</span>
+          Data de Nascimento: <span>{userData?.birthDate}</span>
         </div>
         <div className={styles.infoItem}>
-          <span>{userData?.phone}</span>
+          Celular: <span>{userData?.phone}</span>
         </div>
         <div className={styles.infoItem}>
-          <span>{userData?.gender}</span>
-        </div>
-        <div className={styles.infoItem}>
-          <span>{userData?.email}</span>
+          Gênero: <span>{userData?.gender}</span>
         </div>
       </div>
 

@@ -71,8 +71,8 @@ h3 {
 }
 
 .ColorOption {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 8px;
   border: 1px solid var(--DetailsBgReverse);
   cursor: pointer;
@@ -84,43 +84,10 @@ h3 {
   }
 }
 
-.ColorPickerWrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.Divider {
-  width: 80%;
-  height: 1px;
-  background-color: var(--DetailsBgReverse);
-  margin-bottom: 16px;
-}
-
-.ColorPickerSection {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--PreferredColor);
-  border-radius: 50%;
-  padding: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--TextGeneral);
-}
-
-.ColorPicker {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: transparent;
-  cursor: pointer;
-  border: none;
-}
-
-.ColorPicker::-webkit-color-swatch {
-  border: none;
-  border-radius: 50%;
+.SelectedColor {
+  outline: 3px solid var(--TextGeneral);
+  transform: scale(1.1);
+  box-shadow: 0 0 8px var(--PreferredColor);
 }
 
 .SaveButton {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db } from "../../api/Firebase";
 import styles from "./styles.module.scss";
 
@@ -9,16 +10,22 @@ const HistoryPage = () => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(db, "chats"), orderBy("createdAt", "desc"));
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
+
+    const userChatsRef = collection(db, "Users", userId, "chats");
+    const q = query(userChatsRef, orderBy("createdAt", "desc"));
+
     const unsub = onSnapshot(q, (snap) => {
       setChats(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
     });
+
     return unsub;
   }, []);
 
   return (
     <main className={styles.HistoryContainer}>
-      <h1>Histórico de Conversas</h1>
+      <h1 className={styles.HistoryTitle}>Histórico de Conversas</h1>
       <ul className={styles.chatList}>
         {chats.map((chat) => (
           <li

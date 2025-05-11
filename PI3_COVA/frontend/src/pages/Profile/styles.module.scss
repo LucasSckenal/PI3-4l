@@ -49,17 +49,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   gap: var(--Gap2);
   margin-top: 48px;
 
   .infoItem {
+    width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    border-bottom: 1px solid var(--DetailsBg);
-    width: 50%;
+    border-bottom: 1px solid var(--PreferredColor);
     font-size: 14px;
+    padding-bottom: 5px;
 
     svg {
       color: var(--PreferredColor);

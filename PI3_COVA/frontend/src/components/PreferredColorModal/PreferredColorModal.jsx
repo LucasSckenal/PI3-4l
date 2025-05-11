@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import styles from "./PreferredColorModal.module.scss";
 
 const colorList = [
-  "#7f41e2",
-  "#f44336",
-  "#2196f3",
-  "#4caf50",
-  "#ff9800",
-  "#9c27b0",
-  "#00bcd4",
-  "#b8aa31",
-  "#795548",
+  "#4A90E2",
+  "#7ED321",
+  "#c97c55",
+  "#9B59B6",
+  "#F05D5E",
+  "#1ABC9C",
+  "#bf9c0d",
+  "#F78FB3",
+  "#7E9D7E",
 ];
 
 const PreferredColorModal = ({ isOpen, onClose }) => {
@@ -51,27 +51,17 @@ const PreferredColorModal = ({ isOpen, onClose }) => {
         <h2>Escolher Cor Preferida</h2>
         <div className={styles.ModalContent}>
           <div className={styles.ColorOptions}>
-            <h3>Cores Predefinidas</h3>
             <div className={styles.ColorList}>
               {colorList.map((color, index) => (
                 <div
                   key={index}
-                  className={styles.ColorOption}
+                  className={`${styles.ColorOption} ${
+                    selectedColor === color ? styles.SelectedColor : ""
+                  }`}
                   style={{ backgroundColor: color }}
                   onClick={() => handleColorSelect(color)}
                 />
               ))}
-            </div>
-          </div>
-          <div className={styles.ColorPickerWrapper}>
-            <h3>Ou escolha a sua própria</h3>
-            <div className={styles.ColorPickerSection}>
-              <input
-                type="color"
-                className={styles.ColorPicker}
-                value={selectedColor}
-                onChange={(e) => setSelectedColor(e.target.value)}
-              />
             </div>
           </div>
         </div>

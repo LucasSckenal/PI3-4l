@@ -1,4 +1,3 @@
-// src/pages/Chat/ChatPage.jsx
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -9,6 +8,7 @@ import {
   serverTimestamp,
   onSnapshot,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db } from "../../api/Firebase";
 import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import styles from "./styles.module.scss";
@@ -23,19 +23,22 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
-  // Carrega as mensagens caso seja chat existente
+  const userId = getAuth().currentUser?.uid;
+
+  // Carrega as mensagens se o chat já existir
   useEffect(() => {
-    if (!isNewChat) {
-      const chatRef = doc(db, "chats", chatId);
+    if (!isNewChat && userId) {
+      const chatRef = doc(db, "Users", userId, "chats", chatId);
       const msgsCol = collection(chatRef, "messages");
+
       const unsub = onSnapshot(msgsCol, (snap) => {
         setMessages(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
         scrollToBottom();
       });
+
       return unsub;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]);
+  }, [chatId, userId]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,25 +50,25 @@ const ChatPage = () => {
   };
 
   const handleSend = async () => {
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !userId) return;
 
     let id = chatId;
     if (isNewChat) {
-      // cria novo chat
-      const newChatRef = doc(collection(db, "chats"));
+      const newChatRef = doc(collection(db, "Users", userId, "chats"));
       id = newChatRef.id;
       await setDoc(newChatRef, { createdAt: serverTimestamp() });
       navigate(`/chat/${id}`);
     }
 
-    // salva mensagem com sender: 'user'
-    const chatRef = doc(db, "chats", id);
+    const chatRef = doc(db, "Users", userId, "chats", id);
+
     await addDoc(collection(chatRef, "messages"), {
       type: "text",
       text: inputText,
       sender: "user",
       createdAt: serverTimestamp(),
     });
+
     setInputText("");
   };
 

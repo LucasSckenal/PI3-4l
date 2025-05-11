@@ -43,7 +43,7 @@
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid var(--PreferredColor);
-  background-color: var(--PreferredColor);
+  background-color: var(--Bg);
  }
 
  &::after {
@@ -51,7 +51,7 @@
   position: absolute;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  color: white;
+  color: var(--White);
   width: 100%;
   text-align: center;
   font-size: 0.8rem;

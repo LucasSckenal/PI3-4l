@@ -1,36 +1,115 @@
+// styles.module.scss
 .InnerChatContainer {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 1rem;
-    padding-bottom: 35px;
-  }
-  
-  .messagesContainer {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    overflow-y: auto;
-    padding-top: 10px;
-  }
-  
-  .message {
-    max-width: 70%;
-    padding: 0.75rem 1rem;
-    border-radius: 1rem;
-    word-wrap: break-word;
-  }
-  
-  .user {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 1rem;
+  padding-bottom: 40px;
+  gap: var(--Gap2);
+}
+
+.messagesContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  padding-top: 10px;
+  scroll-behavior: smooth;
+}
+
+.message {
+  max-width: 70%;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  word-wrap: break-word;
+  line-height: 1.4;
+  animation: messageAppear 0.2s ease-out;
+
+  &.user {
     align-self: flex-end;
     background-color: var(--PreferredColor);
-    color: var(--TextOnPreferred, #fff);
+    color: var(--White);
+    border-bottom-right-radius: 0.25rem;
   }
-  
-  .ai {
+
+  &.ai {
     align-self: flex-start;
     background-color: var(--DetailsBg);
-    color: var(--TextGeneral);
+    color: var(--White);
+    border-bottom-left-radius: 0.25rem;
   }
+}
+
+.typingIndicator {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  gap: 0.5rem;
+  background-color: var(--DetailsBg);
+  border-radius: 1rem;
+  border-bottom-left-radius: 0.25rem;
+  max-width: 4rem;
+  margin-bottom: 0.5rem;
+
+  .typingDot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--White);
+    animation: typingAnimation 1.4s infinite ease-in-out;
+    
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+    
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+.streaming {
+  position: relative;
+  background-color: var(--DetailsBg);
+  color: var(--White);
+  border-bottom-left-radius: 0.25rem;
   
+  &::after {
+    content: '...';
+    position: absolute;
+    animation: blink 1s infinite;
+    margin-left: 0.25rem;
+  }
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typingAnimation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  30% {
+    transform: translateY(-0.25rem);
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0 }
+  50% { opacity: 1 }
+}

@@ -1,13 +1,19 @@
 .HistoryContainer{
  display: flex;
  flex-direction: column;
- justify-content: center;
- align-items: center;
+ justify-content: start;
  text-align: center;
+ align-items: center;
+ width: 90%;
  height: 95%;
  overflow: scroll;
  scrollbar-width: none;
- padding-top: 20%;
+ padding-top: 10%;
+ gap: var(--Gap2);
+
+      .HistoryTitle{
+         color: var(--TextGeneral);
+      }
  
     .chatList{
      display: flex;
@@ -18,15 +24,22 @@
          display: flex;
          align-items: center;
          height: 50px;
-         background: var(--DetailsBg);
+         background: none;
          border-radius: 16px;
          padding: 10px;
+         border-bottom: 1px solid var(--PreferredColor);
          list-style: none;
          cursor: pointer;
          p{
             color: var(--PreferredColor);
          }
-            
+         &:hover{
+            background-color: var(--PreferredColor);
+            transform: scale(1.15);
+            p{
+            color: var(--TextGeneral);
+            }
+         }
         }
     }
 
