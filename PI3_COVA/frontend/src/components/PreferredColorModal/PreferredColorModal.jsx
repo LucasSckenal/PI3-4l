@@ -5,7 +5,7 @@ const colorList = [
   "#4A90E2",
   "#7ED321",
   "#c97c55",
-  "#9B59B6",
+  "#7f41e2",
   "#F05D5E",
   "#1ABC9C",
   "#bf9c0d",
@@ -13,10 +13,13 @@ const colorList = [
   "#7E9D7E",
 ];
 
-const PreferredColorModal = ({ isOpen, onClose }) => {
-  const [selectedColor, setSelectedColor] = useState(
-    localStorage.getItem("preferredColor") || "#7f41e2"
-  );
+const PreferredColorModal = ({
+  isOpen,
+  onClose,
+  currentColor,
+  onColorChange,
+}) => {
+  const [selectedColor, setSelectedColor] = useState(currentColor || "#7f41e2");
 
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -31,6 +34,7 @@ const PreferredColorModal = ({ isOpen, onClose }) => {
   };
 
   const handleSave = () => {
+    onColorChange(selectedColor); // <-- repassa pro contexto
     onClose();
   };
 

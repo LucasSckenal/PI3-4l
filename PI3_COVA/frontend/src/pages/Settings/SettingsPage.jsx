@@ -1,5 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeProvider/ThemeProvider";
+import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
 import PreferredColorModal from "../../components/PreferredColorModal/PreferredColorModal";
 import Divider from "../../components/Divider/Divider";
 import SimpleModal from "../../components/SimpleModal/SimpleModal";
@@ -7,29 +8,11 @@ import styles from "./styles.module.scss";
 import { getAuth, signOut } from "firebase/auth";
 
 const SettingsPage = () => {
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-
+  const { isDarkMode, toggleTheme, preferredColor, handleColorChange } =
+    useContext(ThemeContext);
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
   const [isSimpleModalOpen, setIsSimpleModalOpen] = useState(false);
-  const [preferredColor, setPreferredColor] = useState(
-    localStorage.getItem("preferredColor") || "#7f41e2"
-  );
-
-  useEffect(() => {
-    const savedColor = localStorage.getItem("preferredColor");
-    if (savedColor) {
-      document.documentElement.style.setProperty(
-        "--PreferredColor",
-        savedColor
-      );
-    }
-  }, []);
-
-  const handlePreferredColorChange = (color) => {
-    setPreferredColor(color);
-    document.documentElement.style.setProperty("--PreferredColor", color);
-    localStorage.setItem("preferredColor", color);
-  };
+  const { user } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -70,7 +53,9 @@ const SettingsPage = () => {
         isOpen={isColorModalOpen}
         onClose={() => setIsColorModalOpen(false)}
         currentColor={preferredColor}
-        onColorChange={handlePreferredColorChange}
+        onColorChange={(color) => {
+          handleColorChange(color);
+        }}
       />
 
       <div className={styles.OptionRow}>

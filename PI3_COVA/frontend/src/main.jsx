@@ -14,16 +14,16 @@ import { IaProvider } from "./contexts/IaProvider/IaProvider";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <AccountProvider>
+    <AuthProvider>
+      <AccountProvider>
+        <ThemeProvider>
           <BrowserRouter>
             <IaProvider>
-              <AppRoutes/>
+              <AppRoutes />
             </IaProvider>
           </BrowserRouter>
-        </AccountProvider>
-      </AuthProvider>
-    </ThemeProvider>
+        </ThemeProvider>
+      </AccountProvider>
+    </AuthProvider>
   </StrictMode>
 );

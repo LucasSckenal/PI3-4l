@@ -1,7 +1,7 @@
 import { IoArrowBackOutline } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../contexts/ThemeProvider/ThemeProvider";
+import { ThemeContext } from "../../contexts/ThemeProvider/ThemeProvider"; // Certifique-se de importar o contexto corretamente
 
 import logoDark from "../../public/logo4l.png";
 import logoLight from "../../public/logo4l_LightMode.png";
@@ -11,19 +11,24 @@ import styles from "./styles.module.scss";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme } = useContext(ThemeContext); 
-  const [logo, setLogo] = useState(logoDark); 
+
+  // Consome o contexto
+  const { isDarkMode, preferredColor } = useContext(ThemeContext);
+
+  // Calculando dinamicamente as variáveis de acordo com o tema atual
+  const [logo, setLogo] = useState(logoDark);
   const [iconColor, setIconColor] = useState("white");
 
   useEffect(() => {
-    if (theme === "dark") {
+    // Atualizando conforme o tema
+    if (isDarkMode) {
       setLogo(logoDark);
       setIconColor("white");
     } else {
       setLogo(logoLight);
       setIconColor("black");
     }
-  }, [theme]);
+  }, [isDarkMode]); // Atualiza quando isDarkMode mudar
 
   const getPageTitle = (pathname) => {
     switch (pathname) {
@@ -49,7 +54,10 @@ const Header = () => {
         onClick={() => navigate("/")}
         aria-label="Voltar"
       >
-        <IoArrowBackOutline className={styles.btnSbg} color={iconColor} />
+        <IoArrowBackOutline
+          className={styles.btnSbg}
+          style={{ color: iconColor }} // Altera a cor do ícone dinamicamente
+        />
       </button>
       <h2 className={styles.title}>{getPageTitle(location.pathname)}</h2>
       <img className={styles.logo} src={logo} alt="4L" />
