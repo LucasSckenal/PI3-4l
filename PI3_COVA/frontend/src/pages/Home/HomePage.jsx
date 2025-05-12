@@ -4,7 +4,7 @@ import { IoArrowForwardSharp } from "react-icons/io5";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "../../api/Firebase";
+import { db } from "../../api/firebase";
 import ChatHeroBannerBlur from "../../public/ChatHeroBannerBlur.png";
 import styles from "./styles.module.scss";
 

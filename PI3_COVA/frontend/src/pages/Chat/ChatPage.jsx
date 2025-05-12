@@ -9,7 +9,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "../../api/Firebase";
+import { db } from "../../api/firebase";
 import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import styles from "./styles.module.scss";
 import Ia from "../../public/IaChat.gif";
@@ -38,6 +38,7 @@ const ChatPage = () => {
 
       return unsub;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId, userId]);
 
   const scrollToBottom = () => {

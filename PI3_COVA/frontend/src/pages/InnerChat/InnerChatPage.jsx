@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   collection,
   doc,
   addDoc,
+  getDocs,
   serverTimestamp,
   onSnapshot,
   query,
-  orderBy
+  orderBy,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
@@ -15,7 +16,7 @@ import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import styles from "./styles.module.scss";
 import Header from "../../components/Header/Header";
 
-const InnerChatPage = () => {
+export default function InnerChatPage() {
   const { chatId } = useParams();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -28,95 +29,180 @@ const InnerChatPage = () => {
 
   const userId = getAuth().currentUser?.uid;
 
+  const [casesData, setCasesData] = useState([]);
+
+  const systemPrompt = `
+<SYSTEM>
+Você é COV, um assistente virtual de triagem especializado em cefaleias (CID-10 G43: enxaqueca; G44: outras síndromes de algias cefálicas). Seu objetivo é realizar uma triagem eficiente e fornecer um relatório com base nos sintomas relatados pelo paciente.
+
+– Tom de voz: cordial, profissional e conciso.  
+– Objetivo: coletar dados de maneira objetiva e gerar um relatório a partir dos sintomas fornecidos.
+
+Se todas as informações forem fornecidas corretamente, forneça o relatório final, incluindo:
+
+**Relatório de Triagem – Cefaleia**
+– Nome da Doença: [Nome da doença identificada com base nos sintomas]
+– Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
+
+Caso alguma informação não tenha sido fornecida, peça para o paciente fornecer apenas as informações faltantes, sem fazer perguntas extras.
+
+Aqui estão as informações necessárias para a triagem:
+• Qual a data e hora de início do episódio de dor de cabeça?
+• Qual a duração aproximada de cada crise?
+• Em que parte da cabeça você sente a dor (unilateral, bilateral, localização exata)?
+• Quantas crises você tem por semana ou por mês?
+• Em uma escala de 0 a 10, qual a intensidade da dor?
+• Como você descreveria a qualidade da dor (pulsátil, aperto, pontada)?
+• Você apresenta náusea ou vômito?
+• Nota sensibilidade à luz (fotofobia) ou ao som (fonofobia)?
+• Sente aura (visual, sensitiva, alterações de fala)?
+• O que costuma agravar (luz, esforço, ruído)?
+• O que costuma aliviar (repouso, medicação)?
+• Há histórico familiar de cefaleia ou comorbidades relevantes?
+• Quais medicações preventivas e abortivas você usa atualmente?
+• Apresenta febre, rigidez de nuca ou qualquer sinal neurológico (fraqueza, formigamento)?
+
+Por favor, forneça as informações acima para que eu possa gerar o relatório completo. Se faltar alguma informação, pedirei apenas as partes necessárias para completar a triagem.
+</SYSTEM>
+`;
+
+  // --- Leitura da coleção Cases para uso no prompt ---
+  useEffect(() => {
+    const loadCases = async () => {
+      if (!userId) return;
+      const casesRef = collection(db, "Users", userId, "Cases");
+      const snapshot = await getDocs(casesRef);
+      const loadedCases = snapshot.docs.map((doc) => doc.data());
+      setCasesData(loadedCases);
+    };
+    loadCases();
+  }, [userId]);
+
+  const recognitionRef = useRef(null);
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+
+    const recog = new SpeechRecognition();
+    recog.lang = "pt-BR";
+    recog.interimResults = false;
+    recog.maxAlternatives = 1;
+
+    recog.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInputText((prev) => prev + transcript);
+    };
+    recog.onend = () => setIsRecording(false);
+
+    recognitionRef.current = recog;
+  }, []);
+
+  const handleMicClick = () => {
+    if (isRecording) {
+      recognitionRef.current?.stop();
+    } else {
+      setInputText("");
+      recognitionRef.current?.start();
+      setIsRecording(true);
+    }
+  };
+
   const formatConversationHistory = useCallback(() => {
     return messages
-      .filter(msg => msg.text && msg.text.trim() !== '')
-      .map(msg => `${msg.sender === 'user' ? 'Usuário' : 'AI'}: ${msg.text}`)
-      .join('\n');
+      .filter((msg) => msg.text && msg.text.trim() !== "")
+      .map((msg) => `${msg.sender === "user" ? "Usuário" : "AI"}: ${msg.text}`)
+      .join("\n");
   }, [messages]);
 
+  // Listener de mensagens
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !chatId) return;
     const chatRef = doc(db, "Users", userId, "chats", chatId);
     const messagesRef = collection(chatRef, "messages");
     const messagesQuery = query(messagesRef, orderBy("createdAt", "asc"));
 
     const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-      const msgs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      const msgs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
       setMessages(msgs);
-      scrollToBottom();
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     });
 
     return unsubscribe;
   }, [chatId, userId]);
 
-  const scrollToBottom = () => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleMicClick = () => {
-    setIsRecording(prev => !prev);
-  };
-
   const handleSend = async (overrideText = null) => {
-    const messageToSend = overrideText ?? inputText;
+    const messageToSend = overrideText || inputText;
+    if (!messageToSend.trim() || isLoading || !userId || !chatId) return;
 
-    if (!messageToSend.trim() || isLoading || !userId) return;
+    setIsLoading(true);
+    setIsTypingIndicator(true);
+
+    const chatRef = doc(db, "Users", userId, "chats", chatId);
+
+    if (!overrideText) {
+      await addDoc(collection(chatRef, "messages"), {
+        type: "text",
+        text: messageToSend,
+        sender: "user",
+        createdAt: serverTimestamp(),
+      });
+    }
+
+    const history = formatConversationHistory();
+
+    // Formatando os casos anteriores para o prompt
+    const formattedCases =
+      casesData.length > 0
+        ? `Casos anteriores do usuário:\n` +
+          casesData
+            .map((c, i) => `Caso ${i + 1}:\n` + JSON.stringify(c, null, 2))
+            .join("\n\n")
+        : "";
+
+    const fullPrompt = `
+${systemPrompt}
+${formattedCases}
+Histórico da conversa:
+${history}
+
+Usuário: ${messageToSend}
+AI:
+`;
 
     try {
-      setIsLoading(true);
-      setIsTypingIndicator(true);
-
-      const chatRef = doc(db, "Users", userId, "chats", chatId);
-
-      if (!overrideText) {
-        await addDoc(collection(chatRef, "messages"), {
-          type: "text",
-          text: messageToSend,
-          sender: "user",
-          createdAt: serverTimestamp(),
-        });
-      }
-
-      const history = formatConversationHistory();
-      const fullPrompt = `${history}\nUsuário: ${messageToSend}\nAI:`;
-
-      const response = await fetch('http://localhost:5000/api/stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          prompt: fullPrompt,
-          model: 'mistral'
-        }),
+      const response = await fetch("http://localhost:5000/api/stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: fullPrompt, model: "mistral" }),
       });
 
-      if (!response.ok) throw new Error('Network response was not ok');
+      if (!response.ok) throw new Error("Erro ao buscar resposta da IA.");
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let fullResponse = '';
+      let fullResponse = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-
         const chunk = decoder.decode(value);
-        const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
-        
-        for (const line of lines) {
-          try {
-            const data = JSON.parse(line.replace('data: ', ''));
-            if (data.response) {
-              fullResponse += data.response;
-              setStreamingResponse(fullResponse);
-            }
-          } catch (error) {
-            console.error('Error parsing chunk:', error);
-          }
-        }
+        chunk
+          .split("\n")
+          .filter((line) => line.startsWith("data: "))
+          .forEach((line) => {
+            try {
+              const data = JSON.parse(line.replace("data: ", ""));
+              if (data.response) {
+                fullResponse += data.response;
+                setStreamingResponse(fullResponse);
+              }
+            // eslint-disable-next-line no-empty
+            } catch {}
+          });
       }
 
-      if (fullResponse.trim() !== '') {
+      if (fullResponse.trim()) {
         await addDoc(collection(chatRef, "messages"), {
           type: "text",
           text: fullResponse,
@@ -124,10 +210,8 @@ const InnerChatPage = () => {
           createdAt: serverTimestamp(),
         });
       }
-
     } catch (error) {
-      console.error('Error:', error);
-      const chatRef = doc(db, "Users", userId, "chats", chatId);
+      console.error(error);
       await addDoc(collection(chatRef, "messages"), {
         type: "text",
         text: "Desculpe, ocorreu um erro ao processar sua mensagem.",
@@ -151,13 +235,14 @@ const InnerChatPage = () => {
       hasRespondedToFirstMessage.current = true;
       handleSend(messages[0].text);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
   return (
     <main className={styles.InnerChatContainer}>
       <Header />
       <div className={styles.messagesContainer}>
-        {messages.map(msg => (
+        {messages.map((msg) => (
           <div
             key={msg.id}
             className={`${styles.message} ${msg.sender === "user" ? styles.user : styles.ai}`}
@@ -165,12 +250,12 @@ const InnerChatPage = () => {
             {msg.text}
           </div>
         ))}
-        
+
         {isTypingIndicator && !streamingResponse && (
           <div className={`${styles.message} ${styles.ai} ${styles.typingIndicator}`}>
-            <div className={styles.typingDot}></div>
-            <div className={styles.typingDot}></div>
-            <div className={styles.typingDot}></div>
+            <div className={styles.typingDot} />
+            <div className={styles.typingDot} />
+            <div className={styles.typingDot} />
           </div>
         )}
 
@@ -179,6 +264,7 @@ const InnerChatPage = () => {
             {streamingResponse}
           </div>
         )}
+
         <div ref={bottomRef} />
       </div>
 
@@ -193,6 +279,4 @@ const InnerChatPage = () => {
       />
     </main>
   );
-};
-
-export default InnerChatPage;
+}
