@@ -24,12 +24,13 @@ export default function InnerChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [streamingResponse, setStreamingResponse] = useState("");
   const [isTypingIndicator, setIsTypingIndicator] = useState(false);
+  const [casesData, setCasesData] = useState([]);
+  const [isCasesLoaded, setIsCasesLoaded] = useState(false);
+
   const bottomRef = useRef(null);
   const hasRespondedToFirstMessage = useRef(false);
-
+  const recognitionRef = useRef(null);
   const userId = getAuth().currentUser?.uid;
-
-  const [casesData, setCasesData] = useState([]);
 
   const systemPrompt = `
 <SYSTEM>
@@ -63,6 +64,7 @@ Aqui estão as informações necessárias para a triagem:
 • Apresenta febre, rigidez de nuca ou qualquer sinal neurológico (fraqueza, formigamento)?
 
 Por favor, forneça as informações acima para que eu possa gerar o relatório completo. Se faltar alguma informação, pedirei apenas as partes necessárias para completar a triagem.
+Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar o paciente
 </SYSTEM>
 `;
 
@@ -74,16 +76,15 @@ Por favor, forneça as informações acima para que eu possa gerar o relatório 
       const snapshot = await getDocs(casesRef);
       const loadedCases = snapshot.docs.map((doc) => doc.data());
       setCasesData(loadedCases);
+      setIsCasesLoaded(true);
     };
     loadCases();
   }, [userId]);
 
-  const recognitionRef = useRef(null);
   useEffect(() => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
-
     const recog = new SpeechRecognition();
     recog.lang = "pt-BR";
     recog.interimResults = false;
@@ -115,7 +116,6 @@ Por favor, forneça as informações acima para que eu possa gerar o relatório 
       .join("\n");
   }, [messages]);
 
-  // Listener de mensagens
   useEffect(() => {
     if (!userId || !chatId) return;
     const chatRef = doc(db, "Users", userId, "chats", chatId);
@@ -151,18 +151,18 @@ Por favor, forneça as informações acima para que eu possa gerar o relatório 
 
     const history = formatConversationHistory();
 
-    // Formatando os casos anteriores para o prompt
     const formattedCases =
       casesData.length > 0
         ? `Casos anteriores do usuário:\n` +
           casesData
-            .map((c, i) => `Caso ${i + 1}:\n` + JSON.stringify(c, null, 2))
+            .map((c, i) => `Caso ${i + 1}:\n${JSON.stringify(c, null, 2)}`)
             .join("\n\n")
-        : "";
+        : "Nenhum caso anterior registrado.";
 
     const fullPrompt = `
 ${systemPrompt}
 ${formattedCases}
+
 Histórico da conversa:
 ${history}
 
@@ -226,17 +226,19 @@ AI:
     }
   };
 
+  // ✅ Garante que só envia a primeira mensagem após os cases estarem carregados
   useEffect(() => {
     if (
       messages.length === 1 &&
       messages[0].sender === "user" &&
-      !hasRespondedToFirstMessage.current
+      !hasRespondedToFirstMessage.current &&
+      isCasesLoaded
     ) {
       hasRespondedToFirstMessage.current = true;
       handleSend(messages[0].text);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+  }, [messages, isCasesLoaded]);
 
   return (
     <main className={styles.InnerChatContainer}>
