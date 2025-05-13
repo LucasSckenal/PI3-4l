@@ -1,0 +1,67 @@
+.carouselContainer {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ margin-top: 0.5rem;
+ padding: 0 1rem;
+}
+
+.carousel {
+ width: 100%;
+ overflow: hidden;
+ height: 90px;
+}
+
+.slideWrapper {
+ display: flex;
+ transition: transform 0.5s ease;
+}
+
+.slide {
+ min-width: 100%;
+ display: flex;
+ justify-content: center;
+ gap: 0.5rem;
+}
+
+.button {
+ flex: 1;
+ max-width: 48%;
+ height: 100%;
+ background: none;
+ border-left: 1px solid var(--PreferredColor);
+ border-right: 1px solid var(--PreferredColor);
+ border-radius: 12px;
+ padding: 0.75rem 0.5rem;
+ font-size: 0.8rem;
+ text-align: center;
+ word-break: break-word;
+ cursor: pointer;
+ white-space: normal;
+ transition: background-color 0.2s;
+
+ &:hover {
+  background-color: var(--DetailsBg);
+ }
+}
+
+.dots {
+ display: flex;
+ justify-content: center;
+ margin-top: 0.5rem;
+ gap: 6px;
+}
+
+.dot {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ background-color: gray;
+ opacity: 0.4;
+ transition: opacity 0.3s;
+}
+
+.dotActive {
+ opacity: 1;
+ background-color: white;
+}
