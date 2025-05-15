@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   collection,
@@ -9,6 +9,8 @@ import {
   onSnapshot,
   query,
   orderBy,
+  updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
@@ -31,6 +33,54 @@ export default function InnerChatPage() {
   const hasRespondedToFirstMessage = useRef(false);
   const recognitionRef = useRef(null);
   const userId = getAuth().currentUser?.uid;
+
+  const gerarTituloChat = (texto) => {
+    const textoLower = texto.toLowerCase();
+
+    const padroes = [
+      { palavra: "enxaqueca", titulo: "Enxaqueca" },
+      { palavra: "dor de cabeça", titulo: "Dor de Cabeça Intensa" },
+      { palavra: "um lado", titulo: "Dor Lateral" },
+      { palavra: "náusea", titulo: "Com Náusea" },
+      { palavra: "vômito", titulo: "Com Vômito" },
+      { palavra: "intensa", titulo: "Dor Intensa" },
+      { palavra: "homem", titulo: "Homem com Dor" },
+      { palavra: "mulher", titulo: "Mulher com Dor" },
+    ];
+
+    for (const { palavra, titulo } of padroes) {
+      if (textoLower.includes(palavra)) {
+        return titulo;
+      }
+    }
+
+    const palavras = texto.split(" ");
+    return palavras.slice(0, 8).join(" ") + (palavras.length > 8 ? "..." : "");
+  };
+
+  const salvarTituloChat = async (mensagem) => {
+    if (!userId || !chatId) return;
+    const chatRef = doc(db, "Users", userId, "chats", chatId);
+    const chatSnap = await getDoc(chatRef);
+
+    if (!chatSnap.exists()) return;
+    const chatData = chatSnap.data();
+
+    if (!chatData.title) {
+      const tituloGerado = gerarTituloChat(mensagem);
+      await updateDoc(chatRef, { title: tituloGerado });
+    }
+  };
+
+  useEffect(() => {
+    if (
+      messages.length === 1 &&
+      messages[0].sender === "user" &&
+      isCasesLoaded
+    ) {
+      salvarTituloChat(messages[0].text);
+    }
+  }, [messages, isCasesLoaded]);
 
   const systemPrompt = `
 <SYSTEM>
@@ -197,7 +247,7 @@ AI:
                 fullResponse += data.response;
                 setStreamingResponse(fullResponse);
               }
-            // eslint-disable-next-line no-empty
+              // eslint-disable-next-line no-empty
             } catch {}
           });
       }
@@ -247,14 +297,18 @@ AI:
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`${styles.message} ${msg.sender === "user" ? styles.user : styles.ai}`}
+            className={`${styles.message} ${
+              msg.sender === "user" ? styles.user : styles.ai
+            }`}
           >
             {msg.text}
           </div>
         ))}
 
         {isTypingIndicator && !streamingResponse && (
-          <div className={`${styles.message} ${styles.ai} ${styles.typingIndicator}`}>
+          <div
+            className={`${styles.message} ${styles.ai} ${styles.typingIndicator}`}
+          >
             <div className={styles.typingDot} />
             <div className={styles.typingDot} />
             <div className={styles.typingDot} />

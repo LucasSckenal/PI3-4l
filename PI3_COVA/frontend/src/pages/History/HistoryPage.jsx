@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
@@ -44,7 +44,12 @@ const HistoryPage = () => {
         const dataStr =
           chat.createdAt?.toDate().toLocaleDateString("pt-BR") || "";
         const sintoma = (chat.sintoma || "").toLowerCase();
-        return dataStr.includes(lower) || sintoma.includes(lower);
+        const title = (chat.title || "").toLowerCase();
+        return (
+          dataStr.includes(lower) ||
+          sintoma.includes(lower) ||
+          title.includes(lower)
+        );
       });
       if (filtered.length > 0) {
         result[date] = filtered;
@@ -59,7 +64,7 @@ const HistoryPage = () => {
         <input
           type="search"
           className={styles.SearchInput}
-          placeholder="Buscar por data ou sintoma..."
+          placeholder="Buscar por data, sintoma ou título..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -78,11 +83,11 @@ const HistoryPage = () => {
                 onClick={() => navigate(`/chat/${chat.id}`)}
               >
                 <p>
-                  Iniciado:{" "}
-                  {chat.createdAt?.toDate().toLocaleTimeString("pt-BR")}
+                  <strong>{chat.title || chat.sintoma || "Sem título"}</strong>
                 </p>
                 <p>
-                  <strong>{chat.sintoma}</strong>
+                  Iniciado:{" "}
+                  {chat.createdAt?.toDate().toLocaleTimeString("pt-BR")}
                 </p>
               </li>
             ))}

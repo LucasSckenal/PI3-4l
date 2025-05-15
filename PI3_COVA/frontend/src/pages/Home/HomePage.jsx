@@ -41,6 +41,7 @@ const HomePage = () => {
           createdAt:
             data.createdAt?.toDate().toLocaleDateString("pt-BR") ||
             "Data desconhecida",
+          title: data.title || "", // adiciona o título aqui
         };
       });
       setHistory(results);
@@ -65,7 +66,6 @@ const HomePage = () => {
 
       const uniqueSymptoms = [...new Set(allSymptoms)];
       const latestSymptoms = uniqueSymptoms.slice(-6);
-      console.log(allSymptoms);
       setSymptoms(latestSymptoms);
     });
 
@@ -178,7 +178,7 @@ const HomePage = () => {
                 onClick={() => navigate(`/chat/${item.id}`)}
                 style={{ cursor: "pointer" }}
               >
-                {index + 1}. {item.createdAt}
+                {index + 1}. {item.title ? `${item.title} ` : ""}
               </div>
             ))
           ) : (
