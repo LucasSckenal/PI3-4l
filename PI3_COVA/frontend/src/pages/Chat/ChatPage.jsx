@@ -26,6 +26,31 @@ const ChatPage = () => {
 
   const userId = getAuth().currentUser?.uid;
 
+  const fullIntro =
+    "Olá! Sou sua assistente médica. Me conte seus sintomas com uma mensagem de voz ou texto e vou gerar um relatório para agilizar seu atendimento.";
+  const [displayedText, setDisplayedText] = useState("");
+
+  // Efeito de digitação animada
+  useEffect(() => {
+    let isCancelled = false;
+    let currentText = "";
+
+    const typeText = (index) => {
+      if (isCancelled || index >= fullIntro.length) return;
+
+      currentText += fullIntro.charAt(index);
+      setDisplayedText(currentText);
+
+      setTimeout(() => typeText(index + 1), 35);
+    };
+
+    typeText(0);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
   useEffect(() => {
     if (!isNewChat && userId) {
       const chatRef = doc(db, "Users", userId, "chats", chatId);
@@ -99,10 +124,10 @@ const ChatPage = () => {
       <div className={styles.IaContainer}>
         <img src={Ia} className={styles.ia} alt="Assistente IA" />
         <p className={styles.pIa}>
-          Olá! Sou sua assistente médica.{" "}
-          <span className={styles.spanIa}>Me conte seus sintomas</span> com uma
-          mensagem de voz ou texto e vou gerar um relatório para agilizar seu
-          atendimento.
+          {displayedText}
+          {displayedText.length < fullIntro.length && (
+            <span className={styles.cursor}>|</span>
+          )}
         </p>
       </div>
 

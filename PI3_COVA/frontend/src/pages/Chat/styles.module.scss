@@ -3,10 +3,9 @@
   flex-direction: column;
   align-items: center;
   padding-top: 5%;
-  height: 100%;
-  min-height: 78vh;
   overflow: hidden !important;
   gap: 50px;
+  width: 95%;
 
   .IaContainer {
     display: flex;
@@ -27,11 +26,7 @@
     .pIa {
       text-align: center;
       color: var(--TextGeneralAlt);
-    }
-
-    .spanIa {
-      color: var(--PreferredColor);
-      font-weight: bold;
+      height: 50px;
     }
   }
 
@@ -107,6 +102,7 @@
       justify-content: center;
       border-radius: 50%;
       height: 55px;
+      background-color: var(--DetailsBg);
     }
 
     .innerBtns {
@@ -124,5 +120,29 @@
 
   .quickLabel {
     padding-left: 30px;
+    color: var(--TextGeneral);
   }
+
+  .cursor {
+    display: inline-block;
+    margin-left: 2px;
+    width: 1px;
+    background-color: var(--TextGeneralAlt);
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
 }

@@ -90,7 +90,12 @@ const EditProfileModal = ({ onClose }) => {
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.avatarLabel}>
             <img src={formData.photo || "/default-avatar.png"} alt="avatar" />
-            <input type="file" accept="image/*" onChange={handleImageChange} hidden />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              hidden
+            />
           </label>
 
           <input
@@ -103,8 +108,9 @@ const EditProfileModal = ({ onClose }) => {
           />
           <input
             name="phone"
-            type="text"
+            type="tel"
             placeholder="Phone"
+            pattern="([0-9]){2} [0-9]{4}-[0-9]{4}"
             value={formData.phone}
             onChange={handleChange}
           />

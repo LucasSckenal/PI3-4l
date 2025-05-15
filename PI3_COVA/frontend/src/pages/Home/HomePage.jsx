@@ -2,7 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowForwardSharp } from "react-icons/io5";
 import { useAccount } from "../../contexts/Account/AccountProvider";
-import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
 import ChatHeroBannerBlur from "../../public/ChatHeroBannerBlur.png";
@@ -12,6 +18,10 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { userData, loading } = useAccount();
   const [history, setHistory] = useState([]);
+  const [symptoms, setSymptoms] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(2);
+  const [transitioning, setTransitioning] = useState(true);
+  const trackRef = useRef(null);
 
   useEffect(() => {
     const userId = getAuth().currentUser?.uid;
@@ -28,7 +38,9 @@ const HomePage = () => {
         const data = doc.data();
         return {
           id: doc.id,
-          createdAt: data.createdAt?.toDate().toLocaleDateString("pt-BR") || "Data desconhecida",
+          createdAt:
+            data.createdAt?.toDate().toLocaleDateString("pt-BR") ||
+            "Data desconhecida",
         };
       });
       setHistory(results);
@@ -37,22 +49,40 @@ const HomePage = () => {
     return unsub;
   }, []);
 
-  // Carrossel
-  const items = ["PI", "Estresse", "Insônia", "Depressão", "TDAH", "Fobia"];
+  // 🔍 Escutar sintomas da coleção Cases (limitado aos últimos 6 distintos)
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "Cases"), (snapshot) => {
+      const allSymptoms = [];
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (Array.isArray(data.sintomas)) {
+          allSymptoms.push(...data.sintomas);
+        } else if (typeof data.sintomas === "object") {
+          allSymptoms.push(...Object.values(data.sintomas));
+        }
+      });
+
+      const uniqueSymptoms = [...new Set(allSymptoms)];
+      const latestSymptoms = uniqueSymptoms.slice(-6);
+      console.log(allSymptoms);
+      setSymptoms(latestSymptoms);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const itemWidth = 120;
   const visibleItems = 3;
   const offsetToCenter = (itemWidth * visibleItems) / 2 - itemWidth / 2;
-  const duplicatedItems = [
-    items[items.length - 2],
-    items[items.length - 1],
-    ...items,
-    items[0],
-    items[1],
-  ];
 
-  const [currentIndex, setCurrentIndex] = useState(2);
-  const [transitioning, setTransitioning] = useState(true);
-  const trackRef = useRef(null);
+  const duplicatedItems = [
+    symptoms[symptoms.length - 2],
+    symptoms[symptoms.length - 1],
+    ...symptoms,
+    symptoms[0],
+    symptoms[1],
+  ].filter(Boolean);
 
   useEffect(() => {
     const interval = setInterval(() => {

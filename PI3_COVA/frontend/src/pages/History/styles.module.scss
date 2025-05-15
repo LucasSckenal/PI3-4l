@@ -1,46 +1,90 @@
-.HistoryContainer{
- display: flex;
- flex-direction: column;
- justify-content: start;
- text-align: center;
- align-items: center;
- width: 90%;
- height: 95%;
- overflow: scroll;
- scrollbar-width: none;
- padding-top: 10%;
- gap: var(--Gap2);
+.HistoryContainer {
+   display: flex;
+   flex-direction: column;
+   justify-content: start;
+   align-items: center;
+   width: 90%;
+   height: 95%;
+   overflow: scroll;
+   scrollbar-width: none;
+   padding-top: 5%;
+   gap: var(--Gap2);
 
-      .HistoryTitle{
-         color: var(--TextGeneral);
+   .InputWrapper {
+   position: relative;
+   width: 100%;
+   max-width: 500px;
+   margin-bottom: 20px;
+
+   .SearchIcon {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      transform: translateY(-50%);
+      color: var(--PreferredColor);
+      pointer-events: none;
+      font-size: 20px;
+   }
+
+   .SearchInput {
+      width: 100%;
+      padding: 10px 16px 10px 40px; 
+      border-radius: 8px;
+      border: 1px solid var(--PreferredColor);
+      font-size: 16px;
+      outline: none;
+      color: var(--TextGeneral);
+      background-color: transparent;
+      transition: 0.3s ease;
+
+      &:focus {
+         border-color: var(--AccentColor);
+         background-color: rgba(255, 255, 255, 0.05);
       }
- 
-    .chatList{
-     display: flex;
-     flex-direction: column;
-     gap: var(--Gap2);      
-     
-        .chatItem{
-         display: flex;
-         align-items: center;
-         height: 50px;
-         background: none;
-         border-radius: 16px;
-         padding: 10px;
-         border-bottom: 1px solid var(--PreferredColor);
-         list-style: none;
-         cursor: pointer;
-         p{
-            color: var(--PreferredColor);
-         }
-         &:hover{
-            background-color: var(--PreferredColor);
-            transform: scale(1.15);
-            p{
-            color: var(--TextGeneral);
-            }
-         }
-        }
-    }
+   }
+}
 
+   
+
+   .DateTitle {
+      color: var(--TextGeneral);
+      margin-bottom: 4px;
+      font-weight: bold;
+   }
+
+   .chatListGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--Gap2);
+      width: 100%;
+      list-style: none;
+      padding: 10px;
+   }
+
+   .chatItem {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--PreferredColor);
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+
+      p {
+         color: var(--TextGeneral);
+         margin: 4px 0;
+      }
+
+      &:hover {
+         background-color: var(--PreferredColor);
+         transform: scale(1.05);
+
+         p {
+            color: var(--TextGeneral);
+         }
+      }
+      
+   }
 }

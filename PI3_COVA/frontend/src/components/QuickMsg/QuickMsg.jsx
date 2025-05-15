@@ -57,7 +57,7 @@ const QuickMessagesCarousel = ({ onSendMessage }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % totalPages);
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [totalPages]);
 

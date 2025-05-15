@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../api/firebase";
 
 const AccountContext = createContext();
@@ -15,7 +15,6 @@ export const useAccount = () => {
 };
 
 const isValidPhoto = (photo) => {
-  // Verifica se é uma string base64 ou URL válida
   return typeof photo === "string" && (
     photo.startsWith("data:image") || photo.startsWith("http")
   );
@@ -26,42 +25,23 @@ const AccountProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
+    const auth = getAuth();
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         setUserData(null);
         setLoading(false);
         return;
       }
 
+      const userDocRef = doc(db, "Users", user.uid);
+
+      // Primeiro, garantimos que o documento existe
       try {
-        const userDocRef = doc(db, "Users", user.uid);
         const userDoc = await getDoc(userDocRef);
-
-        let data;
-
-        if (userDoc.exists()) {
-          data = userDoc.data();
-
-          const photoSource =
-            isValidPhoto(data.photo) ? data.photo :
-            isValidPhoto(user.photoURL) ? user.photoURL : "";
-
-          data = {
-            uid: user.uid,
-            name: data.name || user.displayName || "",
-            email: data.email || user.email || "",
-            photo: photoSource,
-            birthDate: data.birthDate || "",
-            gender: data.gender || "",
-            phone: data.phone || "",
-            location: data.location || "",
-          };
-
-          setUserData(data);
-        } else {
+        if (!userDoc.exists()) {
           const photoSource = isValidPhoto(user.photoURL) ? user.photoURL : "";
 
-          data = {
+          const initialData = {
             uid: user.uid,
             name: user.displayName || "",
             email: user.email || "",
@@ -72,17 +52,45 @@ const AccountProvider = ({ children }) => {
             location: "",
           };
 
-          await setDoc(userDocRef, data);
-          setUserData(data);
+          await setDoc(userDocRef, initialData);
         }
       } catch (error) {
-        console.error("Erro ao buscar/criar dados do usuário:", error);
-      } finally {
+        console.error("Erro ao criar documento de usuário:", error);
         setLoading(false);
+        return;
       }
+
+      // Agora escutamos o documento em tempo real
+      const unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+
+          const photoSource =
+            isValidPhoto(data.photo) ? data.photo :
+            isValidPhoto(user.photoURL) ? user.photoURL : "";
+
+          setUserData({
+            uid: user.uid,
+            name: data.name || user.displayName || "",
+            email: data.email || user.email || "",
+            photo: photoSource,
+            birthDate: data.birthDate || "",
+            gender: data.gender || "",
+            phone: data.phone || "",
+            location: data.location || "",
+          });
+        }
+        setLoading(false);
+      }, (error) => {
+        console.error("Erro ao escutar dados do usuário:", error);
+        setLoading(false);
+      });
+
+      // Cleanup do snapshot ao deslogar ou desmontar
+      return () => unsubscribeSnapshot();
     });
 
-    return () => unsubscribe();
+    return () => unsubscribeAuth();
   }, []);
 
   return (
