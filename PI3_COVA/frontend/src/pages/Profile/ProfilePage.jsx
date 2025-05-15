@@ -17,9 +17,21 @@ const ProfilePage = () => {
 
   const getProfileImageSource = () => {
     if (!userData.photo) return defaultProfileIcon;
-    if (userData.photo.startsWith("http") || userData.photo.startsWith("data:image"))
+    if (
+      userData.photo.startsWith("http") ||
+      userData.photo.startsWith("data:image")
+    )
       return userData.photo;
     return defaultProfileIcon;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
   };
 
   return (
@@ -48,7 +60,7 @@ const ProfilePage = () => {
           Localização: <span>{userData?.location}</span>
         </div>
         <div className={styles.infoItem}>
-          Data de Nascimento: <span>{userData?.birthDate}</span>
+          Data de Nascimento: <span>{formatDate(userData?.birthDate)}</span>
         </div>
         <div className={styles.infoItem}>
           Celular: <span>{userData?.phone}</span>
@@ -64,7 +76,9 @@ const ProfilePage = () => {
         </button>
       </div>
 
-      {isModalOpen && <EditProfileModal isOpen={isModalOpen} onClose={handleCloseModal} />}
+      {isModalOpen && (
+        <EditProfileModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };
