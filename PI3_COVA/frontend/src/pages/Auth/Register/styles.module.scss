@@ -36,11 +36,12 @@
     border-radius: 16px;
     padding: 10px;
   }
-  .namesInput{
+
+  .namesInput {
     display: flex;
     flex-direction: row;
 
-    .inputRegister{
+    .inputRegister {
       width: 38vw;
     }
   }
@@ -198,6 +199,31 @@
     border: 2px solid white;
   }
 
+  .pass {
+    position: relative;
+    width: 75vw;
+
+    input {
+      width: 100%;
+      height: 5vh;
+      border-radius: 16px;
+      padding-right: 40px;
+    }
+
+    .icon {
+      position: absolute;
+      right: 15px;
+      top: 25%;
+      cursor: pointer;
+      color: var(--TextGeneral);
+      font-size: 1.2rem;
+
+      &:hover {
+        color: var(--PreferredColor);
+      }
+    }
+  }
+
   .hiddenInput {
     display: none;
   }
@@ -214,5 +240,9 @@
       color: var(--TextGeneralReverse);
       transform: scale(1.1);
     }
+  }
+
+  .pBack {
+    color: var(--PreferredColor);
   }
 }

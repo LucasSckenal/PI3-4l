@@ -3,6 +3,7 @@ import { getAuth, updatePassword } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../api/firebase";
 import { useAccount } from "../../contexts/Account/AccountProvider";
+import { toast } from "react-toastify";
 import styles from "./styles.module.scss";
 
 const EditProfileModal = ({ onClose }) => {
@@ -18,6 +19,23 @@ const EditProfileModal = ({ onClose }) => {
 
   const [loading, setLoading] = useState(false);
 
+  const formatPhone = (value) => {
+    const cleaned = value.replace(/\D/g, "").slice(0, 11);
+    const match = cleaned.match(/^(\d{0,2})(\d{0,5})(\d{0,4})$/);
+
+    if (!match) return value;
+
+    const [, ddd, part1, part2] = match;
+    let formatted = "";
+    if (ddd) formatted += `(${ddd}`;
+    if (ddd && ddd.length === 2) formatted += `) `;
+    if (part1) formatted += part1;
+    if (part2) formatted += `-${part2}`;
+    return formatted.trim();
+  };
+  
+  
+
   useEffect(() => {
     if (userData) {
       setFormData((prev) => ({
@@ -30,10 +48,16 @@ const EditProfileModal = ({ onClose }) => {
       }));
     }
   }, [userData]);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    let newValue = value;
+    if (name === "phone") {
+      newValue = formatPhone(value);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
   };
 
   const handleImageChange = (e) => {
@@ -67,10 +91,10 @@ const EditProfileModal = ({ onClose }) => {
         await updatePassword(user, formData.password);
       }
 
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
       onClose();
     } catch (err) {
-      alert("Error updating profile: " + err.message);
+      toast.error("Error updating profile: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -110,7 +134,6 @@ const EditProfileModal = ({ onClose }) => {
             name="phone"
             type="tel"
             placeholder="Phone"
-            pattern="([0-9]){2} [0-9]{4}-[0-9]{4}"
             value={formData.phone}
             onChange={handleChange}
           />
