@@ -15,6 +15,7 @@ const EditProfileModal = ({ onClose }) => {
     location: "",
     photo: "",
     password: "",
+    birthDate: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -33,8 +34,6 @@ const EditProfileModal = ({ onClose }) => {
     if (part2) formatted += `-${part2}`;
     return formatted.trim();
   };
-  
-  
 
   useEffect(() => {
     if (userData) {
@@ -45,10 +44,11 @@ const EditProfileModal = ({ onClose }) => {
         phone: userData.phone || "",
         location: userData.location || "",
         photo: userData.photo || "",
+        birthDate: userData.birthDate || "",
       }));
     }
   }, [userData]);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -79,22 +79,29 @@ const EditProfileModal = ({ onClose }) => {
       const user = auth.currentUser;
 
       const userRef = doc(db, "Users", user.uid);
-      await updateDoc(userRef, {
+
+      const updatedData = {
         name: formData.name,
         gender: formData.gender,
         phone: formData.phone,
         location: formData.location,
         photo: formData.photo,
-      });
+      };
+
+      if (!userData.birthDate && formData.birthDate) {
+        updatedData.birthDate = formData.birthDate;
+      }
+
+      await updateDoc(userRef, updatedData);
 
       if (formData.password) {
         await updatePassword(user, formData.password);
       }
 
-      toast.success("Profile updated successfully!");
+      toast.success("Perfil atualizado com sucesso!");
       onClose();
     } catch (err) {
-      toast.error("Error updating profile: " + err.message);
+      toast.error("Erro ao atualizar o perfil: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -110,7 +117,7 @@ const EditProfileModal = ({ onClose }) => {
       }}
     >
       <div className={styles.modal}>
-        <h2>Edit Profile</h2>
+        <h2>Editar Perfil</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.avatarLabel}>
             <img src={formData.photo || "/default-avatar.png"} alt="avatar" />
@@ -125,44 +132,66 @@ const EditProfileModal = ({ onClose }) => {
           <input
             name="name"
             type="text"
-            placeholder="Full Name"
+            placeholder="Nome completo"
             value={formData.name}
             onChange={handleChange}
             required
           />
+
           <input
             name="phone"
             type="tel"
-            placeholder="Phone"
+            placeholder="Celular"
             value={formData.phone}
             onChange={handleChange}
           />
+
           <input
             name="location"
             type="text"
-            placeholder="Location"
+            placeholder="Localização"
             value={formData.location}
             onChange={handleChange}
           />
+
           <select name="gender" value={formData.gender} onChange={handleChange}>
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="">Selecione o gênero</option>
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+            <option value="other">Outro</option>
           </select>
+
+          <div className={styles.birthDateContainer}>
+            <input
+              name="birthDate"
+              type="date"
+              value={formData.birthDate}
+              onChange={handleChange}
+              disabled={!!userData?.birthDate}
+              required={!userData?.birthDate}
+              className={userData?.birthDate ? styles.disabledInput : ""}
+            />
+            {userData?.birthDate && (
+              <small className={styles.helperText}>
+                A data de nascimento só pode ser definida uma vez.
+              </small>
+            )}
+          </div>
+
           <input
             name="password"
             type="password"
-            placeholder="New Password (optional)"
+            placeholder="Nova senha (opcional)"
             value={formData.password}
             onChange={handleChange}
           />
+
           <div className={styles.buttons}>
             <button type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Save"}
+              {loading ? "Salvando..." : "Salvar"}
             </button>
             <button type="button" onClick={onClose} className={styles.cancel}>
-              Cancel
+              Cancelar
             </button>
           </div>
         </form>

@@ -66,7 +66,14 @@ const ProfilePage = () => {
           Celular: <span>{userData?.phone}</span>
         </div>
         <div className={styles.infoItem}>
-          Gênero: <span>{userData?.gender}</span>
+          Gênero:{" "}
+          <span>
+            {userData?.gender == "male"
+              ? "Masculino"
+              : userData?.gender == "female"
+              ? "Feminino"
+              : "Outro"}
+          </span>
         </div>
       </div>
 

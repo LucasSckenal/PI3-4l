@@ -8,11 +8,13 @@ import {
   IoFileTrayFull,
 } from "react-icons/io5";
 
+import { useAccount } from "../../contexts/Account/AccountProvider";
 import styles from "./styles.module.scss";
 
 const FooterBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { userData } = useAccount();
 
   const navItems = useMemo(
     () => [
@@ -35,6 +37,18 @@ const FooterBar = () => {
     navigate(path);
   };
 
+  const isProfileIncomplete = useMemo(() => {
+    if (!userData) return false;
+    const requiredFields = [
+      "email",
+      "location",
+      "birthDate",
+      "phone",
+      "gender",
+    ];
+    return requiredFields.some((field) => !userData[field]);
+  }, [userData]);
+
   return (
     <footer className={styles.FooterBar}>
       <ul className={styles.bar}>
@@ -45,6 +59,9 @@ const FooterBar = () => {
             onClick={() => handleSelect(item.path)}
           >
             {item.icon}
+            {item.path === "/profile" && isProfileIncomplete && (
+              <span className={styles.notificationDot}></span>
+            )}
           </li>
         ))}
       </ul>
