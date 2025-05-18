@@ -1,90 +1,109 @@
 .HistoryContainer {
-   display: flex;
-   flex-direction: column;
-   justify-content: start;
-   align-items: center;
+   display: grid;
+   grid-template-rows: auto 1fr;
    width: 90%;
    height: 95%;
+   padding-bottom: 2%;
    overflow: scroll;
-   scrollbar-width: none;
-   padding-top: 5%;
    gap: var(--Gap2);
-
-   .InputWrapper {
    position: relative;
-   width: 100%;
-   max-width: 500px;
-   margin-bottom: 20px;
+   scrollbar-width: none;
+   -ms-overflow-style: none;
 
-   .SearchIcon {
-      position: absolute;
-      top: 50%;
-      left: 16px;
-      transform: translateY(-50%);
-      color: var(--PreferredColor);
-      pointer-events: none;
-      font-size: 20px;
-   }
-
-   .SearchInput {
-      width: 100%;
-      padding: 10px 16px 10px 40px; 
-      border-radius: 8px;
-      border: 1px solid var(--PreferredColor);
-      font-size: 16px;
-      outline: none;
-      color: var(--TextGeneral);
-      background-color: transparent;
-      transition: 0.3s ease;
-
-      &:focus {
-         border-color: var(--AccentColor);
-         background-color: rgba(255, 255, 255, 0.05);
-      }
+   &::-webkit-scrollbar {
+      display: none;
    }
 }
 
-   
+.InputWrapper {
+   position: sticky;
+   top: 0;
+   z-index: 10;
+   width: 100%;
+   max-width: 500px;
+   margin: 0 auto 20px auto;
+   padding: 0.5rem 0;
 
-   .DateTitle {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.SearchInput {
+   width: 100%;
+   max-width: 400px;
+   padding: 10px 16px 10px 40px;
+   border-radius: 8px;
+   border: 1px solid var(--PreferredColor);
+   font-size: 16px;
+   outline: none;
+   color: var(--TextGeneral);
+   background-color: var(--Bg);
+   transition: 0.3s ease;
+
+   &:focus {
+      border-color: var(--AccentColor);
+      background-color: rgba(255, 255, 255, 0.05);
+   }
+}
+
+.SearchIcon {
+   position: absolute;
+   top: 50%;
+   left: calc(50% - 180px);
+   transform: translateY(-50%);
+   color: var(--PreferredColor);
+   pointer-events: none;
+   font-size: 20px;
+}
+
+.DayGroup {
+   width: 100%;
+   overflow-y: auto;
+   padding-right: 10px;
+   max-height: calc(95% - 80px);
+}
+
+.DateTitle {
+   color: var(--TextGeneral);
+   margin-bottom: 4px;
+   font-weight: bold;
+}
+
+.chatListGrid {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: var(--Gap2);
+   width: 100%;
+   list-style: none;
+   padding: 10px;
+
+   @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+   }
+}
+
+.chatItem {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   background-color: rgba(255, 255, 255, 0.03);
+   border: 1px solid var(--PreferredColor);
+   border-radius: 16px;
+   padding: 16px;
+   cursor: pointer;
+   transition: 0.3s ease;
+
+   p {
       color: var(--TextGeneral);
-      margin-bottom: 4px;
-      font-weight: bold;
+      margin: 4px 0;
    }
 
-   .chatListGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: var(--Gap2);
-      width: 100%;
-      list-style: none;
-      padding: 10px;
-   }
-
-   .chatItem {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background-color: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--PreferredColor);
-      border-radius: 16px;
-      padding: 16px;
-      cursor: pointer;
-      transition: 0.3s ease;
+   &:hover {
+      background-color: var(--PreferredColor);
 
       p {
          color: var(--TextGeneral);
-         margin: 4px 0;
       }
-
-      &:hover {
-         background-color: var(--PreferredColor);
-         transform: scale(1.05);
-
-         p {
-            color: var(--TextGeneral);
-         }
-      }
-      
    }
 }

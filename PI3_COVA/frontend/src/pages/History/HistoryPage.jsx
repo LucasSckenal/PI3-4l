@@ -71,29 +71,33 @@ const HistoryPage = () => {
         <IoSearchSharp className={styles.SearchIcon} />
       </div>
 
-      {Object.entries(filteredGroupedChats).map(([date, chats]) => (
-        <div key={date} className={styles.DayGroup}>
-          <h3 className={styles.DateTitle}>{date}</h3>
-          <Divider width={"100%"} />
-          <ul className={styles.chatListGrid}>
-            {chats.map((chat) => (
-              <li
-                key={chat.id}
-                className={styles.chatItem}
-                onClick={() => navigate(`/chat/${chat.id}`)}
-              >
-                <p>
-                  <strong>{chat.title || chat.sintoma || "Sem título"}</strong>
-                </p>
-                <p>
-                  Iniciado:{" "}
-                  {chat.createdAt?.toDate().toLocaleTimeString("pt-BR")}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div className={styles.ContentWrapper}>
+        {Object.entries(filteredGroupedChats).map(([date, chats]) => (
+          <div key={date}>
+            <h3 className={styles.DateTitle}>{date}</h3>
+            <Divider width={"100%"} />
+            <ul className={styles.chatListGrid}>
+              {chats.map((chat) => (
+                <li
+                  key={chat.id}
+                  className={styles.chatItem}
+                  onClick={() => navigate(`/chat/${chat.id}`)}
+                >
+                  <p>
+                    <strong>
+                      {chat.title || chat.sintoma || "Sem título"}
+                    </strong>
+                  </p>
+                  <p>
+                    Iniciado:{" "}
+                    {chat.createdAt?.toDate().toLocaleTimeString("pt-BR")}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </main>
   );
 };
