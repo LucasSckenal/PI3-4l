@@ -3,12 +3,17 @@
    grid-template-rows: auto 1fr;
    width: 90%;
    height: 95%;
+   margin: 0 auto;
    padding-bottom: 2%;
    overflow: scroll;
    gap: var(--Gap2);
    position: relative;
    scrollbar-width: none;
    -ms-overflow-style: none;
+
+   @media screen and (min-width: 1028px) {
+      height: 100%;
+   }
 
    &::-webkit-scrollbar {
       display: none;
@@ -40,11 +45,6 @@
    color: var(--TextGeneral);
    background-color: var(--Bg);
    transition: 0.3s ease;
-
-   &:focus {
-      border-color: var(--AccentColor);
-      background-color: rgba(255, 255, 255, 0.05);
-   }
 }
 
 .SearchIcon {

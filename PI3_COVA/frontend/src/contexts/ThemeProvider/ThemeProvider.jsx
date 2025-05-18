@@ -20,7 +20,7 @@ export const ThemeProvider = ({ children }) => {
 
   const [preferredLanguage, setPreferredLanguage] = useState(() => {
     const storedLang = localStorage.getItem("preferredLanguage");
-    return storedLang || "pt"; // Padrão: português
+    return storedLang || "pt";
   });
 
   const [loading, setLoading] = useState(true);

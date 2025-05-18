@@ -12,15 +12,12 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Consome o contexto
-  const { isDarkMode, preferredColor } = useContext(ThemeContext);
+  const { isDarkMode} = useContext(ThemeContext);
 
-  // Calculando dinamicamente as variáveis de acordo com o tema atual
   const [logo, setLogo] = useState(logoDark);
   const [iconColor, setIconColor] = useState("white");
 
   useEffect(() => {
-    // Atualizando conforme o tema
     if (isDarkMode) {
       setLogo(logoDark);
       setIconColor("white");
@@ -28,7 +25,7 @@ const Header = () => {
       setLogo(logoLight);
       setIconColor("black");
     }
-  }, [isDarkMode]); // Atualiza quando isDarkMode mudar
+  }, [isDarkMode]); 
 
   const getPageTitle = (pathname) => {
     switch (pathname) {
@@ -56,7 +53,7 @@ const Header = () => {
       >
         <IoArrowBackOutline
           className={styles.btnSbg}
-          style={{ color: iconColor }} // Altera a cor do ícone dinamicamente
+          style={{ color: iconColor }} 
         />
       </button>
       <h2 className={styles.title}>{getPageTitle(location.pathname)}</h2>

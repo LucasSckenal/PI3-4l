@@ -1,5 +1,5 @@
 .MainContainer {
-
+  width: 100%;
   margin-top: 16px;
   color: var(--TextGeneralAlt);
 
@@ -16,6 +16,7 @@
 
   .InnerContainer {
     display: flex;
+    width: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -26,6 +27,7 @@
       justify-content: space-around;
       align-items: end;
       width: 90vw;
+      max-width: 1200px;
       height: 27vh;
       border: 1px solid var(--TextGeneral);
       border-radius: 16px;
@@ -123,7 +125,7 @@
       display: flex;
       flex-direction: row;
       align-items: center !important;
-      justify-content: space-between;
+      justify-content: space-around;
       margin-top: 3vh;
       font-size: 16px;
 
@@ -142,10 +144,14 @@
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      width: 90vw;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
       gap: 20px;
 
       .box {
+        width: 100%;
+        max-width: 400px;
         width: 42vw;
         border-bottom: 1.5px solid var(--PreferredColor);
         border-radius: 8px;

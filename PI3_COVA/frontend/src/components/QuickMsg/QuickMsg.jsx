@@ -46,9 +46,22 @@ const QuickMessagesCarousel = ({ onSendMessage }) => {
   const gender = userData?.gender;
 
   const messages = generatePersonalizedMessages(gender, age);
+
+  const [itemsPerSlide, setItemsPerSlide] = useState(() =>
+    window.innerWidth >= 1024 ? 4 : 2
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerSlide(window.innerWidth >= 1024 ? 4 : 2);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const groupedMessages = [];
-  for (let i = 0; i < messages.length; i += 2) {
-    groupedMessages.push(messages.slice(i, i + 2));
+  for (let i = 0; i < messages.length; i += itemsPerSlide) {
+    groupedMessages.push(messages.slice(i, i + itemsPerSlide));
   }
 
   const totalPages = groupedMessages.length;

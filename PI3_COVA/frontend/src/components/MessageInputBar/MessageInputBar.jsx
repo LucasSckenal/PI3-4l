@@ -6,7 +6,7 @@ const MessageInputBar = ({
   onChangeText,
   isRecording,
   onMicClick,
-  onSendClick
+  onSendClick,
 }) => (
   <div className={styles.inputBar}>
     <input
@@ -14,7 +14,7 @@ const MessageInputBar = ({
       className={styles.inputTextField}
       placeholder="Escreva seu problema aqui"
       value={inputText}
-      onChange={e => onChangeText(e.target.value)}
+      onChange={(e) => onChangeText(e.target.value)}
     />
 
     <button
@@ -24,9 +24,7 @@ const MessageInputBar = ({
       onClick={onMicClick}
     >
       <IoMic
-        className={
-          isRecording ? styles.innerBtnsRecording : styles.innerBtns
-        }
+        className={isRecording ? styles.innerBtnsRecording : styles.innerBtns}
       />
     </button>
 
