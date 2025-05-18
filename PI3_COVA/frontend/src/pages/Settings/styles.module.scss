@@ -1,115 +1,123 @@
-.SettingsContainer {
+.container {
+  width: 100%;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 90%;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  max-height: 95%;
-  margin: 0 auto;
-  border-radius: 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  gap: 2rem;
   font-family: var(--TextGeneral);
+  background-color: var(--Background);
+  color: var(--White);
+}
 
-  .Title {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    color: var(--TextGeneral);
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+  grid-template-columns: 1fr; // padrão mobile
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr); // 2 colunas para web/tablets
+  }
+}
+
+.card {
+  background-color: var(--DetailsBg, #f9f9f9);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  span {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+}
+
+.switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
   }
 
-  .OptionRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 1rem 0;
-    gap: 20px;
-    color: var(--TextGeneral);
-  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: var(--Bg);
+    border-radius: 26px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.4s;
 
-  .Switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-
-    input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .Slider {
+    &:before {
+      content: "";
       position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
+      height: 20px;
+      width: 20px;
+      background: var(--DetailsBg);
+      border-radius: 50%;
+      left: 3px;
+      bottom: 3px;
       transition: 0.4s;
-      border-radius: 24px;
-
-      &:before {
-        position: absolute;
-        content: '';
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: 0.4s;
-        border-radius: 50%;
-      }
-    }
-
-    input:checked+.Slider {
-      background-color: var(--PreferredColor);
-
-      &:before {
-        transform: translateX(26px);
-      }
     }
   }
-  
-  .ButtonColor {
-    padding: 0.6rem 1.2rem;
-    background: none;
-    border: 1px solid var(--PreferredColor);
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s;
-    color: var(--PreferredColor);
-    font-family: var(--TextGeneral);
-  }
 
-  .Button {
-    padding: 0.6rem 1.2rem;
-    background: none;
-    border: 1px solid var(--Red);
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s;
-    color: var(--Red);
-    font-family: var(--TextGeneral);
-  }
+  input:checked+.slider {
+    background-color: var(--PreferredColor);
 
-  .ColorModalContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
+    &:before {
+      transform: translateX(24px);
+    }
   }
+}
 
-  .ColorInput {
-    width: 60px;
-    height: 60px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
+.select {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--PreferredColor);
+  color: var(--White);
+  font-size: 1rem;
+  cursor: not-allowed;
+  background: none;
+}
+
+.primaryButton,
+.dangerButton {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 2px solid;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.primaryButton {
+  color: var(--PreferredColor);
+  border-color: var(--PreferredColor);
+  background: none;
+
+  &:hover {
+    background-color: var(--PreferredColor);
+    color: var(--TextGeneral);
+  }
+}
+
+.dangerButton {
+  color: var(--Red);
+  border-color: var(--Red);
+  background: none;
+
+  &:hover {
+    background-color: var(--Red);
+    color: var(--White);
   }
 }

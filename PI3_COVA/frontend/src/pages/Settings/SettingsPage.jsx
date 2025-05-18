@@ -1,8 +1,6 @@
 import { useState, useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeProvider/ThemeProvider";
-import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
 import PreferredColorModal from "../../components/PreferredColorModal/PreferredColorModal";
-import Divider from "../../components/Divider/Divider";
 import SimpleModal from "../../components/SimpleModal/SimpleModal";
 import styles from "./styles.module.scss";
 import { getAuth, signOut } from "firebase/auth";
@@ -10,9 +8,9 @@ import { getAuth, signOut } from "firebase/auth";
 const SettingsPage = () => {
   const { isDarkMode, toggleTheme, preferredColor, handleColorChange } =
     useContext(ThemeContext);
+
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
-  const [isSimpleModalOpen, setIsSimpleModalOpen] = useState(false);
-  const { user } = useAuth();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -25,47 +23,57 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className={styles.SettingsContainer}>
-      <h1 className={styles.Title}>GERAL</h1>
+    <main className={styles.container}>
+      <section className={styles.grid}>
+        <div className={styles.card}>
+          <span>Modo Escuro</span>
+          <label className={styles.switch}>
+            <input
+              type="checkbox"
+              checked={isDarkMode}
+              onChange={toggleTheme}
+            />
+            <span className={styles.slider}></span>
+          </label>
+        </div>
 
-      <div className={styles.OptionRow}>
-        <span>Dark Mode</span>
-        <label className={styles.Switch}>
-          <input type="checkbox" checked={isDarkMode} onChange={toggleTheme} />
-          <span className={styles.Slider}></span>
-        </label>
-      </div>
+        <div className={styles.card}>
+          <span>Idioma</span>
+          <select className={styles.select}>
+            <option>Selecione</option>
+            <option value="pt">Português</option>
+            <option value="en">Inglês</option>
+            <option value="es">Espanhol</option>
+          </select>
+        </div>
 
-      <Divider width={"90%"} maxWidth={"250px"} />
+        <div className={styles.card}>
+          <span>Cor Preferida</span>
+          <button
+            onClick={() => setIsColorModalOpen(true)}
+            className={styles.primaryButton}
+          >
+            Escolher cor
+          </button>
+        </div>
 
-      <div className={styles.OptionRow}>
-        <button
-          className={styles.ButtonColor}
-          onClick={() => setIsColorModalOpen(true)}
-        >
-          Escolher cor preferida
-        </button>
-      </div>
-
-      <Divider width={"90%"} maxWidth={"250px"} />
+        <div className={styles.card}>
+          <span>Sair da conta</span>
+          <button
+            onClick={() => setIsLogoutModalOpen(true)}
+            className={styles.dangerButton}
+          >
+            Sair
+          </button>
+        </div>
+      </section>
 
       <PreferredColorModal
         isOpen={isColorModalOpen}
         onClose={() => setIsColorModalOpen(false)}
         currentColor={preferredColor}
-        onColorChange={(color) => {
-          handleColorChange(color);
-        }}
+        onColorChange={handleColorChange}
       />
-
-      <div className={styles.OptionRow}>
-        <button
-          className={styles.Button}
-          onClick={() => setIsSimpleModalOpen(true)}
-        >
-          Sair da conta
-        </button>
-      </div>
 
       <SimpleModal
         title="Tem certeza que deseja sair?"
@@ -75,11 +83,11 @@ const SettingsPage = () => {
         textColor2="white"
         borderColor="1px solid red"
         borderColor2="1px solid white"
-        isOpen={isSimpleModalOpen}
-        isClose={() => setIsSimpleModalOpen(false)}
+        isOpen={isLogoutModalOpen}
+        isClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleLogout}
       />
-    </div>
+    </main>
   );
 };
 

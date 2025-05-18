@@ -9,22 +9,23 @@ export const ThemeProvider = ({ children }) => {
   const db = getFirestore();
 
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Inicializa com localStorage se disponível, senão, assume dark mode como padrão
     const storedTheme = localStorage.getItem("theme");
     return storedTheme === "light" ? false : true;
   });
 
   const [preferredColor, setPreferredColor] = useState(() => {
-    // Inicializa com localStorage se disponível, senão, assume a cor padrão
     const storedColor = localStorage.getItem("preferredColor");
     return storedColor || "#7f41e2";
   });
 
-  const [loading, setLoading] = useState(true);
+  const [preferredLanguage, setPreferredLanguage] = useState(() => {
+    const storedLang = localStorage.getItem("preferredLanguage");
+    return storedLang || "pt"; // Padrão: português
+  });
 
+  const [loading, setLoading] = useState(true);
   const hasLoadedPreferences = useRef(false);
 
-  // Carregar preferências do Firestore
   useEffect(() => {
     const loadPreferences = async () => {
       if (!user) {
@@ -46,6 +47,7 @@ export const ThemeProvider = ({ children }) => {
           const data = docSnap.data();
           setIsDarkMode(data.darkMode ?? true);
           setPreferredColor(data.preferredColor ?? "#7f41e2");
+          setPreferredLanguage(data.language ?? "pt");
         }
       } catch (error) {
         console.error("Erro ao carregar preferências:", error);
@@ -58,7 +60,6 @@ export const ThemeProvider = ({ children }) => {
     loadPreferences();
   }, [user]);
 
-  // Aplicar estilo ao DOM e sincronizar com localStorage
   useEffect(() => {
     if (loading) return;
 
@@ -68,12 +69,11 @@ export const ThemeProvider = ({ children }) => {
       preferredColor
     );
 
-    // LocalStorage apenas para fallback local
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
     localStorage.setItem("preferredColor", preferredColor);
-  }, [isDarkMode, preferredColor, loading]);
+    localStorage.setItem("preferredLanguage", preferredLanguage);
+  }, [isDarkMode, preferredColor, preferredLanguage, loading]);
 
-  // Salvar preferências no Firestore
   useEffect(() => {
     if (!user || !hasLoadedPreferences.current) return;
 
@@ -86,24 +86,37 @@ export const ThemeProvider = ({ children }) => {
           "preferences",
           "settings"
         );
-        await setDoc(userPreferencesRef, {
-          darkMode: isDarkMode,
-          preferredColor: preferredColor,
-        });
+        await setDoc(
+          userPreferencesRef,
+          {
+            darkMode: isDarkMode,
+            preferredColor,
+            language: preferredLanguage,
+          },
+          { merge: true }
+        );
       } catch (error) {
         console.error("Erro ao salvar preferências:", error);
       }
     };
 
     savePreferences();
-  }, [isDarkMode, preferredColor, user]);
+  }, [isDarkMode, preferredColor, preferredLanguage, user]);
 
   const toggleTheme = () => setIsDarkMode((prev) => !prev);
   const handleColorChange = (color) => setPreferredColor(color);
+  const handleLanguageChange = (lang) => setPreferredLanguage(lang);
 
   return (
     <ThemeContext.Provider
-      value={{ isDarkMode, toggleTheme, preferredColor, handleColorChange }}
+      value={{
+        isDarkMode,
+        toggleTheme,
+        preferredColor,
+        handleColorChange,
+        preferredLanguage,
+        handleLanguageChange,
+      }}
     >
       {loading ? null : children}
     </ThemeContext.Provider>
