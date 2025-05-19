@@ -34,6 +34,7 @@ export default function InnerChatPage() {
   const hasRespondedToFirstMessage = useRef(false);
   const recognitionRef = useRef(null);
   const userId = getAuth().currentUser?.uid;
+  const hasWarnedAboutSpeechRecognition = useRef(false);
 
   const gerarTituloChat = (texto) => {
     const textoLower = texto.toLowerCase();
@@ -134,13 +135,15 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
   }, [userId]);
 
 useEffect(() => {
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  if (!SpeechRecognition) {
+  if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
     toast.warn("Reconhecimento de voz não suportado neste navegador.");
+    hasWarnedAboutSpeechRecognition.current = true;
     return;
   }
+
+  if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
 
   if (!recognitionRef.current) {
     const recog = new SpeechRecognition();
@@ -303,7 +306,7 @@ AI:
     }
   };
 
-  // ✅ Garante que só envia a primeira mensagem após os cases estarem carregados
+  // Garante enviar só a primeira mensagem após os cases estarem carregados
   useEffect(() => {
     if (
       messages.length === 1 &&
@@ -325,8 +328,7 @@ AI:
           <div
             key={msg.id}
             className={`${styles.message} ${
-              msg.sender === "user" ? styles.user : styles.ai
-            }`}
+              msg.sender === "user" ? styles.user : styles.ai}`}
           >
             {msg.text}
           </div>
