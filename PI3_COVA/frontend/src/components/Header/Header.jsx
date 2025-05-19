@@ -30,17 +30,17 @@ const Header = () => {
   const getPageTitle = (pathname) => {
     switch (pathname) {
       case "/":
-        return "Main Page";
+        return "Inicial";
       case "/chat":
-        return "Chat Page";
+        return "Conversa";
       case "/history":
-        return "History Page";
+        return "Histórico";
       case "/profile":
-        return "Profile Page";
+        return "Perfil";
       case "/settings":
-        return "Settings Page";
+        return "Configurações";
       default:
-        return "Page";
+        return "Página";
     }
   };
 

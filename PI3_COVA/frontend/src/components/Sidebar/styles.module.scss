@@ -1,5 +1,5 @@
 .sidebar {
-  background-color: #141414;
+  background-color: var(--PreferredColor);
   color: var(--TextGeneral);
   height: 100vh;
   width: 220px;
@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   padding-top: 1rem;
-  border-right: 1px solid var(--DetailsBg);
 
   &.closed {
     width: 60px;

@@ -3,14 +3,14 @@ import styles from "./PreferredColorModal.module.scss";
 
 const colorList = [
   "#4A90E2",
-  "#7ED321",
+  "#60ba1c",
   "#c97c55",
   "#7f41e2",
   "#F05D5E",
   "#1ABC9C",
   "#bf9c0d",
-  "#F78FB3",
-  "#7E9D7E",
+  "#db60a4",
+  "#0c9947", 
 ];
 
 const PreferredColorModal = ({

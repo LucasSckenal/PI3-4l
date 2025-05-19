@@ -81,6 +81,7 @@ export default function InnerChatPage() {
     ) {
       salvarTituloChat(messages[0].text);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isCasesLoaded]);
 
   const systemPrompt = `

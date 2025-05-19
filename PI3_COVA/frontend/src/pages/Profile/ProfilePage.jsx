@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import EditProfileModal from "../../components/EditProfileModal/EditProfileModal";
 import styles from "./styles.module.scss";
 import { useAccount } from "../../contexts/Account/AccountProvider";
@@ -47,7 +47,7 @@ const ProfilePage = () => {
             />
           </div>
           <div className={styles.userNameSection}>
-            <h2 className={styles.userName}>{userData.name}</h2>
+            <h2 className={styles.userName}>{userData?.name?.length <= 17 ? userData.name : userData?.name?.split(' ').slice(0, 2).join(' ')}</h2>
           </div>
         </div>
       </div>
