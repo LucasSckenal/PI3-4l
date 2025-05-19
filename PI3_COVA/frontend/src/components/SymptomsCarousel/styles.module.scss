@@ -1,0 +1,50 @@
+.Carrosel {
+  margin-top: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .CarroselViewport {
+    height: 60px;
+    overflow: hidden;
+    padding: 0 15px;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+  }
+
+  .CarroselTrack {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .CarroselItem {
+    width: 90px;
+    height: 45px;
+    margin: 0 15px;
+    border-radius: 16px;
+    color: var(--TextGeneralAlt);
+    border: 1px solid var(--DetailsBgReverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    opacity: 0.3;
+    transform: scale(0.85);
+    transition: all 0.4s ease-in-out;
+    flex-shrink: 0;
+  }
+
+  .CenterItem {
+    transform: scale(1.1);
+    opacity: 1;
+    border: 2px solid var(--PreferredColor);
+  }
+
+  .SideItem {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}

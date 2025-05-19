@@ -13,6 +13,7 @@ import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
 import styles from "./styles.module.scss";
 import { IoArrowForwardSharp } from "react-icons/io5";
+import SymptomsCarousel from "../../components/SymptomsCarousel/SymptomsCarousel";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -21,14 +22,6 @@ const HomePage = () => {
   const [symptoms, setSymptoms] = useState([]);
   const [chatCount, setChatCount] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1023);
-
-  const trackRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemWidth = 200;
-  const offsetToCenter = 100;
-  const transitioning = false;
-
-  const getClassName = (index) => styles.CarroselItem;
 
   useEffect(() => {
     const handleResize = () => {
@@ -53,7 +46,9 @@ const HomePage = () => {
         const data = doc.data();
         return {
           id: doc.id,
-          createdAt: data.createdAt?.toDate().toLocaleDateString("pt-BR") || "Data desconhecida",
+          createdAt:
+            data.createdAt?.toDate().toLocaleDateString("pt-BR") ||
+            "Data desconhecida",
           title: data.title || "",
         };
       });
@@ -102,6 +97,16 @@ const HomePage = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (symptoms.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % symptoms.length);
+    }, 3000); // tempo em milissegundos
+
+    return () => clearInterval(interval);
+  }, [symptoms]);
+
   if (loading) return <div>Carregando...</div>;
 
   // --- MOBILE VERSION ---
@@ -110,44 +115,31 @@ const HomePage = () => {
       <div className={styles.MainContainer}>
         <div className={styles.GreetingText}>
           <p>Bem-vindo</p>
-          <h2>{userData?.name?.split(" ").slice(0, 4).join(" ") ?? "Usuário"}</h2>
+          <h2>
+            {userData?.name?.split(" ").slice(0, 4).join(" ") ?? "Usuário"}
+          </h2>
         </div>
 
         <div className={styles.InnerContainer}>
           <div className={styles.HeroBanner} onClick={() => navigate("/chat")}>
-            <button className={styles.chatButton} onClick={() => navigate("/chat")}>
+            <button
+              className={styles.chatButton}
+              onClick={() => navigate("/chat")}
+            >
               COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30} />
             </button>
           </div>
 
-          <div className={styles.Carrosel}>
-            <div className={styles.CarroselViewport}>
-              <div
-                ref={trackRef}
-                className={styles.CarroselTrack}
-                style={{
-                  transform: `translateX(-${currentIndex * itemWidth - offsetToCenter}px)`,
-                  transition: transitioning ? "transform 0.5s ease-in-out" : "none",
-                }}
-              >
-                {symptoms.length > 0 ? (
-                  symptoms.map((symptom, index) => (
-                    <div key={index} className={getClassName(index)}>
-                      {symptom}
-                    </div>
-                  ))
-                ) : (
-                  <div className={styles.CarroselItem}>Nenhum sintoma</div>
-                )}
-              </div>
-            </div>
-          </div>
+          <SymptomsCarousel symptoms={symptoms} />
         </div>
 
         <div className={styles.History}>
           <div className={styles.HistoryHeader}>
             <p>Histórico recente: </p>
-            <button className={styles.ViewMoreButton} onClick={() => navigate("/history")}>
+            <button
+              className={styles.ViewMoreButton}
+              onClick={() => navigate("/history")}
+            >
               Ver todos
             </button>
           </div>
@@ -195,14 +187,19 @@ const HomePage = () => {
             <h3>Sintomas Frequentes</h3>
             <div className={styles.SymptomChips}>
               {symptoms.map((s, i) => (
-                <span key={i} className={styles.Chip}>{s}</span>
+                <span key={i} className={styles.Chip}>
+                  {s}
+                </span>
               ))}
             </div>
           </div>
 
           <div className={styles.StatsCardCompact}>
             <h3>Precisa de ajuda?</h3>
-            <button className={styles.HelpButton} onClick={() => navigate("/tutorial")}>
+            <button
+              className={styles.HelpButton}
+              onClick={() => navigate("/tutorial")}
+            >
               Saiba mais
             </button>
           </div>
@@ -212,7 +209,10 @@ const HomePage = () => {
       <div className={styles.History}>
         <div className={styles.HistoryHeader}>
           <p>Histórico recente:</p>
-          <button className={styles.ViewMoreButton} onClick={() => navigate("/history")}>
+          <button
+            className={styles.ViewMoreButton}
+            onClick={() => navigate("/history")}
+          >
             Ver todos
           </button>
         </div>
