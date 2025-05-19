@@ -1,0 +1,91 @@
+.modalBackdrop {
+ position: fixed;
+ inset: 0;
+ background-color: rgba(0, 0, 0, 0.5);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ z-index: 1000;
+}
+
+.modal {
+ display: flex;
+ flex-direction: column;
+
+ background-color: var(--Modal);
+ color: var(--TextGeneral);
+ padding: 2rem;
+ border-radius: 1rem;
+ width: 90%;
+ max-width: 500px;
+ box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+ position: relative;
+}
+
+.team {
+ display: flex;
+ flex-direction: column;
+ gap: 1.5rem;
+ margin-top: 1rem;
+}
+
+.card {
+ background-color: var(--DetailsBg);
+ padding: 1rem;
+ border-radius: 0.75rem;
+ text-align: center;
+ box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+ color: var(--White);
+}
+
+.card h3 {
+ margin-bottom: 0.25rem;
+ font-size: 1.1rem;
+ color: var(--White);
+}
+
+.card p {
+ font-size: 0.95rem;
+ margin-bottom: 0.5rem;
+}
+
+.socials {
+ display: flex;
+ justify-content: center;
+ gap: 1rem;
+}
+
+.socials a {
+ color: var(--PreferredColor);
+ font-size: 1.5rem;
+ transition: transform 0.2s;
+
+ &:hover {
+  transform: scale(1.1);
+ }
+}
+
+.closeBtn {
+ margin-top: 1.5rem;
+ padding: 0.6rem 1.2rem;
+ background-color: var(--PreferredColor);
+ border: none;
+ color: var(--White);
+ font-weight: 600;
+ border-radius: 8px;
+ cursor: pointer;
+
+ &:hover {
+  opacity: 0.9;
+ }
+}
+
+.photo {
+ width: 80px;
+ height: 80px;
+ border-radius: 50%;
+ object-fit: cover;
+ margin: 0 auto 1rem auto;
+ display: block;
+ box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}

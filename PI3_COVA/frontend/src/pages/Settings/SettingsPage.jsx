@@ -4,6 +4,7 @@ import PreferredColorModal from "../../components/PreferredColorModal/PreferredC
 import SimpleModal from "../../components/SimpleModal/SimpleModal";
 import styles from "./styles.module.scss";
 import { getAuth, signOut } from "firebase/auth";
+import AboutModal from "../../components/AboutUsModal/AboutUsModal";
 
 const SettingsPage = () => {
   const { isDarkMode, toggleTheme, preferredColor, handleColorChange } =
@@ -11,6 +12,7 @@ const SettingsPage = () => {
 
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -66,6 +68,13 @@ const SettingsPage = () => {
             Sair
           </button>
         </div>
+
+        <button
+          onClick={() => setIsAboutUsOpen(true)}
+          className={styles.AboutBtn}
+        >
+          Sobre nós
+        </button>
       </section>
 
       <PreferredColorModal
@@ -87,6 +96,12 @@ const SettingsPage = () => {
         isClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleLogout}
       />
+      {isAboutUsOpen && (
+        <AboutModal
+          isOpen={isAboutUsOpen}
+          onClose={() => setIsAboutUsOpen(false)}
+        />
+      )}
     </main>
   );
 };
