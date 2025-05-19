@@ -6,7 +6,7 @@ import { ThemeContext } from "../contexts/ThemeProvider/ThemeProvider";
 
 import MainPage from "../components/MainPage/MainPage";
 import HomePage from "../pages/Home/HomePage";
-import ChatPage from "../pages/Chat/ChatPage";               // página de início de chat (nova conversa)
+import ChatPage from "../pages/Chat/ChatPage"; // página de início de chat (nova conversa)
 import InnerChatPage from "../pages/InnerChat/InnerChatPage"; // página de visualização de conversa existente
 import HistoryPage from "../pages/History/HistoryPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
@@ -16,8 +16,8 @@ import LoginPage from "../pages/Auth/Login/LoginPage";
 import RegisterPage from "../pages/Auth/Register/RegisterPage";
 
 const AppRoutes = () => {
-  const { theme } = useContext(ThemeContext);
-
+  const { isDarkMode } = useContext(ThemeContext);
+  if (isDarkMode ? "dark" : "light");
   return (
     <>
       <ToastContainer
@@ -30,21 +30,21 @@ const AppRoutes = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme={theme}
+        theme={isDarkMode ? "dark" : "light"}
       />
 
       <Routes>
         {/* Rota pública */}
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
-         <Route
-            path="chat/:chatId"
-            element={
-              <PrivateRoute>
-                <InnerChatPage />
-              </PrivateRoute>
-            }
-          />
+        <Route
+          path="chat/:chatId"
+          element={
+            <PrivateRoute>
+              <InnerChatPage />
+            </PrivateRoute>
+          }
+        />
         {/* Rotas privadas a partir de / */}
         <Route
           path="/"
@@ -74,7 +74,6 @@ const AppRoutes = () => {
           />
 
           {/* Visualizar conversa existente */}
-         
 
           <Route
             path="history"

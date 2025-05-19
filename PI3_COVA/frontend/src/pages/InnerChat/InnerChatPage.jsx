@@ -15,6 +15,7 @@ import {
 import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
 import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
+import { toast } from "react-toastify";
 import styles from "./styles.module.scss";
 import Header from "../../components/Header/Header";
 
@@ -131,33 +132,58 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
     loadCases();
   }, [userId]);
 
-  useEffect(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
+useEffect(() => {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    toast.warn("Reconhecimento de voz não suportado neste navegador.");
+    return;
+  }
+
+  if (!recognitionRef.current) {
     const recog = new SpeechRecognition();
     recog.lang = "pt-BR";
     recog.interimResults = false;
     recog.maxAlternatives = 1;
+    recog.continuous = true; 
 
     recog.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      setInputText((prev) => prev + transcript);
+      setInputText(transcript);
     };
-    recog.onend = () => setIsRecording(false);
+
+    recog.onerror = (event) => {
+      toast.error("Erro na gravação:", event.error);
+      setIsRecording(false);
+    };
+
+    recog.onend = () => {
+      setIsRecording(false);
+    };
 
     recognitionRef.current = recog;
-  }, []);
+  }
+}, []);
 
-  const handleMicClick = () => {
-    if (isRecording) {
-      recognitionRef.current?.stop();
-    } else {
-      setInputText("");
-      recognitionRef.current?.start();
+
+const handleMicClick = () => {
+  const recog = recognitionRef.current;
+  if (!recog) return;
+
+  if (isRecording) {
+    recog.stop();
+  } else {
+    setInputText("");
+    try {
+      recog.start();
       setIsRecording(true);
+    } catch (error) {
+      toast.error("Erro ao iniciar gravação:", error);
+      setIsRecording(false);
     }
-  };
+  }
+};
 
   const formatConversationHistory = useCallback(() => {
     return messages
