@@ -37,6 +37,8 @@
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
     position: relative;
     cursor: pointer;
+    color: var(--White);
+    font-weight: bold;
 
     &:hover {
       opacity: 0.95;
@@ -68,6 +70,7 @@
     h3 {
       font-size: 1.4rem;
       margin-bottom: 0.5rem;
+      color: var(--White);
     }
   }
 
@@ -124,6 +127,7 @@
           border-bottom: 1px solid var(--PreferredColor);
           font-size: 0.9rem;
           pointer-events: none;
+          color: var(--White);
         }
       }
     }
@@ -140,7 +144,7 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: var(--PreferredColor), 10%;
+        transform: scale(1.1);
       }
     }
   }
@@ -272,7 +276,7 @@
       padding-bottom: 10px;
       background-color: var(--PreferredColor);
       opacity: 0.8;
-
+      
       &:hover {
         opacity: 1;
 

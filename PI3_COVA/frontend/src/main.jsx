@@ -11,17 +11,20 @@ import AppRoutes from "./routes/Routes";
 import { AuthProvider } from "./contexts/AuthProvider/AuthProvider";
 import AccountProvider from "./contexts/Account/AccountProvider";
 import { IaProvider } from "./contexts/IaProvider/IaProvider";
+import ScreenResizeProvider from "./contexts/ScreenResizeProvider/ScreenResizeProvider";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <AccountProvider>
         <ThemeProvider>
-          <BrowserRouter>
-            <IaProvider>
-              <AppRoutes />
-            </IaProvider>
-          </BrowserRouter>
+          <ScreenResizeProvider>
+            <BrowserRouter>
+              <IaProvider>
+                <AppRoutes />
+              </IaProvider>
+            </BrowserRouter>
+          </ScreenResizeProvider>
         </ThemeProvider>
       </AccountProvider>
     </AuthProvider>

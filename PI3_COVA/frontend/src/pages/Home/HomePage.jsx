@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "../../contexts/Account/AccountProvider";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   collection,
   query,
@@ -14,6 +14,7 @@ import { db } from "../../api/firebase";
 import styles from "./styles.module.scss";
 import { IoArrowForwardSharp } from "react-icons/io5";
 import SymptomsCarousel from "../../components/SymptomsCarousel/SymptomsCarousel";
+import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -21,15 +22,7 @@ const HomePage = () => {
   const [history, setHistory] = useState([]);
   const [symptoms, setSymptoms] = useState([]);
   const [chatCount, setChatCount] = useState(0);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1023);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 1023);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const { isMobile } = useScreenResize();
 
   useEffect(() => {
     const userId = getAuth().currentUser?.uid;
@@ -97,26 +90,16 @@ const HomePage = () => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (symptoms.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % symptoms.length);
-    }, 3000); // tempo em milissegundos
-
-    return () => clearInterval(interval);
-  }, [symptoms]);
 
   if (loading) return <div>Carregando...</div>;
 
-  // --- MOBILE VERSION ---
   if (isMobile) {
     return (
       <div className={styles.MainContainer}>
         <div className={styles.GreetingText}>
           <p>Bem-vindo</p>
           <h2>
-            {userData?.name?.split(" ").slice(0, 4).join(" ") ?? "Usuário"}
+            {userData?.name?.split(" ").slice(0, 2).join(" ") ?? "Usuário"}
           </h2>
         </div>
 

@@ -1,0 +1,57 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  color: var(--TextGeneral);
+
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: var(--DropButton);
+    color: var(--TextGeneral);
+    border-radius: var(--BorderRadius);
+    border: 1px solid var(--TextGeneral);
+
+    span {
+      display: flex;
+      color: var(--TextGeneral);
+      font-size: clamp(14px, 2.65vw, 18px);
+      font-weight: 600;
+      line-height: clamp(16px, 3.43vw, 20px);
+      gap: 8px
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .content {
+    display: block;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    padding-bottom: 10px;
+
+    &.show {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    &.hide {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+
+  .contentFooter {
+    padding-top: 150px;
+    display: flex;
+    align-items: center;
+
+
+  }
+}

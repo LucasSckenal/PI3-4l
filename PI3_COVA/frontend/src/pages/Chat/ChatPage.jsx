@@ -14,6 +14,7 @@ import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import QuickMessagesCarousel from "../../components/QuickMsg/QuickMsg";
 import styles from "./styles.module.scss";
 import Ia from "../../public/IaChat.gif";
+import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 
 const ChatPage = () => {
   const { chatId } = useParams();
@@ -23,6 +24,7 @@ const ChatPage = () => {
   const [inputText, setInputText] = useState("");
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+  const { isMobile } = useScreenResize();
 
   const userId = getAuth().currentUser?.uid;
 
@@ -30,7 +32,6 @@ const ChatPage = () => {
     "Olá! Sou sua assistente médica. Me conte seus sintomas com uma mensagem de voz ou texto e vou gerar um relatório para agilizar seu atendimento.";
   const [displayedText, setDisplayedText] = useState("");
 
-  // Efeito de digitação animada
   useEffect(() => {
     let isCancelled = false;
     let currentText = "";
@@ -118,7 +119,7 @@ const ChatPage = () => {
       { id: `quick-${Date.now()}`, text, sender: "user" },
     ]);
   };
-
+  
   return (
     <main className={styles.ChatContainer}>
       <div className={styles.IaContainer}>
@@ -155,10 +156,14 @@ const ChatPage = () => {
         onSendClick={handleSend}
       />
 
+    {isMobile ? (
       <div className={styles.quickMessagesWrapper}>
         <span className={styles.quickLabel}>Mensagens rápidas</span>
         <QuickMessagesCarousel onSendMessage={handleQuickMessage} />
       </div>
+    ) : (
+      <></>
+    )}
     </main>
   );
 };

@@ -101,3 +101,20 @@
     }
   }
 }
+
+  @media screen and (min-width: 1024px) {
+    
+    .inputBar {
+      .inputTextField {
+        height: 60px;
+      }
+
+      .inputAudioBtn,
+      .inputAudioBtnRecording,
+      .inputSendBtn {
+        height: 60px;
+        width: 60px;
+      }      
+    }
+
+  }
