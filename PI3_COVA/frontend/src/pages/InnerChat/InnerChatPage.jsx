@@ -97,6 +97,7 @@ Se todas as informações forem fornecidas corretamente, forneça o relatório f
 **Relatório de Triagem – Cefaleia**
 – Nome da Doença: [Nome da doença identificada com base nos sintomas]
 – Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
+- Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo)]
 
 Caso alguma informação não tenha sido fornecida, peça para o paciente fornecer apenas as informações faltantes, sem fazer perguntas extras.
 
