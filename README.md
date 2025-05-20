@@ -1,12 +1,61 @@
-# PI3-4l
+# Unijui-PI3-4l
+
+<!-- Banner ou imagem destacada do projeto (opcional) -->
 
 <p align="center">
   <img src="https://static.wikia.nocookie.net/the-ossome-show/images/e/e2/Maxwell.gif/revision/latest/thumbnail/width/360/height/360?cb=20221230214511" alt="Maxwell o gato irado girando">
 </p>
 
-# 🩺 COV – Consultation On-Demand Virtual
+---
 
-## Estrutura do Projeto
+## 📑 Table of Contents
+
+| [📝 Descrição](#-descrição-do-projeto) | [✨ Funcionalidades](#-funcionalidades) | [📊 Aplicação](#-aplicação) | [🚀 Tecnologias](#-tecnologias-utilizadas) |
+|----------------------------------------|--------------------------------------------|----------------------------------------|----------------------------------------|
+| [📂 Estrutura](#-estrutura-do-projeto) | [🛠️ Pré-requisitos](#️-pré-requisitos) | [🏃‍♂️ Como Rodar](#️-como-rodar-o-projeto) | [👥 Autores](#-autores) |
+| [🤝 Contribuindo](#-contribuindo) | [📜 Licença](#-licença) | [📬 Contato](#-contato) |
+
+---
+
+## 📝 Descrição do Projeto
+
+O **Unijui-PI3-4l** codinome COV, é um assistente IA desenvolvido no contexto da disciplina de Projeto Integrador III. O sistema suporta:
+
+O projeto utiliza:
+
+- **Frontend**: React
+- **Backend**: Node.js
+- **Banco de Dados**: Firebase
+
+---
+
+## ✨ Funcionalidades
+
+1. **Auth**: Sistema de login e register;
+2. **Dark mode e Light mode**: Escolha de temas entre claro e escuro.
+3. **IA**.
+---
+
+## 📊 Aplicação
+
+<p align="center">
+  <img src="" alt="Aplicação rodando">
+</p>
+
+---
+
+## 🚀 Tecnologias Utilizadas
+
+### Principais Ferramentas
+
+- ![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white&style=flat) : Criação do frontend interativo.
+- ![NodeJS](https://img.shields.io/badge/-Node.js-E0234E?logo=nodejs&logoColor=white&style=flat) : Gerenciamento do backend.
+- ![Firebase](https://img.shields.io/badge/-Firebase-336791?logo=Firebase&logoColor=white&style=flat) : Banco de dados.
+
+---
+
+## 📂 Estrutura do Projeto
+
 ``` plain text
 📁 Projeto
 ├── 📁 backend
@@ -78,108 +127,131 @@
 ├── 📁 node_modules
 ├── 📄 package-lock.json
 └── 📄 package.json
-
 ```
 
-## 📌 Justificativa
-
-### 🔴 Desafio:
-Acesso rápido a atendimento médico ainda é um grande obstáculo para muitos pacientes, principalmente em sistemas de saúde sobrecarregados.  
-**Problema identificado:** Dificuldade de acesso a atendimento rápido.
 
 ---
 
-## 💡 Solução
+## 🛠️ Pré-requisitos
 
-### ✅ Proposta:
-**COV (Consultation On-Demand Virtual)** é um assistente virtual inteligente desenvolvido com IA, voltado para **triagem inicial ágil**.  
+Certifique-se de ter as seguintes ferramentas instaladas antes de rodar o projeto:
 
-### 🌟 Pontos Positivos:
-- ✅ Interface intuitiva para pacientes e profissionais;
-- ✅ Acessibilidade;
-- ✅ Eficiência.
+- **Node.js** (versão 18 ou superior)
+- **npm** (ou gerenciador de pacotes compatível)
+- **PostgreSQL** (instância local ou remota configurada)
+
+### Especificações mínimas do Hardware:
+- PROCESSADOR:
+- MEMÓRIA RAM:
+---
+
+## 🏃‍♂️ Como Rodar o Projeto
+
+### 1️⃣ Clonar o Repositório
+
+```bash
+# Clone o repositório
+$ git clone https://github.com/LucasSckenal/PI3-4l
+
+# Acesse o diretório do projeto
+$ cd Unijui-PI3-4l/PI3_COVA/
+```
+
+### 2️⃣ Configurar o Ambiente
+
+#### Backend
+
+1. Acesse o diretório:
+
+```bash
+$ cd backend
+```
+
+2. Instale as dependências:
+
+```bash
+$ npm install
+```
+
+3. Execute o servidor backend:
+
+```bash
+$ npm start
+```
+
+#### Frontend
+
+1. Acesse o diretório:
+
+```bash
+$ cd frontend
+```
+
+2. Instale as dependências:
+
+```bash
+$ npm install
+```
+
+3. Execute o servidor frontend:
+
+```bash
+$ npm start
+```
+
+O frontend estará disponível em `http://localhost:5173` e o backend em `http://localhost:5000` (ou portas configuradas).
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 👥 Autores
 
-| Camada         | Tecnologias |
-|----------------|-------------|
-| **Front-end**  | React ⚛️ |
-| **Back-end**   | Nest.js |
-| **Banco de Dados** | Firebase 🔥 |
-| **IA**         | Mistral 🤖 |
-| **Ferramentas**| VSCode, GitHub, Jira, Figma |
+O projeto foi desenvolvido por:
+- **Henrique Luan**
+  - **E-mail**: [Henrique.fritz@sou.unijui.edu.br](mailto:Henrique.fritz@sou.unijui.edu.br)
+- **Luan Vitor**
+  - **E-mail**: [luanvitorcd@gmail.com](mailto:luanvitorcd@gmail.com)
+  - **LinkedIn**: [Luan Vitor](https://www.linkedin.com/in/luan-vitor-casali-dallabrida-20a60a342/)
+- **Lucas Sckenal**
+  - **E-mail**: [lucaspsckenal@gmail.com](mailto:lucaspsckenal@gmail.com)
+  - **LinkedIn**: [Lucas Sckenal](https://www.linkedin.com/in/lucassckenal/)
 
----
 
-## 🧪 Metodologia
-
-### 📌 Metodologias Ágeis:
-- **Scrum** com sprints que incluem:
-  - Planejamento
-  - Desenvolvimento
-  - Revisão
-  - Retrospectiva
-- **Kanban** para organização visual de tarefas:
-  - Colunas de *Requested*, *In Progress*, e *Done*;
-  - Limites de WIP;
-  - Cards e Swimlanes para rastreio.
 
 ---
 
-## 🚧 Progresso Atual
+## 🤝 Contribuindo
 
-Atualmente, o projeto conta com:
+Contribuições são bem-vindas! Siga estas etapas para contribuir:
 
-- Uma **interface de chat funcional**, onde o paciente pode informar sintomas e iniciar a triagem;
-- Tela de configurações com funcionalidades básicas, como:
-  - **Modo escuro (Dark Mode)**;
-  - **Limpar histórico de conversa**;
-  - **Deslogar da conta**.
+1. Faça um fork do repositório.
+2. Crie uma branch para sua funcionalidade ou correção:
 
----
+```bash
+$ git checkout -b minha-nova-funcionalidade
+```
 
-## 🧭 Roadmap
+3. Faça commit das suas alterações:
 
-O projeto é gerenciado utilizando o **Obsidian**, com um mapa mental que conecta:
-- As etapas do fluxo do usuário;
-- Protótipos de interface;
-- Requisitos e backlog.
+```bash
+$ git commit -m "Minha nova funcionalidade"
+```
 
----
+4. Envie para o repositório remoto:
 
-## 🚀 Futuro do Projeto
+```bash
+$ git push origin minha-nova-funcionalidade
+```
 
-Funcionalidades planejadas incluem:
-
-- ✅ Conversão de voz para texto via IA;
-- ✅ Sistema de registro e login em cloud;
-- ✅ Histórico de conversas armazenado;
-- ✅ Integração completa com backend;
-- ✅ Validação das respostas por profissionais da saúde;
-- ✅ Integração com IA treinada em CID-10 G43 e G44 (Enxaqueca);
-- ✅ Aprimoramento de UI/UX para uma experiência mais fluida.
+5. Abra um Pull Request no repositório original.
 
 ---
 
-## 📷 Prints
+## 📜 Licença
 
-Imagens do protótipo e andamento do projeto foram utilizadas para ilustrar o progresso e estão disponíveis na pasta `/docs/img`.
+Este projeto está licenciado sob a licença **MIT**. Para mais informações, consulte o arquivo [LICENSE](LICENSE).
 
 ---
 
-## Dependências (hardware e software)
-- Especificações necessárias para rodar IA
-- Quais softwares ou bibliotecas ou IA instalar
-  
----
+## 📬 Contato
 
-## Iniciando Projeto
-NPM START
----
-
-
-## 🧑‍💻 Contribuidores
-
-- Equipe multidisciplinar formada por desenvolvedores, designers e profissionais da saúde.
+Para dúvidas ou sugestões, entre em contato através dos e-mails ou LinkedIn listados na seção de autores.
