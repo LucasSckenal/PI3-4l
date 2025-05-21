@@ -29,6 +29,7 @@ export default function InnerChatPage() {
   const [isTypingIndicator, setIsTypingIndicator] = useState(false);
   const [casesData, setCasesData] = useState([]);
   const [isCasesLoaded, setIsCasesLoaded] = useState(false);
+  const [priority, setPriority] = useState(null);
 
   const bottomRef = useRef(null);
   const hasRespondedToFirstMessage = useRef(false);
@@ -38,7 +39,6 @@ export default function InnerChatPage() {
 
   const gerarTituloChat = (texto) => {
     const textoLower = texto.toLowerCase();
-
     const padroes = [
       { palavra: "enxaqueca", titulo: "Enxaqueca" },
       { palavra: "dor de cabeça", titulo: "Dor de Cabeça Intensa" },
@@ -64,7 +64,6 @@ export default function InnerChatPage() {
     if (!userId || !chatId) return;
     const chatRef = doc(db, "Users", userId, "chats", chatId);
     const chatSnap = await getDoc(chatRef);
-
     if (!chatSnap.exists()) return;
     const chatData = chatSnap.data();
 
@@ -72,6 +71,11 @@ export default function InnerChatPage() {
       const tituloGerado = gerarTituloChat(mensagem);
       await updateDoc(chatRef, { title: tituloGerado });
     }
+  };
+
+  const extrairPrioridade = (texto) => {
+    const match = texto.match(/Gravidade da Doença:\s*(\w+)/i);
+    return match ? match[1] : null;
   };
 
   useEffect(() => {
@@ -82,22 +86,19 @@ export default function InnerChatPage() {
     ) {
       salvarTituloChat(messages[0].text);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isCasesLoaded]);
 
   const systemPrompt = `
 <SYSTEM>
 Você é COV, um assistente virtual de triagem especializado em cefaleias (CID-10 G43: enxaqueca; G44: outras síndromes de algias cefálicas). Seu objetivo é realizar uma triagem eficiente e fornecer um relatório com base nos sintomas relatados pelo paciente.
-
 – Tom de voz: cordial, profissional e conciso.  
 – Objetivo: coletar dados de maneira objetiva e gerar um relatório a partir dos sintomas fornecidos.
-
 Se todas as informações forem fornecidas corretamente, forneça o relatório final, incluindo:
 
 **Relatório de Triagem – Cefaleia**
 – Nome da Doença: [Nome da doença identificada com base nos sintomas]
 – Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
-- Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo)]
+– Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo apenas o nome da cor)]
 
 Caso alguma informação não tenha sido fornecida, peça para o paciente fornecer apenas as informações faltantes, sem fazer perguntas extras.
 
@@ -122,7 +123,6 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
 </SYSTEM>
 `;
 
-  // --- Leitura da coleção Cases para uso no prompt ---
   useEffect(() => {
     const loadCases = async () => {
       if (!userId) return;
@@ -135,60 +135,59 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
     loadCases();
   }, [userId]);
 
-useEffect(() => {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
-    toast.warn("Reconhecimento de voz não suportado neste navegador.");
-    hasWarnedAboutSpeechRecognition.current = true;
-    return;
-  }
-
-  if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
-
-  if (!recognitionRef.current) {
-    const recog = new SpeechRecognition();
-    recog.lang = "pt-BR";
-    recog.interimResults = false;
-    recog.maxAlternatives = 1;
-    recog.continuous = true; 
-
-    recog.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setInputText(transcript);
-    };
-
-    recog.onerror = (event) => {
-      toast.error("Erro na gravação:", event.error);
-      setIsRecording(false);
-    };
-
-    recog.onend = () => {
-      setIsRecording(false);
-    };
-
-    recognitionRef.current = recog;
-  }
-}, []);
-
-
-const handleMicClick = () => {
-  const recog = recognitionRef.current;
-  if (!recog) return;
-
-  if (isRecording) {
-    recog.stop();
-  } else {
-    setInputText("");
-    try {
-      recog.start();
-      setIsRecording(true);
-    } catch (error) {
-      toast.error("Erro ao iniciar gravação:", error);
-      setIsRecording(false);
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
+      toast.warn("Reconhecimento de voz não suportado neste navegador.");
+      hasWarnedAboutSpeechRecognition.current = true;
+      return;
     }
-  }
-};
+
+    if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
+
+    if (!recognitionRef.current) {
+      const recog = new SpeechRecognition();
+      recog.lang = "pt-BR";
+      recog.interimResults = false;
+      recog.maxAlternatives = 1;
+      recog.continuous = true;
+
+      recog.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputText(transcript);
+      };
+
+      recog.onerror = (event) => {
+        toast.error("Erro na gravação:", event.error);
+        setIsRecording(false);
+      };
+
+      recog.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognitionRef.current = recog;
+    }
+  }, []);
+
+  const handleMicClick = () => {
+    const recog = recognitionRef.current;
+    if (!recog) return;
+
+    if (isRecording) {
+      recog.stop();
+    } else {
+      setInputText("");
+      try {
+        recog.start();
+        setIsRecording(true);
+      } catch (error) {
+        toast.error("Erro ao iniciar gravação:", error);
+        setIsRecording(false);
+      }
+    }
+  };
 
   const formatConversationHistory = useCallback(() => {
     return messages
@@ -278,7 +277,6 @@ AI:
                 fullResponse += data.response;
                 setStreamingResponse(fullResponse);
               }
-              // eslint-disable-next-line no-empty
             } catch {}
           });
       }
@@ -290,6 +288,12 @@ AI:
           sender: "ai",
           createdAt: serverTimestamp(),
         });
+
+        const prioridadeExtraida = extrairPrioridade(fullResponse);
+        if (prioridadeExtraida) {
+          await updateDoc(chatRef, { priority: prioridadeExtraida });
+          setPriority(prioridadeExtraida);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -307,7 +311,6 @@ AI:
     }
   };
 
-  // Garante enviar só a primeira mensagem após os cases estarem carregados
   useEffect(() => {
     if (
       messages.length === 1 &&
@@ -318,18 +321,23 @@ AI:
       hasRespondedToFirstMessage.current = true;
       handleSend(messages[0].text);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isCasesLoaded]);
 
   return (
     <main className={styles.InnerChatContainer}>
       <Header />
+      {priority && (
+        <div className={styles.priorityBadge}>
+          Prioridade: <span>{priority}</span>
+        </div>
+      )}
       <div className={styles.messagesContainer}>
         {messages.map((msg) => (
           <div
             key={msg.id}
             className={`${styles.message} ${
-              msg.sender === "user" ? styles.user : styles.ai}`}
+              msg.sender === "user" ? styles.user : styles.ai
+            }`}
           >
             {msg.text}
           </div>

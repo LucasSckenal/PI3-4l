@@ -22,8 +22,8 @@
 
 .InputWrapper {
    position: sticky;
-   top: 15px;
-   z-index: 10;
+   top: 10px;
+   z-index: 100;
    width: 100%;
    max-width: 500px;
    margin: 0 auto 20px auto;
@@ -38,6 +38,7 @@
    width: 100%;
    max-width: 400px;
    padding: 10px 16px 10px 40px;
+
    border-radius: 8px;
    border: 1px solid var(--PreferredColor);
    font-size: 16px;
@@ -50,11 +51,13 @@
 .SearchIcon {
    position: absolute;
    top: 50%;
-   left: calc(50% - 180px);
+   left: 12px;
    transform: translateY(-50%);
    color: var(--PreferredColor);
    pointer-events: none;
    font-size: 20px;
+
+
 }
 
 .DayGroup {
@@ -78,6 +81,7 @@
    list-style: none;
    padding: 10px;
 
+
    @media (max-width: 600px) {
       grid-template-columns: 1fr;
    }
@@ -93,6 +97,7 @@
    padding: 16px;
    cursor: pointer;
    transition: 0.3s ease;
+   border-right: 8px solid transparent;
 
    p {
       color: var(--TextGeneral);
@@ -103,7 +108,48 @@
       background-color: var(--PreferredColor);
 
       p {
-         color: var(--TextGeneral);
+         color: var(--White);
       }
+   }
+}
+
+.DeleteAllButton {
+   background: transparent;
+   border: 1px solid var(--Decline);
+   color: var(--Decline);
+   cursor: pointer;
+   margin-left: 10px;
+   padding: 6px 12px;
+   border-radius: 6px;
+   font-weight: bold;
+   transition: color 0.3s, border-color 0.3s;
+   background-color: var(--Bg);
+
+   @media screen and (min-width: 1028px) {
+      width: 30%;
+      padding: 10px 13px;
+   }
+
+   &:hover {
+      color: var(--White);
+      background: var(--Red);
+   }
+}
+
+.DeleteButton {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   background: transparent;
+   border: none;
+   color: var(--Decline);
+   border: 1px solid var(--Decline);
+   cursor: pointer;
+   transition: color 0.3s;
+   padding: 5px;
+
+   &:hover {
+      color: var(--White);
+      background: var(--Red);
    }
 }
