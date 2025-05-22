@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   collection,
@@ -111,30 +111,60 @@ const HistoryPage = () => {
 
   // Função para deletar 1 chat
   const deleteSingleChat = async (chatId) => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-    try {
-      await deleteDoc(doc(db, "Users", userId, "chats", chatId));
-    } catch (error) {
-      console.error("Erro ao deletar chat:", error);
-    }
-  };
+  const userId = getAuth().currentUser?.uid;
+  if (!userId || !chatId) return;
+
+  try {
+    const messagesRef = collection(db, "Users", userId, "chats", chatId, "messages");
+    const messagesSnap = await getDocs(messagesRef);
+
+    const deleteMessages = messagesSnap.docs.map((msgDoc) =>
+      deleteDoc(doc(db, "Users", userId, "chats", chatId, "messages", msgDoc.id))
+    );
+
+    await Promise.all(deleteMessages);
+
+    await deleteDoc(doc(db, "Users", userId, "chats", chatId));
+    console.log(`Chat ${chatId} deletado com sucesso.`);
+  } catch (error) {
+    console.error("Erro ao deletar chat:", error);
+  }
+};
+
 
   // Função para deletar todos os chats
   const deleteAllChats = async () => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-    try {
-      const chatsRef = collection(db, "Users", userId, "chats");
-      const snapshot = await getDocs(chatsRef);
-      const batchDeletes = snapshot.docs.map((docSnap) =>
-        deleteDoc(doc(db, "Users", userId, "chats", docSnap.id))
+  const userId = getAuth().currentUser?.uid;
+  if (!userId) return;
+
+  try {
+    const chatsRef = collection(db, "Users", userId, "chats");
+    const chatsSnap = await getDocs(chatsRef);
+
+    const deleteAll = chatsSnap.docs.map(async (chatDoc) => {
+      const chatId = chatDoc.id;
+
+      // Deleta todas as mensagens do chat
+      const messagesRef = collection(db, "Users", userId, "chats", chatId, "messages");
+      const messagesSnap = await getDocs(messagesRef);
+
+      const deleteMessages = messagesSnap.docs.map((msgDoc) =>
+        deleteDoc(doc(db, "Users", userId, "chats", chatId, "messages", msgDoc.id))
       );
-      await Promise.all(batchDeletes);
-    } catch (error) {
-      console.error("Erro ao deletar todos os chats:", error);
-    }
-  };
+
+      await Promise.all(deleteMessages);
+
+      // Deleta o documento do chat
+      await deleteDoc(doc(db, "Users", userId, "chats", chatId));
+    });
+
+    await Promise.all(deleteAll);
+    console.log("Todos os chats e mensagens foram deletados com sucesso.");
+  } catch (error) {
+    console.error("Erro ao deletar todos os chats:", error);
+  }
+};
+
 
   return (
     <main className={styles.HistoryContainer}>
@@ -224,7 +254,7 @@ const HistoryPage = () => {
         Text2="Cancelar"
         textColor="#fff"
         borderColor="1px solid red"
-        textColor2="#333"
+        textColor2="var(--TextGeneral)"
         borderColor2="1px solid #ccc"
         onConfirm={async () => {
           if (modalAction === "all") {

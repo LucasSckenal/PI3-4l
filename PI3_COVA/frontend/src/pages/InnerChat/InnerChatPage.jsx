@@ -37,39 +37,89 @@ export default function InnerChatPage() {
   const userId = getAuth().currentUser?.uid;
   const hasWarnedAboutSpeechRecognition = useRef(false);
 
-  const gerarTituloChat = (texto) => {
-    const textoLower = texto.toLowerCase();
-    const padroes = [
-      { palavra: "enxaqueca", titulo: "Enxaqueca" },
-      { palavra: "dor de cabeça", titulo: "Dor de Cabeça Intensa" },
-      { palavra: "um lado", titulo: "Dor Lateral" },
-      { palavra: "náusea", titulo: "Com Náusea" },
-      { palavra: "vômito", titulo: "Com Vômito" },
-      { palavra: "intensa", titulo: "Dor Intensa" },
-      { palavra: "homem", titulo: "Homem com Dor" },
-      { palavra: "mulher", titulo: "Mulher com Dor" },
-    ];
-
-    for (const { palavra, titulo } of padroes) {
-      if (textoLower.includes(palavra)) {
-        return titulo;
+  const gerarTituloAutomatico = async (conversa) => {
+    if (!conversa || !userId || !chatId) return "Nova Conversa";
+    
+    try {
+      // Primeiro tentamos extrair um título com base na resposta da IA
+      const respostaIA = conversa.find(msg => msg.sender === "ai")?.text || "";
+      
+      // Se a IA já identificou a doença, usamos isso como título
+      const matchDoenca = respostaIA.match(/Nome da Doença:\s*(.*?)(\n|$)/i);
+      if (matchDoenca && matchDoenca[1]) {
+        return `Cefaleia: ${matchDoenca[1].trim()}`;
       }
-    }
+      
+      // Se não, pedimos para a IA sugerir um título baseado no contexto
+      const promptTitulo = `
+Com base na seguinte conversa, gere um título conciso (máximo 8 palavras) que resuma o principal sintoma ou condição relatada. O título deve ser escrito levando em consideração a linguagem da mensagem do paciente (por padrão use Português do Brasil) e o contexto, após a mensagem ser completa.
+OBS.: Sem explicar o motivo pelo qual escolheu aquele título.
 
-    const palavras = texto.split(" ");
-    return palavras.slice(0, 8).join(" ") + (palavras.length > 8 ? "..." : "");
+Conversa:
+${conversa.map(msg => `${msg.sender === "user" ? "Paciente" : "Médico"}: ${msg.text}`).join("\n")}
+
+Título sugerido:`;
+
+      const response = await fetch("http://localhost:5000/api/stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: promptTitulo, model: "mistral", max_tokens: 20 }),
+      });
+
+      if (!response.ok) throw new Error("Erro ao gerar título");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let titulo = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        chunk
+          .split("\n")
+          .filter((line) => line.startsWith("data: "))
+          .forEach((line) => {
+            try {
+              const data = JSON.parse(line.replace("data: ", ""));
+              if (data.response) {
+                titulo += data.response;
+              }
+            // eslint-disable-next-line no-empty
+            } catch {}
+          });
+      }
+
+      // Limpa o título removendo possíveis aspas e quebras de linha
+      titulo = titulo.replace(/["\n]/g, "").trim();
+      
+      // Se o título for muito longo, pegamos apenas o início
+      const palavras = titulo.split(" ");
+      return palavras.slice(0, 8).join(" ") + (palavras.length > 8 ? "..." : "");
+    } catch (error) {
+      console.error("Erro ao gerar título:", error);
+      // Fallback: pega as primeiras palavras da primeira mensagem do usuário
+      const primeiraMensagem = conversa.find(msg => msg.sender === "user")?.text || "";
+      const palavras = primeiraMensagem.split(" ");
+      return palavras.slice(0, 5).join(" ") + (palavras.length > 5 ? "..." : "");
+    }
   };
 
-  const salvarTituloChat = async (mensagem) => {
-    if (!userId || !chatId) return;
+  const atualizarTituloChat = async () => {
+    if (!userId || !chatId || messages.length === 0) return;
+    
     const chatRef = doc(db, "Users", userId, "chats", chatId);
     const chatSnap = await getDoc(chatRef);
+    
     if (!chatSnap.exists()) return;
     const chatData = chatSnap.data();
-
-    if (!chatData.title) {
-      const tituloGerado = gerarTituloChat(mensagem);
-      await updateDoc(chatRef, { title: tituloGerado });
+    
+    // Só atualiza se não tiver título ou se for um título genérico
+    if (!chatData.title || chatData.title === "Nova Conversa") {
+      const novoTitle = await gerarTituloAutomatico(messages);
+      if (novoTitle) {
+        await updateDoc(chatRef, { title: novoTitle });
+      }
     }
   };
 
@@ -79,13 +129,10 @@ export default function InnerChatPage() {
   };
 
   useEffect(() => {
-    if (
-      messages.length === 1 &&
-      messages[0].sender === "user" &&
-      isCasesLoaded
-    ) {
-      salvarTituloChat(messages[0].text);
+    if (messages.length > 0 && isCasesLoaded) {
+      atualizarTituloChat();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isCasesLoaded]);
 
   const systemPrompt = `
@@ -95,12 +142,19 @@ Você é COV, um assistente virtual de triagem especializado em cefaleias (CID-1
 – Objetivo: coletar dados de maneira objetiva e gerar um relatório a partir dos sintomas fornecidos.
 Se todas as informações forem fornecidas corretamente, forneça o relatório final, incluindo:
 
-**Relatório de Triagem – Cefaleia**
+Relatório de Triagem – [Nome da doença grupo CID-10 G43/G44]
 – Nome da Doença: [Nome da doença identificada com base nos sintomas]
 – Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
-– Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo apenas o nome da cor)]
+– Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo, apenas o nome da cor, ou seja: 'amarelo', 'laranja', 'vermelho', 'verde' e 'azul', sem falar 'Grupo' ou outras palavras)]
+- Precisão do Diagnóstico: [XX%]
 
-Caso alguma informação não tenha sido fornecida, peça para o paciente fornecer apenas as informações faltantes, sem fazer perguntas extras.
+Use esses como critérios para diagnóstico (para auxiliar no diagnóstico, NÃO EXIBIR ISSO PARA USUÁRIO):
+- Enxaqueca (G43): dor pulsátil, unilateral, náusea, fotofobia, durando 4-72h
+- Cefaleia tensional (G44.2): dor em pressão bilateral, sem náusea
+- Cefaleia em salvas (G44.0): dor unilateral intensa periorbitária com lacrimejamento
+- Cefaleia secundária (G44.88): considerar quando há sinais de alerta
+
+Caso alguma informação não tenha sido fornecida, ou a precisão esteja inferior a 70%, peça para o paciente fornecer apenas as informações faltantes, sem fazer perguntas extras.
 
 Aqui estão as informações necessárias para a triagem:
 • Qual a data e hora de início do episódio de dor de cabeça?
@@ -277,6 +331,7 @@ AI:
                 fullResponse += data.response;
                 setStreamingResponse(fullResponse);
               }
+            // eslint-disable-next-line no-empty
             } catch {}
           });
       }
@@ -321,6 +376,7 @@ AI:
       hasRespondedToFirstMessage.current = true;
       handleSend(messages[0].text);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isCasesLoaded]);
 
   return (
