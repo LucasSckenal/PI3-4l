@@ -53,6 +53,7 @@ export default function InnerChatPage() {
       // Se não, pedimos para a IA sugerir um título baseado no contexto
       const promptTitulo = `
 Com base na seguinte conversa, gere um título conciso (máximo 8 palavras) que resuma o principal sintoma ou condição relatada. O título deve ser escrito levando em consideração a linguagem da mensagem do paciente (por padrão use Português do Brasil) e o contexto, após a mensagem ser completa.
+LEMBRETE: Sem necessidade falar gênero ou idade da pessoa, prefira fazer o título no formato: "{Nome da doença grupo CID-10 G43/G44} - {dia da semana que foi realizado essa mensagem}"
 OBS.: Sem explicar o motivo pelo qual escolheu aquele título.
 
 Conversa:
