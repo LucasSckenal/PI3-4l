@@ -70,58 +70,94 @@ const ChatPage = () => {
   }, [chatId, userId, isNewChat]);
 
   useEffect(() => {
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
-        toast.warn("Reconhecimento de voz não suportado neste navegador.");
-        hasWarnedAboutSpeechRecognition.current = true;
-        return;
-      }
-  
-      if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
-  
-      if (!recognitionRef.current) {
-        const recog = new SpeechRecognition();
-        recog.lang = "pt-BR";
-        recog.interimResults = false;
-        recog.maxAlternatives = 1;
-        recog.continuous = true;
-  
-        recog.onresult = (event) => {
-          const transcript = event.results[0][0].transcript;
-          setInputText(transcript);
-        };
-  
-        recog.onerror = (event) => {
-          toast.error("Erro na gravação:", event.error);
-          setIsRecording(false);
-        };
-  
-        recog.onend = () => {
-          setIsRecording(false);
-        };
-  
-        recognitionRef.current = recog;
-      }
-    }, []);
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
+      toast.warn("Reconhecimento de voz não suportado neste navegador.");
+      hasWarnedAboutSpeechRecognition.current = true;
+      return;
+    }
+
+    if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
+
+    if (!recognitionRef.current) {
+      const recog = new SpeechRecognition();
+      recog.lang = "pt-BR";
+      recog.interimResults = false;
+      recog.maxAlternatives = 1;
+      recog.continuous = true;
+
+      recog.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputText(transcript);
+      };
+
+      recog.onerror = (event) => {
+        toast.error("Erro na gravação:", event.error);
+        setIsRecording(false);
+      };
+
+      recog.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognitionRef.current = recog;
+    }
+  }, []);
+
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
+      toast.warn("Reconhecimento de voz não suportado neste navegador.");
+      hasWarnedAboutSpeechRecognition.current = true;
+      return;
+    }
+
+    if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
+
+    if (!recognitionRef.current) {
+      const recog = new SpeechRecognition();
+      recog.lang = "pt-BR";
+      recog.interimResults = false;
+      recog.maxAlternatives = 1;
+      recog.continuous = true;
+
+      recog.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputText(transcript);
+      };
+
+      recog.onerror = (event) => {
+        toast.error("Erro na gravação:", event.error);
+        setIsRecording(false);
+      };
+
+      recog.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognitionRef.current = recog;
+    }
+  }, []);
 
   const handleMicClick = () => {
-      const recog = recognitionRef.current;
-      if (!recog) return;
-  
-      if (isRecording) {
-        recog.stop();
-      } else {
-        setInputText("");
-        try {
-          recog.start();
-          setIsRecording(true);
-        } catch (error) {
-          toast.error("Erro ao iniciar gravação:", error);
-          setIsRecording(false);
-        }
+    const recog = recognitionRef.current;
+    if (!recog) return;
+
+    if (isRecording) {
+      recog.stop();
+    } else {
+      setInputText("");
+      try {
+        recog.start();
+        setIsRecording(true);
+      } catch (error) {
+        toast.error("Erro ao iniciar gravação:", error);
+        setIsRecording(false);
       }
-    };
+    }
+  };
 
   const handleSend = async () => {
     if (!inputText.trim() || !userId) return;
@@ -208,14 +244,12 @@ const ChatPage = () => {
         onSendClick={handleSend}
       />
 
-    {isMobile ? (
       <div className={styles.quickMessagesWrapper}>
-        <span className={styles.quickLabel}>Mensagens rápidas</span>
+        <span className={styles.quickLabel}>
+          {t("chat.quickMessagesLabel")}
+        </span>
         <QuickMessagesCarousel onSendMessage={handleQuickMessage} />
       </div>
-    ) : (
-      <></>
-    )}
     </main>
   );
 };
