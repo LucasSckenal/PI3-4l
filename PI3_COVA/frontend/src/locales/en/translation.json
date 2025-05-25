@@ -1,0 +1,116 @@
+{
+  "settings": {
+    "darkMode": "Dark Mode",
+    "language": "Language",
+    "select": "Select",
+    "portuguese": "Portuguese",
+    "english": "English",
+    "spanish": "Spanish",
+    "preferredColor": "Preferred Color",
+    "chooseColor": "Choose color",
+    "logout": "Logout",
+    "logoutConfirmTitle": "Are you sure you want to logout?",
+    "logoutConfirmYes": "Yes",
+    "logoutConfirmCancel": "Cancel",
+    "aboutUs": "About us"
+  },
+   "common": {
+     "loading": "Loading..."
+   },
+   "home": {
+     "welcome": "Welcome",
+     "welcomeBack": "Welcome back",
+     "user": "User",
+     "startDiagnosis": "START DIAGNOSIS",
+     "newDiagnosis": "START NEW DIAGNOSIS",
+     "recentHistory": "Recent history:",
+     "viewAll": "View all",
+     "noHistory": "No history found.",
+     "noTitle": "Untitled",
+     "unknownDate": "Unknown date",
+     "diagnoses": "Diagnoses",
+     "frequentSymptoms": "Frequent symptoms",
+     "needHelp": "Need help?",
+     "learnMore": "Learn more"
+   },
+   "symptoms": {
+    "tonturaLeve": "Mild dizziness",
+    "sensacaoPesoCabeca": "Feeling of heaviness in the head",
+    "dorCabecaPontadas": "Stabbing headache",
+    "sensibilidadeLuz": "Light sensitivity",
+    "nausea": "Nausea",
+    "zumbido": "Ringing in the ears",
+    "fotofobia": "Photophobia",
+    "fonofobia": "Phonophobia",
+    "dorPulsatilUnilateral": "Unilateral pulsating pain",
+    "visaoEmbacada": "Blurred vision"
+  },
+  "history": {
+    "searchPlaceholder": "Search by date, symptom, or title...",
+    "deleteAllButton": "Delete all",
+    "deleteAllAria": "Delete all history",
+    "modalDeleteAllTitle": "Do you want to delete all history?",
+    "modalDeleteSingleTitle": "Do you want to delete this history?",
+    "modalConfirm": "Confirm",
+    "modalCancel": "Cancel",
+    "started": "Started",
+    "priority": "Priority",
+    "noTitle": "No title"
+  },
+  "chat": {
+    "intro": "Hello! I’m your medical assistant. Tell me your symptoms via voice or text and I’ll generate a report to speed up your care.",
+    "quickMessagesLabel": "Quick Messages",
+    "inputPlaceholder": "Describe your problem here",
+    "personalizedMessages": {
+      "base": "I am {{pronoun}} and I am {{age}} years old",
+      "pronouns": {
+        "male": "a man",
+        "female": "a woman",
+        "other": "a person"
+      },
+      "headache": [
+        "{{base}} and I have intense one-sided headaches, often with nausea.",
+        "{{base}} and the pain worsens with physical effort or sudden movement.",
+        "{{base}} and I become sensitive to light and sound during attacks.",
+        "{{base}} and the headaches can last for hours or days, often throbbing.",
+        "{{base}} and painkillers don't always provide full relief.",
+        "{{base}} and I sometimes feel dizzy and have trouble concentrating.",
+        "{{base}} and I usually isolate myself in a dark room when it starts.",
+        "{{base}} and I’ve had to miss appointments due to the severity.",
+        "{{base}} and my headache episodes have been more frequent lately.",
+        "{{base}} and I often experience visual disturbances like blurry vision or flashes.",
+        "{{base}} and it starts with a pressure or tingling on one side of my head.",
+        "{{base}} and the pain is so intense it disrupts my sleep and rest.",
+        "{{base}} and sometimes it comes with neck or shoulder stiffness.",
+        "{{base}} and I notice that stress and temperature changes worsen it."
+      ]
+    }
+  },
+  "profile": {
+    "loading": "Loading profile...",
+    "alt": "Profile picture",
+    "email": "Email",
+    "location": "Location",
+    "birthDate": "Date of Birth",
+    "phone": "Phone",
+    "gender": {
+      "label": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "edit": "Edit Profile"
+  },
+  "sidebar": {
+    "home": "Home",
+    "history": "History",
+    "chat": "Chat",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "aboutModal": {
+    "title": "About Us",
+    "closeBtn": "Close",
+    "photoAlt": "{{name}}'s photo"
+  }
+}

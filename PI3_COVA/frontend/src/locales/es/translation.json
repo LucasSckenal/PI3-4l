@@ -1,0 +1,119 @@
+{
+  "settings": {
+    "darkMode": "Modo oscuro",
+    "language": "Idioma",
+    "select": "Seleccione",
+    "portuguese": "Portugués",
+    "english": "Inglés",
+    "spanish": "Español",
+    "preferredColor": "Color preferido",
+    "chooseColor": "Elegir color",
+    "logout": "Cerrar sesión",
+    "logoutConfirmTitle": "¿Está seguro de que desea cerrar sesión?",
+    "logoutConfirmYes": "Sí",
+    "logoutConfirmCancel": "Cancelar",
+    "aboutUs": "Sobre nosotros"
+  },
+
+  "common": {
+    "loading": "Cargando..."
+  },
+  "home": {
+    "welcome": "Bienvenido",
+    "welcomeBack": "Bienvenido de nuevo",
+    "user": "Usuario",
+    "startDiagnosis": "INICIAR DIAGNÓSTICO",
+    "newDiagnosis": "INICIAR NUEVO DIAGNÓSTICO",
+    "recentHistory": "Historial reciente:",
+    "viewAll": "Ver todo",
+    "noHistory": "No se encontró historial.",
+    "noTitle": "Sin título",
+    "unknownDate": "Fecha desconocida",
+    "diagnoses": "Diagnósticos",
+    "frequentSymptoms": "Síntomas frecuentes",
+    "needHelp": "¿Necesita ayuda?",
+    "learnMore": "Aprender más"
+  },
+   "symptoms": {
+     "tonturaLeve": "mareo leve",
+     "sensacaoPesoCabeca": "sensación de peso en la cabeza",
+     "dorCabecaPontadas": "dolor de cabeza punzante",
+     "sensibilidadeLuz": "sensibilidad a la luz",
+     "nausea": "náusea",
+     "zumbido": "zumbido",
+     "fotofobia": "fotofobia",
+     "fonofobia": "fonofobia",
+     "dorPulsatilUnilateral": "dolor pulsátil unilateral",
+     "visaoEmbacada": "visión borrosa"
+   },
+    "history": {
+      "searchPlaceholder": "Buscar por fecha, síntoma o título...",
+      "deleteAllButton": "Eliminar todo",
+      "deleteAllAria": "Eliminar todo el historial",
+      "modalDeleteAllTitle": "¿Desea eliminar todo el historial?",
+      "modalDeleteSingleTitle": "¿Desea eliminar este historial?",
+      "modalConfirm": "Confirmar",
+      "modalCancel": "Cancelar",
+      "started": "Iniciado",
+      "priority": "Prioridad",
+      "noTitle": "Sin título"
+    },
+    "chat": {
+    "intro": "¡Hola! Soy tu asistente médica. Cuéntame tus síntomas por voz o texto y generaré un informe para agilizar tu atención.",
+    "quickMessagesLabel": "Mensajes rápidos",
+    "inputPlaceholder": "Describe tu problema aquí",
+    "personalizedMessages": {
+      "base": "Soy {{pronoun}} de {{age}} años",
+      "pronouns": {
+        "male": "un hombre",
+        "female": "una mujer",
+        "other": "una persona"
+      },
+      "headache": [
+        "{{base}} y tengo dolor de cabeza intenso en un lado, frecuentemente con náuseas.",
+        "{{base}} y el dolor empeora con esfuerzo físico o movimientos rápidos.",
+        "{{base}} y me vuelvo sensible a la luz y al sonido durante las crisis.",
+        "{{base}} y los dolores pueden durar horas o días, y suelen ser punzantes.",
+        "{{base}} y los analgésicos no siempre alivian completamente el dolor.",
+        "{{base}} y las crisis pueden venir acompañadas de mareos y dificultad para concentrarme.",
+        "{{base}} y suelo aislarme en un lugar oscuro cuando comienza el dolor.",
+        "{{base}} y he tenido que faltar a compromisos debido a la intensidad del dolor.",
+        "{{base}} y últimamente los episodios de dolor de cabeza son más frecuentes.",
+        "{{base}} y a menudo experimento alteraciones visuales como visión borrosa o destellos.",
+        "{{base}} y los dolores empiezan con una sensación de presión o cosquilleo en un lado de la cabeza.",
+        "{{base}} y el dolor es tan fuerte que dificulta dormir o descansar.",
+        "{{base}} y a veces se acompaña de rigidez en el cuello o los hombros.",
+        "{{base}} y noto que el estrés y los cambios de temperatura agravan las crisis."
+      ]
+    }
+  },
+  "profile": {
+    "loading": "Cargando perfil...",
+    "alt": "Foto de perfil",
+    "email": "Correo electrónico",
+    "location": "Ubicación",
+    "birthDate": "Fecha de nacimiento",
+    "phone": "Teléfono",
+    "gender": {
+      "label": "Género",
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro"
+    },
+    "edit": "Editar perfil"
+  },
+  "sidebar": {
+    "home": "Inicio",
+    "history": "Historial",
+    "chat": "Chat",
+    "profile": "Perfil",
+    "settings": "Configuración"
+  },
+  "aboutModal": {
+   "title": "Sobre Nosotros",
+   "closeBtn": "Cerrar",
+   "photoAlt": "Foto de {{name}}"
+ }
+}
+
+
