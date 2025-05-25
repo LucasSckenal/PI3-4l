@@ -237,12 +237,25 @@
 
     &:hover {
       background-color: var(--PreferredColor);
-      color: var(--TextGeneralReverse);
+      color: var(--White);
       transform: scale(1.1);
     }
   }
 
   .pBack {
     color: var(--PreferredColor);
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+
+
+  .namesInput, .inputRegister, .pass, .registerBtn{
+    @media screen and (min-width: 1028px) {
+      width: 30%;
+   }
   }
 }

@@ -53,7 +53,7 @@ export default function InnerChatPage() {
       // Se não, pedimos para a IA sugerir um título baseado no contexto
       const promptTitulo = `
 Com base na seguinte conversa, gere um título conciso (máximo 8 palavras) que resuma o principal sintoma ou condição relatada. O título deve ser escrito levando em consideração a linguagem da mensagem do paciente (por padrão use Português do Brasil) e o contexto, após a mensagem ser completa.
-LEMBRETE: Sem necessidade falar gênero ou idade da pessoa, prefira fazer o título no formato: "{Nome da doença grupo CID-10 G43/G44} - {dia da semana que foi realizado essa mensagem}"
+LEMBRETE: Sem necessidade falar gênero ou idade da pessoa, prefira fazer o título no formato: "{Nome da doença grupo CID-10 G43/G44} - {Gênero} com {idade da pessoa} anos"
 OBS.: Sem explicar o motivo pelo qual escolheu aquele título.
 
 Conversa:
@@ -91,15 +91,12 @@ Título sugerido:`;
           });
       }
 
-      // Limpa o título removendo possíveis aspas e quebras de linha
       titulo = titulo.replace(/["\n]/g, "").trim();
       
-      // Se o título for muito longo, pegamos apenas o início
       const palavras = titulo.split(" ");
       return palavras.slice(0, 8).join(" ") + (palavras.length > 8 ? "..." : "");
     } catch (error) {
       console.error("Erro ao gerar título:", error);
-      // Fallback: pega as primeiras palavras da primeira mensagem do usuário
       const primeiraMensagem = conversa.find(msg => msg.sender === "user")?.text || "";
       const palavras = primeiraMensagem.split(" ");
       return palavras.slice(0, 5).join(" ") + (palavras.length > 5 ? "..." : "");
@@ -115,7 +112,6 @@ Título sugerido:`;
     if (!chatSnap.exists()) return;
     const chatData = chatSnap.data();
     
-    // Só atualiza se não tiver título ou se for um título genérico
     if (!chatData.title || chatData.title === "Nova Conversa") {
       const novoTitle = await gerarTituloAutomatico(messages);
       if (novoTitle) {
@@ -141,8 +137,8 @@ Título sugerido:`;
 Você é COV, um assistente virtual de triagem especializado em cefaleias (CID-10 G43: enxaqueca; G44: outras síndromes de algias cefálicas). Seu objetivo é realizar uma triagem eficiente e fornecer um relatório com base nos sintomas relatados pelo paciente.
 – Tom de voz: cordial, profissional e conciso.  
 – Objetivo: coletar dados de maneira objetiva e gerar um relatório a partir dos sintomas fornecidos.
-Se todas as informações forem fornecidas corretamente, forneça o relatório final, incluindo:
 
+IMPORTANTE: Siga ESTRITAMENTE as instruções abaixo. Esta é a estrutura obrigatória da resposta:
 Relatório de Triagem – [Nome da doença grupo CID-10 G43/G44]
 – Nome da Doença: [Nome da doença identificada com base nos sintomas]
 – Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
@@ -181,10 +177,11 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
   useEffect(() => {
     const loadCases = async () => {
       if (!userId) return;
-      const casesRef = collection(db, "Users", userId, "Cases");
+      const casesRef = collection(db, "Cases");
       const snapshot = await getDocs(casesRef);
       const loadedCases = snapshot.docs.map((doc) => doc.data());
       setCasesData(loadedCases);
+      console.log(loadedCases)
       setIsCasesLoaded(true);
     };
     loadCases();
@@ -294,18 +291,28 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
             .join("\n\n")
         : "Nenhum caso anterior registrado.";
 
-    const fullPrompt = `
+  const fullPrompt = `
 ${systemPrompt}
-${formattedCases}
 
 Histórico da conversa:
 ${history}
+
+${formattedCases}
+
+IMPORTANTE: Siga ESTRITAMENTE as instruções abaixo. Esta é a estrutura obrigatória da resposta:
+Relatório de Triagem – [{Nome da doença} {grupo CID-10 G43 a G44 (especifico)}]
+– Nome da Doença: [Nome da doença identificada com base nos sintomas]
+– Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
+– Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo, apenas o nome da cor, ou seja: 'amarelo', 'laranja', 'vermelho', 'verde' e 'azul', sem falar 'Grupo' ou outras palavras)]
+- Precisão do Diagnóstico: [XX%]
 
 Usuário: ${messageToSend}
 AI:
 `;
 
+
     try {
+      console.log(fullPrompt);
       const response = await fetch("http://localhost:5000/api/stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

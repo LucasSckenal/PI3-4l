@@ -197,7 +197,7 @@ const RegisterPage = () => {
         value={formData.gender}
         onChange={handleChange}
       >
-        <option value="">Selecione o gênero</option>
+        <option value="" hidden="true">Selecione o gênero</option>
         <option value="male">Masculino</option>
         <option value="female">Feminino</option>
         <option value="other">Outro</option>
@@ -258,7 +258,7 @@ const RegisterPage = () => {
         Registrar
       </button>
       <p className={styles.pBack} onClick={() => navigate("/login")}>
-        voltar para login
+        Voltar para login
       </p>
     </div>
   );

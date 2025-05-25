@@ -15,6 +15,7 @@ import QuickMessagesCarousel from "../../components/QuickMsg/QuickMsg";
 import styles from "./styles.module.scss";
 import Ia from "../../public/IaChat.gif";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
+import { toast } from "react-toastify";
 
 const ChatPage = () => {
   const { chatId } = useParams();
@@ -24,6 +25,8 @@ const ChatPage = () => {
   const [inputText, setInputText] = useState("");
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const hasWarnedAboutSpeechRecognition = useRef(false);
   const { isMobile } = useScreenResize();
 
   const userId = getAuth().currentUser?.uid;
@@ -66,10 +69,59 @@ const ChatPage = () => {
     }
   }, [chatId, userId, isNewChat]);
 
+  useEffect(() => {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
+        toast.warn("Reconhecimento de voz não suportado neste navegador.");
+        hasWarnedAboutSpeechRecognition.current = true;
+        return;
+      }
+  
+      if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
+  
+      if (!recognitionRef.current) {
+        const recog = new SpeechRecognition();
+        recog.lang = "pt-BR";
+        recog.interimResults = false;
+        recog.maxAlternatives = 1;
+        recog.continuous = true;
+  
+        recog.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          setInputText(transcript);
+        };
+  
+        recog.onerror = (event) => {
+          toast.error("Erro na gravação:", event.error);
+          setIsRecording(false);
+        };
+  
+        recog.onend = () => {
+          setIsRecording(false);
+        };
+  
+        recognitionRef.current = recog;
+      }
+    }, []);
+
   const handleMicClick = () => {
-    setIsRecording((prev) => !prev);
-    // TODO: implementar gravação de áudio
-  };
+      const recog = recognitionRef.current;
+      if (!recog) return;
+  
+      if (isRecording) {
+        recog.stop();
+      } else {
+        setInputText("");
+        try {
+          recog.start();
+          setIsRecording(true);
+        } catch (error) {
+          toast.error("Erro ao iniciar gravação:", error);
+          setIsRecording(false);
+        }
+      }
+    };
 
   const handleSend = async () => {
     if (!inputText.trim() || !userId) return;
@@ -155,6 +207,11 @@ const ChatPage = () => {
         onMicClick={handleMicClick}
         onSendClick={handleSend}
       />
+
+      <div className={styles.quickMessagesWrapper}>
+              <span className={styles.quickLabel}>Mensagens rápidas</span>
+              <QuickMessagesCarousel onSendMessage={handleQuickMessage} />
+            </div>
 
     {isMobile ? (
       <div className={styles.quickMessagesWrapper}>

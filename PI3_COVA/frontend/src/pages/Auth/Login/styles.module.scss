@@ -86,7 +86,7 @@
 
     &:hover {
       background-color: var(--PreferredColor);
-      color: var(--TextGeneralReverse);
+      color: var(--White);
       transform: scale(1.1);
     }
   }
@@ -142,5 +142,11 @@
         background-color: var(--PreferredColor);
       }
     }
+  }
+
+  .inputLogin, .Pass, .loginBtn {
+    @media screen and (min-width: 1028px) {
+      width: 30%;
+   }
   }
 }

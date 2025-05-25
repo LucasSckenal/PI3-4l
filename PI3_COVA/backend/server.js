@@ -25,7 +25,8 @@ app.post('/api/stream', async (req, res) => {
       data: {
         model: 'mistral',
         prompt: prompt,
-        stream: true
+        stream: true,
+        temperature: 0.0
       }
     });
 
