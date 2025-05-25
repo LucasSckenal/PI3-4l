@@ -8,5 +8,9 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "i18next": "^25.2.0",
+    "react-i18next": "^15.5.2"
   }
 }

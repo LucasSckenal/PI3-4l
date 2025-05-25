@@ -15,6 +15,7 @@ import styles from "./styles.module.scss";
 import { IoArrowForwardSharp } from "react-icons/io5";
 import SymptomsCarousel from "../../components/SymptomsCarousel/SymptomsCarousel";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
+import { useTranslation } from "react-i18next";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const HomePage = () => {
   const [symptoms, setSymptoms] = useState([]);
   const [chatCount, setChatCount] = useState(0);
   const { isMobile } = useScreenResize();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const userId = getAuth().currentUser?.uid;
@@ -41,7 +43,7 @@ const HomePage = () => {
           id: doc.id,
           createdAt:
             data.createdAt?.toDate().toLocaleDateString("pt-BR") ||
-            "Data desconhecida",
+            t("home.unknownDate"),
           title: data.title || "",
         };
       });
@@ -49,7 +51,7 @@ const HomePage = () => {
     });
 
     return unsub;
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const userId = getAuth().currentUser?.uid;
@@ -90,16 +92,42 @@ const HomePage = () => {
     return () => unsubscribe();
   }, []);
 
+  const mapSymptomToKey = (symptom) => {
+    switch (symptom.toLowerCase()) {
+      case "tontura leve":
+        return "tonturaLeve";
+      case "sensação de peso na cabeça":
+        return "sensacaoPesoCabeca";
+      case "dor de cabeça em pontadas":
+        return "dorCabecaPontadas";
+      case "sensibilidade à luz":
+        return "sensibilidadeLuz";
+      case "náusea":
+        return "nausea";
+      case "zumbido":
+        return "zumbido";
+      case "fotofobia":
+        return "fotofobia";
+      case "fonofobia":
+        return "fonofobia";
+      case "dor pulsátil unilateral":
+        return "dorPulsatilUnilateral";
+      case "visão embaçada":
+        return "visaoEmbacada";
+      default:
+        return null;
+    }
+  };
 
-  if (loading) return <div>Carregando...</div>;
+  if (loading) return <div>{t("common.loading")}</div>;
 
   if (isMobile) {
     return (
       <div className={styles.MainContainer}>
         <div className={styles.GreetingText}>
-          <p>Bem-vindo</p>
+          <p>{t("home.welcome")}</p>
           <h2>
-            {userData?.name?.split(" ").slice(0, 2).join(" ") ?? "Usuário"}
+            {userData?.name?.split(" ").slice(0, 2).join(" ") ?? t("home.user")}
           </h2>
         </div>
 
@@ -109,7 +137,7 @@ const HomePage = () => {
               className={styles.chatButton}
               onClick={() => navigate("/chat")}
             >
-              COMEÇAR DIAGNÓSTICO <IoArrowForwardSharp size={30} />
+              {t("home.startDiagnosis")} <IoArrowForwardSharp size={30} />
             </button>
           </div>
 
@@ -118,12 +146,12 @@ const HomePage = () => {
 
         <div className={styles.History}>
           <div className={styles.HistoryHeader}>
-            <p>Histórico recente: </p>
+            <p>{t("home.recentHistory")}</p>
             <button
               className={styles.ViewMoreButton}
               onClick={() => navigate("/history")}
             >
-              Ver todos
+              {t("home.viewAll")}
             </button>
           </div>
           <div className={styles.InnerHistory}>
@@ -139,7 +167,7 @@ const HomePage = () => {
                 </div>
               ))
             ) : (
-              <div className={styles.box}>Nenhum histórico encontrado.</div>
+              <div className={styles.box}>{t("home.noHistory")}</div>
             )}
           </div>
         </div>
@@ -147,43 +175,47 @@ const HomePage = () => {
     );
   }
 
-  // --- DESKTOP VERSION ---
   return (
     <div className={styles.MainContainer}>
       <div className={styles.GreetingText}>
-        <p>Bem-vindo de volta</p>
-        <h2>{userData?.name?.split(" ").slice(0, 4).join(" ") ?? "Usuário"}</h2>
+        <p>{t("home.welcomeBack")}</p>
+        <h2>
+          {userData?.name?.split(" ").slice(0, 4).join(" ") ?? t("home.user")}
+        </h2>
       </div>
 
       <div className={styles.HeroBanner} onClick={() => navigate("/chat")}>
-        COMEÇAR NOVO DIAGNÓSTICO
+        {t("home.newDiagnosis")}
       </div>
 
       <div className={styles.InnerContainer}>
         <div className={styles.Dashboard}>
           <div className={styles.StatsCardCompact}>
-            <h3>Diagnósticos</h3>
+            <h3>{t("home.diagnoses")}</h3>
             <p>{chatCount}</p>
           </div>
 
           <div className={styles.StatsCardSymptoms}>
-            <h3>Sintomas Frequentes</h3>
+            <h3>{t("home.frequentSymptoms")}</h3>
             <div className={styles.SymptomChips}>
-              {symptoms.map((s, i) => (
-                <span key={i} className={styles.Chip}>
-                  {s}
-                </span>
-              ))}
+              {symptoms.map((s, i) => {
+                const key = mapSymptomToKey(s);
+                return (
+                  <span key={i} className={styles.Chip}>
+                    {key ? t(`symptoms.${key}`) : s}
+                  </span>
+                );
+              })}
             </div>
           </div>
 
           <div className={styles.StatsCardCompact}>
-            <h3>Precisa de ajuda?</h3>
+            <h3>{t("home.needHelp")}</h3>
             <button
               className={styles.HelpButton}
               onClick={() => navigate("/tutorial")}
             >
-              Saiba mais
+              {t("home.learnMore")}
             </button>
           </div>
         </div>
@@ -191,12 +223,12 @@ const HomePage = () => {
 
       <div className={styles.History}>
         <div className={styles.HistoryHeader}>
-          <p>Histórico recente:</p>
+          <p>{t("home.recentHistory")}</p>
           <button
             className={styles.ViewMoreButton}
             onClick={() => navigate("/history")}
           >
-            Ver todos
+            {t("home.viewAll")}
           </button>
         </div>
 
@@ -208,11 +240,11 @@ const HomePage = () => {
                 className={styles.box}
                 onClick={() => navigate(`/chat/${item.id}`)}
               >
-                {index + 1}. {item.title || "Sem título"}
+                {index + 1}. {item.title || t("home.noTitle")}
               </div>
             ))
           ) : (
-            <div className={styles.box}>Nenhum histórico encontrado.</div>
+            <div className={styles.box}>{t("home.noHistory")}</div>
           )}
         </div>
       </div>

@@ -2,6 +2,8 @@ import styles from "./styles.module.scss";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import photo1 from "../../public/lucas.png";
 import photo2 from "../../public/Luan.jpg";
+import { useTranslation } from "react-i18next";
+
 const team = [
   {
     name: "Lucas Sckenal",
@@ -19,18 +21,20 @@ const team = [
 ];
 
 export default function AboutModal({ isOpen, onClose }) {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   return (
     <div className={styles.modalBackdrop} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <h2>Sobre Nós</h2>
+        <h2>{t("aboutModal.title")}</h2>
         <div className={styles.team}>
           {team.map((person) => (
             <div className={styles.card} key={person.name}>
               <img
                 src={person.photo}
-                alt={`Foto de ${person.name}`}
+                alt={t("aboutModal.photoAlt", { name: person.name })}
                 className={styles.photo}
               />
               <h3>{person.name}</h3>
@@ -49,7 +53,7 @@ export default function AboutModal({ isOpen, onClose }) {
           ))}
         </div>
         <button className={styles.closeBtn} onClick={onClose}>
-          Fechar
+          {t("aboutModal.closeBtn")}
         </button>
       </div>
     </div>

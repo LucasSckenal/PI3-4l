@@ -15,16 +15,18 @@ import Divider from "../../components/Divider/Divider";
 import styles from "./styles.module.scss";
 import { IoSearchSharp, IoTrash } from "react-icons/io5";
 import SimpleModal from "../../components/SimpleModal/SimpleModal";
+import { useTranslation } from "react-i18next";
 
 const HistoryPage = () => {
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Modal states
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalAction, setModalAction] = useState(null); 
+  const [modalAction, setModalAction] = useState(null);
   const [selectedChatId, setSelectedChatId] = useState(null);
+  const { t, i18n } = useTranslation();
+
+  const locale = i18n.language === "en" ? "en-US" : "pt-BR";
 
   useEffect(() => {
     const userId = getAuth().currentUser?.uid;
@@ -40,25 +42,23 @@ const HistoryPage = () => {
     return unsub;
   }, []);
 
-  // Agrupar chats por data
   const groupedChats = useMemo(() => {
     const groups = {};
     chats.forEach((chat) => {
-      const date = chat.createdAt?.toDate().toLocaleDateString("pt-BR");
+      const date = chat.createdAt?.toDate().toLocaleDateString(locale);
       if (!groups[date]) groups[date] = [];
       groups[date].push(chat);
     });
     return groups;
-  }, [chats]);
+  }, [chats, locale]);
 
-  // Filtrar chats
   const filteredGroupedChats = useMemo(() => {
     const lower = searchTerm.toLowerCase();
     const result = {};
     for (const [date, group] of Object.entries(groupedChats)) {
       const filtered = group.filter((chat) => {
         const dataStr =
-          chat.createdAt?.toDate().toLocaleDateString("pt-BR") || "";
+          chat.createdAt?.toDate().toLocaleDateString(locale) || "";
         const sintoma = (chat.sintoma || "").toLowerCase();
         const title = (chat.title || "").toLowerCase();
         const priority = (chat.priority || "").toLowerCase();
@@ -75,9 +75,8 @@ const HistoryPage = () => {
       }
     }
     return result;
-  }, [groupedChats, searchTerm]);
+  }, [groupedChats, searchTerm, locale]);
 
-  // Cores de prioridade
   const getPriorityColor = (prioridade) => {
     if (!prioridade) return "#bdc3c7";
     const cor = prioridade.trim().toLowerCase();
@@ -97,7 +96,6 @@ const HistoryPage = () => {
     }
   };
 
-  // Abrir modais
   const openDeleteSingleModal = (chatId) => {
     setSelectedChatId(chatId);
     setModalAction("single");
@@ -109,62 +107,74 @@ const HistoryPage = () => {
     setModalOpen(true);
   };
 
-  // Função para deletar 1 chat
   const deleteSingleChat = async (chatId) => {
-  const userId = getAuth().currentUser?.uid;
-  if (!userId || !chatId) return;
+    const userId = getAuth().currentUser?.uid;
+    if (!userId || !chatId) return;
 
-  try {
-    const messagesRef = collection(db, "Users", userId, "chats", chatId, "messages");
-    const messagesSnap = await getDocs(messagesRef);
-
-    const deleteMessages = messagesSnap.docs.map((msgDoc) =>
-      deleteDoc(doc(db, "Users", userId, "chats", chatId, "messages", msgDoc.id))
-    );
-
-    await Promise.all(deleteMessages);
-
-    await deleteDoc(doc(db, "Users", userId, "chats", chatId));
-    console.log(`Chat ${chatId} deletado com sucesso.`);
-  } catch (error) {
-    console.error("Erro ao deletar chat:", error);
-  }
-};
-
-
-  // Função para deletar todos os chats
-  const deleteAllChats = async () => {
-  const userId = getAuth().currentUser?.uid;
-  if (!userId) return;
-
-  try {
-    const chatsRef = collection(db, "Users", userId, "chats");
-    const chatsSnap = await getDocs(chatsRef);
-
-    const deleteAll = chatsSnap.docs.map(async (chatDoc) => {
-      const chatId = chatDoc.id;
-
-      // Deleta todas as mensagens do chat
-      const messagesRef = collection(db, "Users", userId, "chats", chatId, "messages");
+    try {
+      const messagesRef = collection(
+        db,
+        "Users",
+        userId,
+        "chats",
+        chatId,
+        "messages"
+      );
       const messagesSnap = await getDocs(messagesRef);
 
       const deleteMessages = messagesSnap.docs.map((msgDoc) =>
-        deleteDoc(doc(db, "Users", userId, "chats", chatId, "messages", msgDoc.id))
+        deleteDoc(
+          doc(db, "Users", userId, "chats", chatId, "messages", msgDoc.id)
+        )
       );
 
       await Promise.all(deleteMessages);
 
-      // Deleta o documento do chat
       await deleteDoc(doc(db, "Users", userId, "chats", chatId));
-    });
+      console.log(`Chat ${chatId} deletado com sucesso.`);
+    } catch (error) {
+      console.error("Erro ao deletar chat:", error);
+    }
+  };
 
-    await Promise.all(deleteAll);
-    console.log("Todos os chats e mensagens foram deletados com sucesso.");
-  } catch (error) {
-    console.error("Erro ao deletar todos os chats:", error);
-  }
-};
+  const deleteAllChats = async () => {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
 
+    try {
+      const chatsRef = collection(db, "Users", userId, "chats");
+      const chatsSnap = await getDocs(chatsRef);
+
+      const deleteAll = chatsSnap.docs.map(async (chatDoc) => {
+        const chatId = chatDoc.id;
+
+        const messagesRef = collection(
+          db,
+          "Users",
+          userId,
+          "chats",
+          chatId,
+          "messages"
+        );
+        const messagesSnap = await getDocs(messagesRef);
+
+        const deleteMessages = messagesSnap.docs.map((msgDoc) =>
+          deleteDoc(
+            doc(db, "Users", userId, "chats", chatId, "messages", msgDoc.id)
+          )
+        );
+
+        await Promise.all(deleteMessages);
+
+        await deleteDoc(doc(db, "Users", userId, "chats", chatId));
+      });
+
+      await Promise.all(deleteAll);
+      console.log("Todos os chats e mensagens foram deletados com sucesso.");
+    } catch (error) {
+      console.error("Erro ao deletar todos os chats:", error);
+    }
+  };
 
   return (
     <main className={styles.HistoryContainer}>
@@ -172,7 +182,7 @@ const HistoryPage = () => {
         <input
           type="search"
           className={styles.SearchInput}
-          placeholder="Buscar por data, sintoma ou título..."
+          placeholder={t("history.searchPlaceholder")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -180,10 +190,10 @@ const HistoryPage = () => {
         <button
           className={styles.DeleteAllButton}
           onClick={openDeleteAllModal}
-          aria-label="Excluir todos os históricos"
+          aria-label={t("history.deleteAllAria")}
           type="button"
         >
-          Excluir todos
+          {t("history.deleteAllButton")}
         </button>
       </div>
 
@@ -209,12 +219,12 @@ const HistoryPage = () => {
                     </strong>
                   </p>
                   <p>
-                    Iniciado:{" "}
-                    {chat.createdAt?.toDate().toLocaleTimeString("pt-BR")}
+                    {t("history.started")}{" "}
+                    {chat.createdAt?.toDate().toLocaleTimeString(locale)}
                   </p>
                   {chat.prioridade && (
                     <p>
-                      Prioridade:{" "}
+                      {t("history.priority")}{" "}
                       <strong
                         style={{ color: getPriorityColor(chat.prioridade) }}
                       >
@@ -241,17 +251,16 @@ const HistoryPage = () => {
         ))}
       </div>
 
-      {/* Modal de confirmação */}
       <SimpleModal
         isOpen={modalOpen}
         isClose={() => setModalOpen(false)}
         title={
           modalAction === "all"
-            ? "Deseja excluir todos os históricos?"
-            : "Deseja excluir este histórico?"
+            ? t("history.modalDeleteAllTitle")
+            : t("history.modalDeleteSingleTitle")
         }
-        Text="Confirmar"
-        Text2="Cancelar"
+        Text={t("history.modalConfirm")}
+        Text2={t("history.modalCancel")}
         textColor="#fff"
         borderColor="1px solid red"
         textColor2="var(--TextGeneral)"

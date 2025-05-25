@@ -15,6 +15,7 @@ import QuickMessagesCarousel from "../../components/QuickMsg/QuickMsg";
 import styles from "./styles.module.scss";
 import Ia from "../../public/IaChat.gif";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 const ChatPage = () => {
@@ -28,11 +29,10 @@ const ChatPage = () => {
   const recognitionRef = useRef(null);
   const hasWarnedAboutSpeechRecognition = useRef(false);
   const { isMobile } = useScreenResize();
-
+  const { t } = useTranslation();
   const userId = getAuth().currentUser?.uid;
 
-  const fullIntro =
-    "Olá! Sou sua assistente médica. Me conte seus sintomas com uma mensagem de voz ou texto e vou gerar um relatório para agilizar seu atendimento.";
+  const fullIntro = t("chat.intro");
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const ChatPage = () => {
     return () => {
       isCancelled = true;
     };
-  }, []);
+  }, [fullIntro]);
 
   useEffect(() => {
     if (!isNewChat && userId) {
@@ -171,11 +171,11 @@ const ChatPage = () => {
       { id: `quick-${Date.now()}`, text, sender: "user" },
     ]);
   };
-  
+
   return (
     <main className={styles.ChatContainer}>
       <div className={styles.IaContainer}>
-        <img src={Ia} className={styles.ia} alt="Assistente IA" />
+        <img src={Ia} className={styles.ia} alt={t("chat.assistantAlt")} />
         <p className={styles.pIa}>
           {displayedText}
           {displayedText.length < fullIntro.length && (
@@ -207,11 +207,6 @@ const ChatPage = () => {
         onMicClick={handleMicClick}
         onSendClick={handleSend}
       />
-
-      <div className={styles.quickMessagesWrapper}>
-              <span className={styles.quickLabel}>Mensagens rápidas</span>
-              <QuickMessagesCarousel onSendMessage={handleQuickMessage} />
-            </div>
 
     {isMobile ? (
       <div className={styles.quickMessagesWrapper}>

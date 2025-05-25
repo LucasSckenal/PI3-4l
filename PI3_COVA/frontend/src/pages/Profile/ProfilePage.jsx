@@ -3,13 +3,15 @@ import EditProfileModal from "../../components/EditProfileModal/EditProfileModal
 import styles from "./styles.module.scss";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import defaultProfileIcon from "../../public/UserDefault.webp";
+import { useTranslation } from "react-i18next";
 
 const ProfilePage = () => {
   const { userData, loading } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useTranslation();
 
   if (loading || !userData) {
-    return <div className={styles.loading}>Carregando perfil...</div>;
+    return <div className={styles.loading}>{t("profile.loading")}</div>;
   }
 
   const handleEditProfile = () => setIsModalOpen(true);
@@ -41,45 +43,50 @@ const ProfilePage = () => {
           <div className={styles.profilePicContainer}>
             <img
               src={getProfileImageSource()}
-              alt="Foto de perfil"
+              alt={t("profile.alt")}
               className={styles.profilePic}
               onError={(e) => (e.target.src = defaultProfileIcon)}
             />
           </div>
           <div className={styles.userNameSection}>
-            <h2 className={styles.userName}>{userData?.name?.length <= 17 ? userData.name : userData?.name?.split(' ').slice(0, 2).join(' ')}</h2>
+            <h2 className={styles.userName}>
+              {userData?.name?.length <= 17
+                ? userData.name
+                : userData?.name?.split(" ").slice(0, 2).join(" ")}
+            </h2>
           </div>
         </div>
       </div>
 
       <div className={styles.infoSection}>
         <div className={styles.infoItem}>
-          Email: <span>{userData?.email}</span>
+          {t("profile.email")}: <span>{userData?.email}</span>
         </div>
         <div className={styles.infoItem}>
-          Localização: <span>{userData?.location}</span>
+          {t("profile.location")}: <span>{userData?.location}</span>
         </div>
         <div className={styles.infoItem}>
-          Data de Nascimento: <span>{formatDate(userData?.birthDate)}</span>
+          {t("profile.birthDate")}:{" "}
+          <span>{formatDate(userData?.birthDate)}</span>
         </div>
         <div className={styles.infoItem}>
-          Celular: <span>{userData?.phone}</span>
+          {t("profile.phone")}: <span>{userData?.phone}</span>
         </div>
         <div className={styles.infoItem}>
-          Gênero:{" "}
+          {t("profile.gender.label")}:{" "}
           <span>
-            {userData?.gender == "male"
-              ? "Masculino"
-              : userData?.gender == "female"
-              ? "Feminino"
-              : "Outro"}
+            {userData?.gender === "male"
+              ? t("profile.gender.male")
+              : userData?.gender === "female"
+              ? t("profile.gender.female")
+              : t("profile.gender.other")}
           </span>
         </div>
       </div>
 
       <div className={styles.footer}>
         <button className={styles.editButton} onClick={handleEditProfile}>
-          Editar Perfil
+          {t("profile.edit")}
         </button>
       </div>
 

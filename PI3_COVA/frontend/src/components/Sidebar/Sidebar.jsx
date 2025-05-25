@@ -9,22 +9,41 @@ import {
   IoMenu,
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const { t } = useTranslation();
 
   const menuItems = [
-    { icon: <IoHomeOutline />, label: "Home", path: "/" },
-    { icon: <IoTimeOutline />, label: "History", path: "/history" },
-    { icon: <IoChatbubbleEllipsesOutline />, label: "Chat", path: "/chat" },
-    { icon: <IoPersonOutline />, label: "Profile", path: "/profile" },
-    { icon: <IoSettingsOutline />, label: "Settings", path: "/settings" },
+    { icon: <IoHomeOutline />, label: t("sidebar.home"), path: "/" },
+    { icon: <IoTimeOutline />, label: t("sidebar.history"), path: "/history" },
+    {
+      icon: <IoChatbubbleEllipsesOutline />,
+      label: t("sidebar.chat"),
+      path: "/chat",
+    },
+    {
+      icon: <IoPersonOutline />,
+      label: t("sidebar.profile"),
+      path: "/profile",
+    },
+    {
+      icon: <IoSettingsOutline />,
+      label: t("sidebar.settings"),
+      path: "/settings",
+    },
   ];
 
   return (
-    <div className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
+    <div
+      className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}
+    >
       <div className={styles.topSection}>
-        <button className={styles.menuButton} onClick={() => setIsOpen(!isOpen)}>
+        <button
+          className={styles.menuButton}
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <IoMenu />
         </button>
       </div>

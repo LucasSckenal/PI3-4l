@@ -12,6 +12,7 @@ import { AuthProvider } from "./contexts/AuthProvider/AuthProvider";
 import AccountProvider from "./contexts/Account/AccountProvider";
 import { IaProvider } from "./contexts/IaProvider/IaProvider";
 import ScreenResizeProvider from "./contexts/ScreenResizeProvider/ScreenResizeProvider";
+import "./i18n";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

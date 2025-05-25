@@ -1,18 +1,31 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ThemeContext } from "../../contexts/ThemeProvider/ThemeProvider";
+import { useTranslation } from "react-i18next";
 import PreferredColorModal from "../../components/PreferredColorModal/PreferredColorModal";
 import SimpleModal from "../../components/SimpleModal/SimpleModal";
+import AboutModal from "../../components/AboutUsModal/AboutUsModal";
 import styles from "./styles.module.scss";
 import { getAuth, signOut } from "firebase/auth";
-import AboutModal from "../../components/AboutUsModal/AboutUsModal";
 
 const SettingsPage = () => {
-  const { isDarkMode, toggleTheme, preferredColor, handleColorChange } =
-    useContext(ThemeContext);
+  const {
+    isDarkMode,
+    toggleTheme,
+    preferredColor,
+    handleColorChange,
+    preferredLanguage,
+    handleLanguageChange,
+  } = useContext(ThemeContext);
 
   const [isColorModalOpen, setIsColorModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
+
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    i18n.changeLanguage(preferredLanguage);
+  }, [preferredLanguage, i18n]);
 
   const handleLogout = async () => {
     try {
@@ -28,7 +41,7 @@ const SettingsPage = () => {
     <main className={styles.container}>
       <section className={styles.grid}>
         <div className={styles.card}>
-          <span>Modo Escuro</span>
+          <span>{t("settings.darkMode")}</span>
           <label className={styles.switch}>
             <input
               type="checkbox"
@@ -40,32 +53,38 @@ const SettingsPage = () => {
         </div>
 
         <div className={styles.card}>
-          <span>Idioma</span>
-          <select className={styles.select}>
-            <option>Selecione</option>
-            <option value="pt">Português</option>
-            <option value="en">Inglês</option>
-            <option value="es">Espanhol</option>
+          <span>{t("settings.language")}</span>
+          <select
+            className={styles.select}
+            value={preferredLanguage}
+            onChange={(e) => handleLanguageChange(e.target.value)}
+          >
+            <option value="" hidden="true">
+              {t("settings.select")}
+            </option>
+            <option value="pt">{t("settings.portuguese")}</option>
+            <option value="en">{t("settings.english")}</option>
+            <option value="es">{t("settings.spanish")}</option>
           </select>
         </div>
 
         <div className={styles.card}>
-          <span>Cor Preferida</span>
+          <span>{t("settings.preferredColor")}</span>
           <button
             onClick={() => setIsColorModalOpen(true)}
             className={styles.primaryButton}
           >
-            Escolher cor
+            {t("settings.chooseColor")}
           </button>
         </div>
 
         <div className={styles.card}>
-          <span>Sair da conta</span>
+          <span>{t("settings.logout")}</span>
           <button
             onClick={() => setIsLogoutModalOpen(true)}
             className={styles.dangerButton}
           >
-            Sair
+            {t("settings.logout")}
           </button>
         </div>
 
@@ -73,7 +92,7 @@ const SettingsPage = () => {
           onClick={() => setIsAboutUsOpen(true)}
           className={styles.AboutBtn}
         >
-          Sobre nós
+          {t("settings.aboutUs")}
         </button>
       </section>
 
@@ -85,9 +104,9 @@ const SettingsPage = () => {
       />
 
       <SimpleModal
-        title="Tem certeza que deseja sair?"
-        Text="Sim"
-        Text2="Cancelar"
+        title={t("settings.logoutConfirm")}
+        Text={t("settings.yes")}
+        Text2={t("settings.cancel")}
         textColor="red"
         textColor2="white"
         borderColor="1px solid red"
@@ -96,6 +115,7 @@ const SettingsPage = () => {
         isClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleLogout}
       />
+
       {isAboutUsOpen && (
         <AboutModal
           isOpen={isAboutUsOpen}
