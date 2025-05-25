@@ -9,9 +9,9 @@
     "preferredColor": "Color preferido",
     "chooseColor": "Elegir color",
     "logout": "Cerrar sesión",
-    "logoutConfirmTitle": "¿Está seguro de que desea cerrar sesión?",
-    "logoutConfirmYes": "Sí",
-    "logoutConfirmCancel": "Cancelar",
+    "logoutConfirm": "¿Está seguro de que desea cerrar sesión?",
+    "logoutYes": "Sí",
+    "logoutCancel": "Cancelar",
     "aboutUs": "Sobre nosotros"
   },
 
@@ -34,31 +34,31 @@
     "needHelp": "¿Necesita ayuda?",
     "learnMore": "Aprender más"
   },
-   "symptoms": {
-     "tonturaLeve": "mareo leve",
-     "sensacaoPesoCabeca": "sensación de peso en la cabeza",
-     "dorCabecaPontadas": "dolor de cabeza punzante",
-     "sensibilidadeLuz": "sensibilidad a la luz",
-     "nausea": "náusea",
-     "zumbido": "zumbido",
-     "fotofobia": "fotofobia",
-     "fonofobia": "fonofobia",
-     "dorPulsatilUnilateral": "dolor pulsátil unilateral",
-     "visaoEmbacada": "visión borrosa"
-   },
-    "history": {
-      "searchPlaceholder": "Buscar por fecha, síntoma o título...",
-      "deleteAllButton": "Eliminar todo",
-      "deleteAllAria": "Eliminar todo el historial",
-      "modalDeleteAllTitle": "¿Desea eliminar todo el historial?",
-      "modalDeleteSingleTitle": "¿Desea eliminar este historial?",
-      "modalConfirm": "Confirmar",
-      "modalCancel": "Cancelar",
-      "started": "Iniciado",
-      "priority": "Prioridad",
-      "noTitle": "Sin título"
-    },
-    "chat": {
+  "symptoms": {
+    "tonturaLeve": "mareo leve",
+    "sensacaoPesoCabeca": "sensación de peso en la cabeza",
+    "dorCabecaPontadas": "dolor de cabeza punzante",
+    "sensibilidadeLuz": "sensibilidad a la luz",
+    "nausea": "náusea",
+    "zumbido": "zumbido",
+    "fotofobia": "fotofobia",
+    "fonofobia": "fonofobia",
+    "dorPulsatilUnilateral": "dolor pulsátil unilateral",
+    "visaoEmbacada": "visión borrosa"
+  },
+  "history": {
+    "searchPlaceholder": "Buscar por fecha, síntoma o título...",
+    "deleteAllButton": "Eliminar todo",
+    "deleteAllAria": "Eliminar todo el historial",
+    "modalDeleteAllTitle": "¿Desea eliminar todo el historial?",
+    "modalDeleteSingleTitle": "¿Desea eliminar este historial?",
+    "modalConfirm": "Confirmar",
+    "modalCancel": "Cancelar",
+    "started": "Iniciado",
+    "priority": "Prioridad",
+    "noTitle": "Sin título"
+  },
+  "chat": {
     "intro": "¡Hola! Soy tu asistente médica. Cuéntame tus síntomas por voz o texto y generaré un informe para agilizar tu atención.",
     "quickMessagesLabel": "Mensajes rápidos",
     "inputPlaceholder": "Describe tu problema aquí",
@@ -102,6 +102,26 @@
     },
     "edit": "Editar perfil"
   },
+  "editProfile": {
+    "title": "Editar perfil",
+    "avatarAlt": "Avatar del usuario",
+    "name": "Nombre completo",
+    "phone": "Teléfono",
+    "location": "Ubicación",
+    "gender": {
+      "select": "Seleccione el género",
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro"
+    },
+    "birthDateNote": "La fecha de nacimiento solo se puede establecer una vez.",
+    "password": "Nueva contraseña (opcional)",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "success": "Perfil actualizado con éxito!",
+    "error": "Error al actualizar el perfil"
+  },
   "sidebar": {
     "home": "Inicio",
     "history": "Historial",
@@ -110,10 +130,19 @@
     "settings": "Configuración"
   },
   "aboutModal": {
-   "title": "Sobre Nosotros",
-   "closeBtn": "Cerrar",
-   "photoAlt": "Foto de {{name}}"
- }
+    "title": "Sobre Nosotros",
+    "closeBtn": "Cerrar",
+    "photoAlt": "Foto de {{name}}"
+  },
+  "modal": {
+    "selectPreferredColor": "Seleccionar Color Preferido",
+    "save": "Guardar"
+  },
+  "toast": {
+    "speechRecognitionNotSupported": "El reconocimiento de voz no es compatible con este navegador.",
+    "recordingError": "Error en la grabación: {{error}}",
+    "startRecordingError": "Error al iniciar la grabación: {{error}}"
+  }
 }
 
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./PreferredColorModal.module.scss";
+import { useTranslation } from "react-i18next";
 
 const colorList = [
   "#4A90E2",
@@ -20,7 +21,7 @@ const PreferredColorModal = ({
   onColorChange,
 }) => {
   const [selectedColor, setSelectedColor] = useState(currentColor || "#7f41e2");
-
+  const { t } = useTranslation(); 
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--PreferredColor",
@@ -34,7 +35,7 @@ const PreferredColorModal = ({
   };
 
   const handleSave = () => {
-    onColorChange(selectedColor); // <-- repassa pro contexto
+    onColorChange(selectedColor);
     onClose();
   };
 
@@ -52,7 +53,7 @@ const PreferredColorModal = ({
         <button className={styles.CloseButton} onClick={onClose}>
           &times;
         </button>
-        <h2>Escolher Cor Preferida</h2>
+        <h2><h2>{t("modal.selectPreferredColor")}</h2></h2>
         <div className={styles.ModalContent}>
           <div className={styles.ColorOptions}>
             <div className={styles.ColorList}>
@@ -70,7 +71,7 @@ const PreferredColorModal = ({
           </div>
         </div>
         <button className={styles.SaveButton} onClick={handleSave}>
-          Salvar
+          {t("modal.save")}
         </button>
       </div>
     </div>

@@ -105,8 +105,8 @@ const SettingsPage = () => {
 
       <SimpleModal
         title={t("settings.logoutConfirm")}
-        Text={t("settings.yes")}
-        Text2={t("settings.cancel")}
+        Text={t("settings.logoutYes")}
+        Text2={t("settings.logoutCancel")}
         textColor="red"
         textColor2="white"
         borderColor="1px solid red"

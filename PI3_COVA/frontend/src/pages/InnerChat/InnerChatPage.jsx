@@ -18,6 +18,7 @@ import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import { toast } from "react-toastify";
 import styles from "./styles.module.scss";
 import Header from "../../components/Header/Header";
+import { useTranslation } from "react-i18next";
 
 export default function InnerChatPage() {
   const { chatId } = useParams();
@@ -30,6 +31,7 @@ export default function InnerChatPage() {
   const [casesData, setCasesData] = useState([]);
   const [isCasesLoaded, setIsCasesLoaded] = useState(false);
   const [priority, setPriority] = useState(null);
+  const { t } = useTranslation();
 
   const bottomRef = useRef(null);
   const hasRespondedToFirstMessage = useRef(false);
@@ -191,7 +193,7 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
-      toast.warn("Reconhecimento de voz não suportado neste navegador.");
+      toast.warn(t("toast.speechRecognitionNotSupported"));
       hasWarnedAboutSpeechRecognition.current = true;
       return;
     }
@@ -211,7 +213,7 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
       };
 
       recog.onerror = (event) => {
-        toast.error("Erro na gravação:", event.error);
+        toast.error(t("toast.recordingError", { error: event.error }));
         setIsRecording(false);
       };
 
@@ -221,6 +223,7 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
 
       recognitionRef.current = recog;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleMicClick = () => {
@@ -235,7 +238,7 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
         recog.start();
         setIsRecording(true);
       } catch (error) {
-        toast.error("Erro ao iniciar gravação:", error);
+        toast.error(t("toast.startRecordingError", { error: error.message }));
         setIsRecording(false);
       }
     }

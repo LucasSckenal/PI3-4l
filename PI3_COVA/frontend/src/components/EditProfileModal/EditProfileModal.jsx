@@ -5,9 +5,12 @@ import { db } from "../../api/firebase";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import { toast } from "react-toastify";
 import styles from "./styles.module.scss";
+import { useTranslation } from "react-i18next";
 
 const EditProfileModal = ({ onClose }) => {
   const { userData } = useAccount();
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
     name: "",
     gender: "",
@@ -98,10 +101,10 @@ const EditProfileModal = ({ onClose }) => {
         await updatePassword(user, formData.password);
       }
 
-      toast.success("Perfil atualizado com sucesso!");
+      toast.success(t("editProfile.success"));
       onClose();
     } catch (err) {
-      toast.error("Erro ao atualizar o perfil: " + err.message);
+      toast.error(t("editProfile.error") + ": " + err.message);
     } finally {
       setLoading(false);
     }
@@ -117,10 +120,10 @@ const EditProfileModal = ({ onClose }) => {
       }}
     >
       <div className={styles.modal}>
-        <h2>Editar Perfil</h2>
+        <h2>{t("editProfile.title")}</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.avatarLabel}>
-            <img src={formData.photo || "/default-avatar.png"} alt="avatar" />
+            <img src={formData.photo || "/default-avatar.png"} alt={t("editProfile.avatarAlt")} />
             <input
               type="file"
               accept="image/*"
@@ -132,7 +135,7 @@ const EditProfileModal = ({ onClose }) => {
           <input
             name="name"
             type="text"
-            placeholder="Nome completo"
+            placeholder={t("editProfile.name")}
             value={formData.name}
             onChange={handleChange}
             required
@@ -141,7 +144,7 @@ const EditProfileModal = ({ onClose }) => {
           <input
             name="phone"
             type="tel"
-            placeholder="Celular"
+            placeholder={t("editProfile.phone")}
             value={formData.phone}
             onChange={handleChange}
           />
@@ -149,16 +152,16 @@ const EditProfileModal = ({ onClose }) => {
           <input
             name="location"
             type="text"
-            placeholder="Localização"
+            placeholder={t("editProfile.location")}
             value={formData.location}
             onChange={handleChange}
           />
 
           <select name="gender" value={formData.gender} onChange={handleChange}>
-            <option value="">Selecione o gênero</option>
-            <option value="male">Masculino</option>
-            <option value="female">Feminino</option>
-            <option value="other">Outro</option>
+            <option value="" hidden="true">{t("editProfile.gender.select")}</option>
+            <option value="male">{t("editProfile.gender.male")}</option>
+            <option value="female">{t("editProfile.gender.female")}</option>
+            <option value="other">{t("editProfile.gender.other")}</option>
           </select>
 
           <div className={styles.birthDateContainer}>
@@ -173,7 +176,7 @@ const EditProfileModal = ({ onClose }) => {
             />
             {userData?.birthDate && (
               <small className={styles.helperText}>
-                A data de nascimento só pode ser definida uma vez.
+                {t("editProfile.birthDateNote")}
               </small>
             )}
           </div>
@@ -181,17 +184,17 @@ const EditProfileModal = ({ onClose }) => {
           <input
             name="password"
             type="password"
-            placeholder="Nova senha (opcional)"
+            placeholder={t("editProfile.password")}
             value={formData.password}
             onChange={handleChange}
           />
 
           <div className={styles.buttons}>
             <button type="submit" disabled={loading}>
-              {loading ? "Salvando..." : "Salvar"}
+              {loading ? t("editProfile.saving") : t("editProfile.save")}
             </button>
             <button type="button" onClick={onClose} className={styles.cancel}>
-              Cancelar
+              {t("editProfile.cancel")}
             </button>
           </div>
         </form>

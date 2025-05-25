@@ -9,9 +9,9 @@
     "preferredColor": "Cor Preferida",
     "chooseColor": "Escolher cor",
     "logout": "Sair da conta",
-    "logoutConfirmTitle": "Tem certeza que deseja sair?",
-    "logoutConfirmYes": "Sim",
-    "logoutConfirmCancel": "Cancelar",
+    "logoutConfirm": "Tem certeza que deseja sair?",
+    "logoutYes": "Sim",
+    "logoutCancel": "Cancelar",
     "aboutUs": "Sobre nós"
   },
 
@@ -103,6 +103,26 @@
     },
     "edit": "Editar Perfil"
   },
+  "editProfile": {
+    "title": "Editar Perfil",
+    "avatarAlt": "Avatar do usuário",
+    "name": "Nome completo",
+    "phone": "Celular",
+    "location": "Localização",
+    "gender": {
+      "select": "Selecione o gênero",
+      "male": "Masculino",
+      "female": "Feminino",
+      "other": "Outro"
+    },
+    "birthDateNote": "A data de nascimento só pode ser definida uma vez.",
+    "password": "Nova senha (opcional)",
+    "save": "Salvar",
+    "saving": "Salvando...",
+    "cancel": "Cancelar",
+    "success": "Perfil atualizado com sucesso!",
+    "error": "Erro ao atualizar o perfil"
+  },
   "sidebar": {
     "home": "Início",
     "history": "Histórico",
@@ -114,5 +134,17 @@
     "title": "Sobre Nós",
     "closeBtn": "Fechar",
     "photoAlt": "Foto de {{name}}"
+  },
+
+  "modal": {
+    "selectPreferredColor": "Escolha a sua cor Preferida",
+    "save": "Salvar"
+  },
+
+  "toast": {
+    "speechRecognitionNotSupported": "Reconhecimento de voz não suportado neste navegador.",
+     "recordingError": "Erro na gravação: {{error}}",
+    "startRecordingError": "Erro ao iniciar gravação: {{error}}"
   }
+  
 }

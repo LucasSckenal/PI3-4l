@@ -9,31 +9,31 @@
     "preferredColor": "Preferred Color",
     "chooseColor": "Choose color",
     "logout": "Logout",
-    "logoutConfirmTitle": "Are you sure you want to logout?",
-    "logoutConfirmYes": "Yes",
-    "logoutConfirmCancel": "Cancel",
+    "logoutConfirm": "Are you sure you want to logout?",
+    "logoutYes": "Yes",
+    "logoutCancel": "Cancel",
     "aboutUs": "About us"
   },
-   "common": {
-     "loading": "Loading..."
-   },
-   "home": {
-     "welcome": "Welcome",
-     "welcomeBack": "Welcome back",
-     "user": "User",
-     "startDiagnosis": "START DIAGNOSIS",
-     "newDiagnosis": "START NEW DIAGNOSIS",
-     "recentHistory": "Recent history:",
-     "viewAll": "View all",
-     "noHistory": "No history found.",
-     "noTitle": "Untitled",
-     "unknownDate": "Unknown date",
-     "diagnoses": "Diagnoses",
-     "frequentSymptoms": "Frequent symptoms",
-     "needHelp": "Need help?",
-     "learnMore": "Learn more"
-   },
-   "symptoms": {
+  "common": {
+    "loading": "Loading..."
+  },
+  "home": {
+    "welcome": "Welcome",
+    "welcomeBack": "Welcome back",
+    "user": "User",
+    "startDiagnosis": "START DIAGNOSIS",
+    "newDiagnosis": "START NEW DIAGNOSIS",
+    "recentHistory": "Recent history:",
+    "viewAll": "View all",
+    "noHistory": "No history found.",
+    "noTitle": "Untitled",
+    "unknownDate": "Unknown date",
+    "diagnoses": "Diagnoses",
+    "frequentSymptoms": "Frequent symptoms",
+    "needHelp": "Need help?",
+    "learnMore": "Learn more"
+  },
+  "symptoms": {
     "tonturaLeve": "Mild dizziness",
     "sensacaoPesoCabeca": "Feeling of heaviness in the head",
     "dorCabecaPontadas": "Stabbing headache",
@@ -101,6 +101,26 @@
     },
     "edit": "Edit Profile"
   },
+  "editProfile": {
+    "title": "Edit Profile",
+    "avatarAlt": "User avatar",
+    "name": "Full name",
+    "phone": "Phone",
+    "location": "Location",
+    "gender": {
+      "select": "Select gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "birthDateNote": "Birthdate can only be set once.",
+    "password": "New password (optional)",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "success": "Profile updated successfully!",
+    "error": "Error updating profile"
+  },
   "sidebar": {
     "home": "Home",
     "history": "History",
@@ -112,5 +132,14 @@
     "title": "About Us",
     "closeBtn": "Close",
     "photoAlt": "{{name}}'s photo"
+  },
+  "modal": {
+    "selectPreferredColor": "Select Preferred Color",
+    "save": "Save"
+  },
+  "toast": {
+    "speechRecognitionNotSupported": "Speech recognition not supported in this browser.",
+    "recordingError": "Recording error: {{error}}",
+    "startRecordingError": "Error starting recording: {{error}}"
   }
 }

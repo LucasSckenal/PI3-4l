@@ -7,14 +7,14 @@ import { useTranslation } from "react-i18next";
 const team = [
   {
     name: "Lucas Sckenal",
-    role: "Desenvolvedor full stack",
+    role: "Dev full stack",
     linkedin: "https://www.linkedin.com/in/lucassckenal/",
     instagram: "https://www.instagram.com/lucas.sckenal/",
     photo: photo1,
   },
   {
     name: "Luan Vitor C. D.",
-    role: "Desenvolvedor full stack",
+    role: "Dev full stack",
     linkedin: "https://www.linkedin.com/in/luan-vitor-casali-dallabrida/",
     photo: photo2,
   },

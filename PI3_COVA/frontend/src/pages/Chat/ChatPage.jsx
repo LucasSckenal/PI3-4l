@@ -28,6 +28,7 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
   const hasWarnedAboutSpeechRecognition = useRef(false);
+  // eslint-disable-next-line no-unused-vars
   const { isMobile } = useScreenResize();
   const { t } = useTranslation();
   const userId = getAuth().currentUser?.uid;
@@ -73,7 +74,7 @@ const ChatPage = () => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
-      toast.warn("Reconhecimento de voz não suportado neste navegador.");
+      toast.warn(t("toast.speechRecognitionNotSupported"));
       hasWarnedAboutSpeechRecognition.current = true;
       return;
     }
@@ -93,7 +94,7 @@ const ChatPage = () => {
       };
 
       recog.onerror = (event) => {
-        toast.error("Erro na gravação:", event.error);
+        toast.error(t("toast.recordingError", { error: event.error }));
         setIsRecording(false);
       };
 
@@ -103,43 +104,7 @@ const ChatPage = () => {
 
       recognitionRef.current = recog;
     }
-  }, []);
-
-  useEffect(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition && !hasWarnedAboutSpeechRecognition.current) {
-      toast.warn("Reconhecimento de voz não suportado neste navegador.");
-      hasWarnedAboutSpeechRecognition.current = true;
-      return;
-    }
-
-    if (!SpeechRecognition && hasWarnedAboutSpeechRecognition.current) return;
-
-    if (!recognitionRef.current) {
-      const recog = new SpeechRecognition();
-      recog.lang = "pt-BR";
-      recog.interimResults = false;
-      recog.maxAlternatives = 1;
-      recog.continuous = true;
-
-      recog.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setInputText(transcript);
-      };
-
-      recog.onerror = (event) => {
-        toast.error("Erro na gravação:", event.error);
-        setIsRecording(false);
-      };
-
-      recog.onend = () => {
-        setIsRecording(false);
-      };
-
-      recognitionRef.current = recog;
-    }
-  }, []);
+  }, [t]);
 
   const handleMicClick = () => {
     const recog = recognitionRef.current;
@@ -153,7 +118,7 @@ const ChatPage = () => {
         recog.start();
         setIsRecording(true);
       } catch (error) {
-        toast.error("Erro ao iniciar gravação:", error);
+        toast.error(t("toast.startRecordingError", { error: error.message }));
         setIsRecording(false);
       }
     }

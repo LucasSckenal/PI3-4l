@@ -8,7 +8,8 @@ import { useTranslation } from "react-i18next";
 const ProfilePage = () => {
   const { userData, loading } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "en" ? "en-US" : "pt-BR";
 
   if (loading || !userData) {
     return <div className={styles.loading}>{t("profile.loading")}</div>;
@@ -29,11 +30,15 @@ const ProfilePage = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
-    const day = String(date.getUTCDate()).padStart(2, "0");
-    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const year = date.getUTCFullYear();
-    return `${day}/${month}/${year}`;
+    const utcDate = new Date(dateString);
+    
+    const localDate = new Date(utcDate.getTime() + 3 * 60 * 60 * 1000); //? Precisa tornar dinâmico com o horário do computador do usuário (atualmente fixo no fuso horário -3 horas)
+
+    return localDate.toLocaleDateString(locale, {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
   return (
