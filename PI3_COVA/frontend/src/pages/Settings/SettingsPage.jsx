@@ -1,4 +1,7 @@
 import { useState, useContext, useEffect } from "react";
+
+import { IoLanguageSharp, IoLogOutOutline } from "react-icons/io5";
+
 import { ThemeContext } from "../../contexts/ThemeProvider/ThemeProvider";
 import { useTranslation } from "react-i18next";
 import PreferredColorModal from "../../components/PreferredColorModal/PreferredColorModal";
@@ -53,13 +56,15 @@ const SettingsPage = () => {
         </div>
 
         <div className={styles.card}>
-          <span>{t("settings.language")}</span>
+          <span>
+            {t("settings.language")} <IoLanguageSharp />
+          </span>
           <select
             className={styles.select}
             value={preferredLanguage}
             onChange={(e) => handleLanguageChange(e.target.value)}
           >
-            <option value="" hidden="true">
+            <option value="" hidden={true}>
               {t("settings.select")}
             </option>
             <option value="pt">{t("settings.portuguese")}</option>
@@ -84,7 +89,7 @@ const SettingsPage = () => {
             onClick={() => setIsLogoutModalOpen(true)}
             className={styles.dangerButton}
           >
-            {t("settings.logout")}
+            <IoLogOutOutline />
           </button>
         </div>
 

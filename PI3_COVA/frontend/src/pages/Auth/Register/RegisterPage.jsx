@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 import styles from "./styles.module.scss";
-import LoginPageImg from "../../../public/LoginPage.png";
+import registerImg from "../../../public/RegisterPage.png";
 import defaultProfileIcon from "../../../public/UserDefault.webp";
 
 const RegisterPage = () => {
@@ -28,6 +28,7 @@ const RegisterPage = () => {
     location: "",
     password: "",
     confirmPassword: "",
+    role: "", // Novo campo
   });
 
   const handlePhotoChange = (e) => {
@@ -71,6 +72,7 @@ const RegisterPage = () => {
       location,
       password,
       confirmPassword,
+      role,
     } = formData;
 
     if (
@@ -82,7 +84,8 @@ const RegisterPage = () => {
       !phone ||
       !location ||
       !password ||
-      !confirmPassword
+      !confirmPassword ||
+      !role
     ) {
       toast.error("Preencha todos os campos.");
       return;
@@ -126,10 +129,12 @@ const RegisterPage = () => {
         phone,
         location,
         photo: photoPreview || defaultProfileIcon,
+        role,
         createdAt: new Date().toISOString(),
       });
 
       toast.success("Usuário registrado com sucesso!");
+
       navigate("/login");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -143,7 +148,7 @@ const RegisterPage = () => {
   return (
     <div className={styles.loginContainer}>
       <ToastContainer />
-      <img src={LoginPageImg} alt="" className={styles.bgImg} />
+      <img src={registerImg} alt="" className={styles.bgImg} />
       <h1 className={styles.title}>Registre-se!</h1>
 
       <div className={styles.profilePhotoWrapper}>
@@ -197,10 +202,25 @@ const RegisterPage = () => {
         value={formData.gender}
         onChange={handleChange}
       >
-        <option value="" hidden="true">Selecione o gênero</option>
+        <option value="" hidden>
+          Selecione o gênero
+        </option>
         <option value="male">Masculino</option>
         <option value="female">Feminino</option>
         <option value="other">Outro</option>
+      </select>
+
+      <select
+        className={styles.inputRegister}
+        name="role"
+        value={formData.role}
+        onChange={handleChange}
+      >
+        <option value="" hidden>
+          Selecione o tipo de conta
+        </option>
+        <option value="user">Usuário</option>
+        <option value="doctor">Médico</option>
       </select>
 
       <input
@@ -249,7 +269,10 @@ const RegisterPage = () => {
           value={formData.confirmPassword}
           onChange={handleChange}
         />
-        <span onClick={() => setIsVisible2(!isVisible2)} className={styles.icon}>
+        <span
+          onClick={() => setIsVisible2(!isVisible2)}
+          className={styles.icon}
+        >
           {isVisible2 ? <IoEyeOff /> : <IoEye />}
         </span>
       </div>

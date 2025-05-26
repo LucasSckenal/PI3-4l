@@ -29,8 +29,11 @@
 
 
   span {
+    display: flex;
     font-weight: 600;
     font-size: 1rem;
+    align-items: center;
+    gap: var(--Gap);
   }
 }
 
@@ -150,6 +153,8 @@
 }
 
 .dangerButton {
+  display: flex;
+  justify-content: center;
   color: var(--Red);
   border-color: var(--Red);
   background: none;

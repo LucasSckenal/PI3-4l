@@ -128,7 +128,9 @@
     "history": "Histórico",
     "chat": "Chat",
     "profile": "Perfil",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "doctorProfile": "Perfil",
+    "consultationAnalysis": "Análises"
   },
   "aboutModal": {
     "title": "Sobre Nós",

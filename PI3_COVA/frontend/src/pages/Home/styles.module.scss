@@ -91,6 +91,7 @@
       align-items: flex-start;
       justify-content: center;
       gap: 0.5rem;
+      max-height: 175px;
 
       h3 {
         font-weight: 600;
@@ -112,6 +113,12 @@
       padding: 1rem 1.5rem;
       display: flex;
       flex-direction: column;
+      overflow-y: scroll;
+      max-height: 175px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       h3 {
         margin-bottom: 1rem;
@@ -248,7 +255,6 @@
     }
   }
 
-  // --- Mobile Styles ---
   @media (max-width: 768px) {
     margin-top: 16px;
 

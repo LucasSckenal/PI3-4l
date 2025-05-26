@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import {
   IoHome,
@@ -7,7 +7,9 @@ import {
   IoChatbubbles,
   IoFileTrayFull,
 } from "react-icons/io5";
+import { LuFilePenLine } from "react-icons/lu";
 
+import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import styles from "./styles.module.scss";
 
@@ -15,17 +17,36 @@ const FooterBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userData } = useAccount();
+  const { user } = useAuth();
 
-  const navItems = useMemo(
-    () => [
+  if (!user) return null;
+
+  const role = user.role;
+
+  const navItems = useMemo(() => {
+    if (!role) {
+      return [
+        { icon: <IoHome />, path: "/" },
+        { icon: <IoSettingsSharp />, path: "/settings" },
+      ];
+    }
+
+    if (role === "doctor") {
+      return [
+        { icon: <LuFilePenLine />, path: "/analysis" },
+        { icon: <IoPerson />, path: "/doctor/profile" },
+        { icon: <IoSettingsSharp />, path: "/settings" },
+      ];
+    }
+
+    return [
       { icon: <IoFileTrayFull />, path: "/history" },
       { icon: <IoChatbubbles />, path: "/chat" },
       { icon: <IoHome />, path: "/" },
       { icon: <IoPerson />, path: "/profile" },
       { icon: <IoSettingsSharp />, path: "/settings" },
-    ],
-    []
-  );
+    ];
+  }, [role]);
 
   const activeIndex = useMemo(() => {
     return navItems.findIndex((item) =>
@@ -38,7 +59,8 @@ const FooterBar = () => {
   };
 
   const isProfileIncomplete = useMemo(() => {
-    if (!userData) return false;
+    if (role !== "user") return false;
+
     const requiredFields = [
       "email",
       "location",
@@ -46,8 +68,8 @@ const FooterBar = () => {
       "phone",
       "gender",
     ];
-    return requiredFields.some((field) => !userData[field]);
-  }, [userData]);
+    return requiredFields.some((field) => !userData?.[field]);
+  }, [role, userData]);
 
   return (
     <footer className={styles.FooterBar}>

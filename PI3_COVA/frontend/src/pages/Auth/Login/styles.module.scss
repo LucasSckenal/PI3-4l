@@ -20,7 +20,10 @@
 
   .bgImg {
     position: absolute;
-    max-width: 100vw;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     pointer-events: none;
   }
 
@@ -144,9 +147,11 @@
     }
   }
 
-  .inputLogin, .Pass, .loginBtn {
+  .inputLogin,
+  .Pass,
+  .loginBtn {
     @media screen and (min-width: 1028px) {
       width: 30%;
-   }
+    }
   }
 }

@@ -7,15 +7,33 @@ import {
   IoTimeOutline,
   IoSettingsOutline,
   IoMenu,
+  IoClipboardOutline,
 } from "react-icons/io5";
+
+import { LuFilePenLine } from "react-icons/lu";
+
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const { t } = useTranslation();
+  const { user } = useAuth();
 
-  const menuItems = [
+  if (!user) return null;
+
+  const role = user.role;
+
+  const commonItems = [
+    {
+      icon: <IoSettingsOutline />,
+      label: t("sidebar.settings"),
+      path: "/settings",
+    },
+  ];
+
+  const userItems = [
     { icon: <IoHomeOutline />, label: t("sidebar.home"), path: "/" },
     { icon: <IoTimeOutline />, label: t("sidebar.history"), path: "/history" },
     {
@@ -28,12 +46,25 @@ const Sidebar = () => {
       label: t("sidebar.profile"),
       path: "/profile",
     },
+  ];
+
+  const doctorItems = [
     {
-      icon: <IoSettingsOutline />,
-      label: t("sidebar.settings"),
-      path: "/settings",
+      icon: <IoPersonOutline />,
+      label: t("sidebar.doctorProfile"),
+      path: "/doctor/profile",
+    },
+    {
+      icon: <LuFilePenLine />,
+      label: t("sidebar.consultationAnalysis"),
+      path: "/analysis",
     },
   ];
+
+  const menuItems =
+    role === "user"
+      ? [...userItems, ...commonItems]
+      : [...doctorItems, ...commonItems];
 
   return (
     <div

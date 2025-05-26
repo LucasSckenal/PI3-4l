@@ -1,4 +1,3 @@
-// src/routes/AppRoutes.jsx
 import { Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import { ToastContainer } from "react-toastify";
@@ -6,18 +5,23 @@ import { ThemeContext } from "../contexts/ThemeProvider/ThemeProvider";
 
 import MainPage from "../components/MainPage/MainPage";
 import HomePage from "../pages/Home/HomePage";
-import ChatPage from "../pages/Chat/ChatPage"; // página de início de chat (nova conversa)
-import InnerChatPage from "../pages/InnerChat/InnerChatPage"; // página de visualização de conversa existente
+import ChatPage from "../pages/Chat/ChatPage";
+import InnerChatPage from "../pages/InnerChat/InnerChatPage";
 import HistoryPage from "../pages/History/HistoryPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 import SettingsPage from "../pages/Settings/SettingsPage";
-import PrivateRoute from "./PrivateRoutes";
 import LoginPage from "../pages/Auth/Login/LoginPage";
 import RegisterPage from "../pages/Auth/Register/RegisterPage";
 
+import AnalysisPage from "../pages/Analysis/AnalysisPage.jsx";
+import DoctorProfilePage from "../pages/DoctorProfile/DoctorProfilePage.jsx";
+
+import RoleRoute from "./roleRoutes";
+import PrivateRoute from "./PrivateRoutes";
+
 const AppRoutes = () => {
   const { isDarkMode } = useContext(ThemeContext);
-  if (isDarkMode ? "dark" : "light");
+
   return (
     <>
       <ToastContainer
@@ -34,18 +38,9 @@ const AppRoutes = () => {
       />
 
       <Routes>
-        {/* Rota pública */}
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route
-          path="chat/:chatId"
-          element={
-            <PrivateRoute>
-              <InnerChatPage />
-            </PrivateRoute>
-          }
-        />
-        {/* Rotas privadas a partir de / */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
         <Route
           path="/"
           element={
@@ -54,43 +49,70 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         >
+          {/* Rotas para usuários normais */}
           <Route
             index
             element={
-              <PrivateRoute>
+              <RoleRoute allowedRoles={["user"]}>
                 <HomePage />
-              </PrivateRoute>
+              </RoleRoute>
             }
           />
 
-          {/* Iniciar nova conversa */}
           <Route
             path="chat"
             element={
-              <PrivateRoute>
+              <RoleRoute allowedRoles={["user"]}>
                 <ChatPage />
-              </PrivateRoute>
+              </RoleRoute>
             }
           />
-
-          {/* Visualizar conversa existente */}
+          <Route
+            path="chat/:chatId"
+            element={
+              <RoleRoute allowedRoles={["user"]}>
+                <InnerChatPage />
+              </RoleRoute>
+            }
+          />
 
           <Route
             path="history"
             element={
-              <PrivateRoute>
+              <RoleRoute allowedRoles={["user"]}>
                 <HistoryPage />
-              </PrivateRoute>
+              </RoleRoute>
             }
           />
+
           <Route
             path="profile"
             element={
-              <PrivateRoute>
+              <RoleRoute allowedRoles={["user"]}>
                 <ProfilePage />
-              </PrivateRoute>
+              </RoleRoute>
             }
           />
+
+          {/* Rotas para médicos */}
+          <Route
+            path="analysis"
+            element={
+              <RoleRoute allowedRoles={["doctor"]}>
+                <AnalysisPage />
+              </RoleRoute>
+            }
+          />
+
+          <Route
+            path="doctor/profile"
+            element={
+              <RoleRoute allowedRoles={["doctor"]}>
+                <DoctorProfilePage />
+              </RoleRoute>
+            }
+          />
+
           <Route
             path="settings"
             element={
