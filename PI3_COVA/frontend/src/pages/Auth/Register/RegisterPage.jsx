@@ -120,7 +120,7 @@ const RegisterPage = () => {
       );
       const user = userCredential.user;
 
-      await setDoc(doc(db, "Users", user.uid), {
+      const userData = {
         uid: user.uid,
         name: `${firstName} ${lastName}`,
         birthDate,
@@ -131,7 +131,13 @@ const RegisterPage = () => {
         photo: photoPreview || defaultProfileIcon,
         role,
         createdAt: new Date().toISOString(),
-      });
+      };
+
+      if (role === "doctor") {
+        userData.doctorOnline = true;
+      }
+
+      await setDoc(doc(db, "Users", user.uid), userData);
 
       toast.success("Usuário registrado com sucesso!");
 
