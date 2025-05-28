@@ -128,7 +128,8 @@
     "profile": "Profile",
     "settings": "Settings",
     "doctorProfile": "Profile",
-    "consultationAnalysis": "Analysis"
+    "consultationAnalysis": "Analysis",
+    "consultationHome": "Home"
   },
   "aboutModal": {
     "title": "About Us",

@@ -129,7 +129,8 @@
     "profile": "Perfil",
     "settings": "Configuración",
     "doctorProfile": "Perfil",
-    "consultationAnalysis": "Análisis"
+    "consultationAnalysis": "Análisis",
+    "consultationHome": "Inicio"
   },
   "aboutModal": {
     "title": "Sobre Nosotros",

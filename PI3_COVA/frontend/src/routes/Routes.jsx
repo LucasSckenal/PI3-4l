@@ -15,6 +15,7 @@ import RegisterPage from "../pages/Auth/Register/RegisterPage";
 
 import AnalysisPage from "../pages/Analysis/AnalysisPage.jsx";
 import DoctorProfilePage from "../pages/DoctorProfile/DoctorProfilePage.jsx";
+import DoctorHomePage from "../pages/DoctorHome/DoctorHomePage.jsx"
 
 import RoleRoute from "./roleRoutes";
 import PrivateRoute from "./PrivateRoutes";
@@ -49,7 +50,6 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         >
-          {/* Rotas para usuários normais */}
           <Route
             index
             element={
@@ -67,14 +67,7 @@ const AppRoutes = () => {
               </RoleRoute>
             }
           />
-          <Route
-            path="chat/:chatId"
-            element={
-              <RoleRoute allowedRoles={["user"]}>
-                <InnerChatPage />
-              </RoleRoute>
-            }
-          />
+          
 
           <Route
             path="history"
@@ -94,7 +87,15 @@ const AppRoutes = () => {
             }
           />
 
-          {/* Rotas para médicos */}
+          <Route
+            path="/doctor/home"
+            element={
+              <RoleRoute allowedRoles={["doctor"]}>
+                <DoctorHomePage />
+              </RoleRoute>
+            }
+          />
+
           <Route
             path="analysis"
             element={
@@ -119,6 +120,14 @@ const AppRoutes = () => {
               <PrivateRoute>
                 <SettingsPage />
               </PrivateRoute>
+            }
+          />
+          <Route
+            path="chat/:chatId"
+            element={
+              <RoleRoute allowedRoles={["user"]}>
+                <InnerChatPage />
+              </RoleRoute>
             }
           />
         </Route>

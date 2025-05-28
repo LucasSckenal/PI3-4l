@@ -75,7 +75,7 @@ const LoginPage = () => {
       toast.success("Login com Google bem-sucedido!");
 
       if (role === "doctor") {
-        navigate("/analysis");
+        navigate("/doctor/home");
       } else {
         navigate("/");
       }

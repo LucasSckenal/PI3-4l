@@ -35,6 +35,7 @@ const FooterBar = () => {
       return [
         { icon: <LuFilePenLine />, path: "/analysis" },
         { icon: <IoPerson />, path: "/doctor/profile" },
+        { icon: <IoHome />, path: "/doctor/home" },
         { icon: <IoSettingsSharp />, path: "/settings" },
       ];
     }

@@ -50,6 +50,11 @@ const Sidebar = () => {
 
   const doctorItems = [
     {
+      icon: <IoHomeOutline />,
+      label: t("sidebar.consultationHome"),
+      path: "/doctor/home",
+    },
+    {
       icon: <IoPersonOutline />,
       label: t("sidebar.doctorProfile"),
       path: "/doctor/profile",
@@ -59,6 +64,7 @@ const Sidebar = () => {
       label: t("sidebar.consultationAnalysis"),
       path: "/analysis",
     },
+    
   ];
 
   const menuItems =
