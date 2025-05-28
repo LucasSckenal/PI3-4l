@@ -144,5 +144,35 @@
     "speechRecognitionNotSupported": "Speech recognition not supported in this browser.",
     "recordingError": "Recording error: {{error}}",
     "startRecordingError": "Error starting recording: {{error}}"
+  },
+  "pages": {
+    "home": "Home",
+    "newChat": "New Chat",
+    "history": "History",
+    "profile": "Profile",
+    "settings": "Settings",
+    "analysis": "Analysis",
+    "default": "Page"
+  },
+  "analysis": {
+    "pendingDiagnoses": "Pending Diagnoses",
+    "severeCases": "Severe Cases",
+    "diagnoses": "Diagnoses",
+    "allCategories": "All categories",
+    "sortBy": "Sort by",
+    "priority": "Priority",
+    "date": "Date",
+    "category": "Category",
+    "default": "Default",
+    "viewByDate": "View by date"
+  },
+  "date": {
+    "months": [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ],
+    "days": [
+    "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+    ]
   }
 }

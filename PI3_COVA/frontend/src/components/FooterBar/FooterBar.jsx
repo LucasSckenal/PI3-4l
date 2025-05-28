@@ -1,4 +1,5 @@
-import { useMemo, useEffect } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useMemo} from "react";
 import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import {
   IoHome,

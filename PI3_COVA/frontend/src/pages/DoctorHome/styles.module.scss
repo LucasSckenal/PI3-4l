@@ -12,21 +12,11 @@ $sombra-box: 0 2px 2px rgba(0, 0, 0, 0.1);
 $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
 
 .container {
-  min-height: 100vh;
   padding: $espacamento-padrao;
   font-family: 'Roboto', sans-serif;
 }
 
-.header {
-  margin-bottom: $espacamento-padrao * 2;
-  
-  h1 {
-    color: var(--TextGeneral);
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin: 0;
-  }
-}
+
 
 .mainContent {
   display: flex;
@@ -34,7 +24,6 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
   gap: $espacamento-padrao * 2;
 }
 
-// Seção de Cards (apenas desktop)
 .cardsSection {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -48,14 +37,14 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
   padding: $espacamento-padrao;
   box-shadow: $sombra-card;
   text-align: center;
-  
+
   h3 {
     color: var(--White);
     font-size: 1rem;
     margin: 0 0 $espacamento-padrao 0;
     font-weight: 500;
   }
-  
+
   .cardNumber {
     color: var(--TextGeneral);
     font-size: 2.5rem;
@@ -66,7 +55,7 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
 
 .cardGrave {
   border-top: 4px solid var(--Red);
-  
+
   .cardNumber {
     color: var(--Red);
   }
@@ -92,20 +81,20 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
     width: 100%;
     justify-content: center;
   }
-  
+
   .iconeFiltro {
     font-size: 1.2rem;
   }
-  
+
   .iconeSeta {
     transition: transform 0.3s ease;
     margin-left: auto;
-    
+
     &.viradoParaCima {
       transform: rotate(180deg);
     }
   }
-  
+
   .menuFiltros {
     background-color: var(--UiBg);
     border-radius: $borda-arredondada;
@@ -126,7 +115,7 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   gap: $espacamento-padrao;
-  
+
   label {
     color: var(--TextGeneral);
     font-size: 0.9rem;
@@ -142,7 +131,7 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
   border-radius: $borda-arredondada;
   cursor: pointer;
   min-width: 120px;
-  
+
   &:hover {
     border-color: var(--PreferredColor);
   }
@@ -191,7 +180,7 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
 
 .detalhes {
   flex: 1;
-  
+
   h3 {
     margin: 0 0 4px 0;
     color: var(--TextGeneral);
@@ -213,10 +202,12 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
     color: #e74c3c;
     font-weight: 500;
   }
+
   &[data-prioridade="média"] {
     color: #f39c12;
     font-weight: 500;
   }
+
   &[data-prioridade="baixa"] {
     color: #27ae60;
     font-weight: 500;
@@ -250,7 +241,7 @@ $sombra-card: 0 2px 2px rgba(0, 0, 0, 0.1);
   .filtroMobile {
     display: none;
   }
-  
+
   .container {
     max-width: 1200px;
     margin: 0 auto;

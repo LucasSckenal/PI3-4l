@@ -145,6 +145,36 @@
     "speechRecognitionNotSupported": "El reconocimiento de voz no es compatible con este navegador.",
     "recordingError": "Error en la grabación: {{error}}",
     "startRecordingError": "Error al iniciar la grabación: {{error}}"
+  },
+  "pages": {
+    "home": "Inicio",
+    "newChat": "Nuevo Chat",
+    "history": "Historial",
+    "profile": "Perfil",
+    "settings": "Configuraciones",
+    "analysis": "Análisis",
+    "default": "Página"
+  },
+  "analysis": {
+    "pendingDiagnoses": "Diagnósticos pendientes",
+    "severeCases": "Casos graves",
+    "diagnoses": "Diagnósticos",
+    "allCategories": "Todas las categorías",
+    "sortBy": "Ordenar por",
+    "priority": "Prioridad",
+    "date": "Fecha",
+    "category": "Categoría",
+    "default": "Predeterminado",
+    "viewByDate": "Ver por fecha"
+  },
+  "date": {
+    "months": [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ],
+    "days": [
+    "Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"
+    ]
   }
 }
 

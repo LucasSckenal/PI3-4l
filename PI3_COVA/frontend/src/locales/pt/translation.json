@@ -148,6 +148,35 @@
     "speechRecognitionNotSupported": "Reconhecimento de voz não suportado neste navegador.",
      "recordingError": "Erro na gravação: {{error}}",
     "startRecordingError": "Erro ao iniciar gravação: {{error}}"
+  },
+  "pages": {
+    "home": "Inicial",
+    "newChat": "Nova Conversa",
+    "history": "Histórico",
+    "profile": "Perfil",
+    "settings": "Configurações",
+    "analysis": "Análise",
+    "default": "Página"
+  },
+  "analysis": {
+    "pendingDiagnoses": "Diagnósticos pendentes",
+    "severeCases": "Casos graves",
+    "diagnoses": "Diagnósticos",
+    "allCategories": "Todas as categorias",
+    "sortBy": "Ordenar por",
+    "priority": "Prioridade",
+    "date": "Data",
+    "category": "Categoria",
+    "default": "Padrão",
+    "viewByDate": "Visualizar por data"
+  },
+  "date": {
+    "months": [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ],
+    "days": [
+    "Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"
+    ]
   }
-  
 }

@@ -10,12 +10,14 @@ import logoDark from "../../public/logo4l.png";
 import logoLight from "../../public/logo4l_LightMode.png";
 
 import styles from "./styles.module.scss";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { chatId } = useParams();
   const { isDarkMode } = useContext(ThemeContext);
+  const { t } = useTranslation();
 
   const [logo, setLogo] = useState(logoDark);
   const [iconColor, setIconColor] = useState("white");
@@ -23,39 +25,29 @@ const Header = () => {
   const [unsubscribeSnapshot, setUnsubscribeSnapshot] = useState(null);
 
   useEffect(() => {
-    if (isDarkMode) {
-      setLogo(logoDark);
-      setIconColor("white");
-    } else {
-      setLogo(logoLight);
-      setIconColor("black");
-    }
+    setLogo(isDarkMode ? logoDark : logoLight);
+    setIconColor(isDarkMode ? "white" : "black");
   }, [isDarkMode]);
 
-  // Configura o listener em tempo real para o título do chat
   useEffect(() => {
     const setupChatListener = async () => {
       if (!chatId) return;
-      
+
       const userId = getAuth().currentUser?.uid;
       if (!userId) return;
 
       try {
         const chatRef = doc(db, "Users", userId, "chats", chatId);
-        
-        // Cria um listener em tempo real
         const unsubscribe = onSnapshot(chatRef, (doc) => {
           if (doc.exists()) {
-            const title = doc.data().title || "Conversa";
+            const title = doc.data().title || t("chat.defaultTitle");
             setChatTitle(title);
           }
         });
-
-        setUnsubscribeSnapshot(() => unsubscribe); // Armazena a função para limpeza
-
+        setUnsubscribeSnapshot(() => unsubscribe);
       } catch (error) {
         console.error("Erro ao configurar listener do chat:", error);
-        setChatTitle("Conversa");
+        setChatTitle(t("chat.defaultTitle"));
       }
     };
 
@@ -65,16 +57,13 @@ const Header = () => {
       setChatTitle(null);
     }
 
-    // Limpeza do listener quando o componente desmontar ou o chatId mudar
     return () => {
       if (unsubscribeSnapshot) {
         unsubscribeSnapshot();
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, chatId]);
+  }, [location.pathname, chatId, t]);
 
-  // Limpa o listener quando sai da página de chat
   useEffect(() => {
     if (!location.pathname.startsWith("/chat/") && unsubscribeSnapshot) {
       unsubscribeSnapshot();
@@ -83,24 +72,29 @@ const Header = () => {
   }, [location.pathname, unsubscribeSnapshot]);
 
   const getPageTitle = (pathname) => {
-    // Mostra o título do chat se disponível
     if (pathname.startsWith("/chat/")) {
-      return chatTitle || "Carregando...";
+      return chatTitle || t("chat.loading");
     }
 
     switch (pathname) {
       case "/":
-        return "Inicial";
+        return t("pages.home");
       case "/chat":
-        return "Nova Conversa";
+        return t("pages.newChat");
       case "/history":
-        return "Histórico";
+        return t("pages.history");
       case "/profile":
-        return "Perfil";
+        return t("pages.profile");
       case "/settings":
-        return "Configurações";
+        return t("pages.settings");
+      case "/analysis":
+        return t("pages.analysis");
+      case "/doctor/home":
+        return t("pages.home");
+      case "/doctor/profile":
+        return t("pages.profile");
       default:
-        return "Página";
+        return t("pages.default");
     }
   };
 
@@ -109,11 +103,11 @@ const Header = () => {
       <button
         className={styles.backBtn}
         onClick={() => navigate(-1)}
-        aria-label="Voltar"
+        aria-label={t("buttons.back")}
       >
         <IoArrowBackOutline
           className={styles.btnSbg}
-          style={{ color: iconColor }} 
+          style={{ color: iconColor }}
         />
       </button>
       <h2 className={styles.title}>{getPageTitle(location.pathname)}</h2>
