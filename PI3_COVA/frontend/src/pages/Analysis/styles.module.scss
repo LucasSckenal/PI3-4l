@@ -310,7 +310,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 .listaDiagnosticos {
   margin-top: 2rem;
 
-  @media (min-width: 992px) {
+  @media (max-width: 992px) {
     .listaHeader {
       display: flex;
       justify-content: space-between;
