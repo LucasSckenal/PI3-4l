@@ -8,6 +8,14 @@
   gap: var(--Gap2);
 }
 
+.chatHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
 .messagesContainer {
   flex: 1;
   display: flex;
@@ -88,45 +96,6 @@
   }
 }
 
-@keyframes messageAppear {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes typingAnimation {
-
-  0%,
-  60%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-
-  30% {
-    transform: translateY(-0.25rem);
-    opacity: 1;
-  }
-}
-
-@keyframes blink {
-
-  0%,
-  100% {
-    opacity: 0
-  }
-
-  50% {
-    opacity: 1
-  }
-}
-
 .priorityBadge {
   background-color: #fef3c7;
   color: #92400e;
@@ -134,6 +103,83 @@
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.9rem;
-  margin: 0 auto 10px;
   width: fit-content;
+}
+
+.revisionButtonContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.revisionButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+
+  &:hover:not(:disabled) {
+    background-color: #388e3c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  &:disabled {
+    background-color: #a5d6a7;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.revisionRequested {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #2196f3;
+  color: white;
+  border-radius: 25px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typingAnimation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  30% {
+    transform: translateY(-0.25rem);
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }

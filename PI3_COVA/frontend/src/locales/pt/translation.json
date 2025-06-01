@@ -144,10 +144,18 @@
     "save": "Salvar"
   },
 
+  "button": {
+    "requestDoctorRevision": "Solicitar Revisão Médica",
+    "requestingRevision": "Solicitando...",
+    "revisionRequested": "Revisão Médica Solicitada"
+  },
+
   "toast": {
     "speechRecognitionNotSupported": "Reconhecimento de voz não suportado neste navegador.",
      "recordingError": "Erro na gravação: {{error}}",
-    "startRecordingError": "Erro ao iniciar gravação: {{error}}"
+    "startRecordingError": "Erro ao iniciar gravação: {{error}}",
+    "doctorRevisionRequested": "Revisão médica solicitada com sucesso!",
+    "doctorRevisionError": "Erro ao solicitar revisão médica"
   },
   "pages": {
     "home": "Inicial",

@@ -140,10 +140,17 @@
     "selectPreferredColor": "Select Preferred Color",
     "save": "Save"
   },
+  "button": {
+    "requestDoctorRevision": "Request Medical Review",
+    "requestingRevision": "Requesting...",
+    "revisionRequested": "Medical Review Requested"
+  },
   "toast": {
     "speechRecognitionNotSupported": "Speech recognition not supported in this browser.",
     "recordingError": "Recording error: {{error}}",
-    "startRecordingError": "Error starting recording: {{error}}"
+    "startRecordingError": "Error starting recording: {{error}}",
+    "doctorRevisionRequested": "Medical review successfully requested!",
+    "doctorRevisionError": "Error requesting medical review"
   },
   "pages": {
     "home": "Home",

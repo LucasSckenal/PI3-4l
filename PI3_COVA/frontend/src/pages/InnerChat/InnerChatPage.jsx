@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import styles from "./styles.module.scss";
 import Header from "../../components/Header/Header";
 import { useTranslation } from "react-i18next";
+import { FaStethoscope } from "react-icons/fa"; // Importando ícone médico
 
 export default function InnerChatPage() {
   const { chatId } = useParams();
@@ -31,6 +32,8 @@ export default function InnerChatPage() {
   const [casesData, setCasesData] = useState([]);
   const [isCasesLoaded, setIsCasesLoaded] = useState(false);
   const [priority, setPriority] = useState(null);
+  const [isDoctorRevisionRequested, setIsDoctorRevisionRequested] = useState(false);
+  const [isRequestingRevision, setIsRequestingRevision] = useState(false);
   const { t } = useTranslation();
 
   const bottomRef = useRef(null);
@@ -133,6 +136,27 @@ Título sugerido:`;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isCasesLoaded]);
+
+  // Verificar se já foi solicitada revisão médica
+  useEffect(() => {
+    const checkDoctorRevision = async () => {
+      if (!userId || !chatId) return;
+      
+      try {
+        const chatRef = doc(db, "Users", userId, "chats", chatId);
+        const chatSnap = await getDoc(chatRef);
+        
+        if (chatSnap.exists()) {
+          const data = chatSnap.data();
+          setIsDoctorRevisionRequested(data.doctorRevision || false);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar revisão médica:", error);
+      }
+    };
+    
+    checkDoctorRevision();
+  }, [userId, chatId]);
 
   const systemPrompt = `
 <SYSTEM>
@@ -266,6 +290,29 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
     return unsubscribe;
   }, [chatId, userId]);
 
+  // Função para solicitar revisão médica
+  const requestDoctorRevision = async () => {
+    if (!userId || !chatId || isRequestingRevision) return;
+    
+    setIsRequestingRevision(true);
+    
+    try {
+      const chatRef = doc(db, "Users", userId, "chats", chatId);
+      await updateDoc(chatRef, {
+        doctorRevision: true,
+        revisionRequestedAt: serverTimestamp()
+      });
+      
+      setIsDoctorRevisionRequested(true);
+      toast.success(t("toast.doctorRevisionRequested"));
+    } catch (error) {
+      console.error("Erro ao solicitar revisão médica:", error);
+      toast.error(t("toast.doctorRevisionError"));
+    } finally {
+      setIsRequestingRevision(false);
+    }
+  };
+
   const handleSend = async (overrideText = null) => {
     const messageToSend = overrideText || inputText;
     if (!messageToSend.trim() || isLoading || !userId || !chatId) return;
@@ -393,11 +440,38 @@ AI:
   return (
     <main className={styles.InnerChatContainer}>
       <Header />
-      {priority && (
-        <div className={styles.priorityBadge}>
-          Prioridade: <span>{priority}</span>
+      <div className={styles.chatHeaderControls}>
+        {priority && (
+          <div className={styles.priorityBadge}>
+            Prioridade: <span>{priority}</span>
+          </div>
+        )}
+        
+        {/* Botão de revisão médica centralizado */}
+      {!isDoctorRevisionRequested && messages.some(msg => msg.sender === "ai") && (
+        <div className={styles.revisionButtonContainer}>
+          <button 
+            className={styles.revisionButton}
+            onClick={requestDoctorRevision}
+            disabled={isRequestingRevision}
+          >
+            <FaStethoscope />
+            {isRequestingRevision 
+              ? t("button.requestingRevision") 
+              : t("button.requestDoctorRevision")}
+          </button>
         </div>
       )}
+      
+      {/* Indicador de revisão solicitada */}
+      {isDoctorRevisionRequested && (
+        <div className={styles.revisionRequested}>
+          <FaStethoscope />
+          {t("button.revisionRequested")}
+        </div>
+      )}
+    </div>
+      
       <div className={styles.messagesContainer}>
         {messages.map((msg) => (
           <div

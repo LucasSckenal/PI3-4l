@@ -141,10 +141,17 @@
     "selectPreferredColor": "Seleccionar Color Preferido",
     "save": "Guardar"
   },
+  "button": {
+    "requestDoctorRevision": "Solicitar revisión médica",
+    "requestingRevision": "Solicitando...",
+    "revisionRequested": "Revisión médica solicitada"
+  },
   "toast": {
     "speechRecognitionNotSupported": "El reconocimiento de voz no es compatible con este navegador.",
     "recordingError": "Error en la grabación: {{error}}",
-    "startRecordingError": "Error al iniciar la grabación: {{error}}"
+    "startRecordingError": "Error al iniciar la grabación: {{error}}",
+    "doctorRevisionRequested": "¡Revisión médica solicitada exitosamente!",
+    "doctorRevisionError": "Error al solicitar revisión médica"
   },
   "pages": {
     "home": "Inicio",

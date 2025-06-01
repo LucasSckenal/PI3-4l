@@ -82,7 +82,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     .calendarIcon {
       font-size: 1.8rem;
       color: var(--PreferredColor);
-      margin-top: $espacamento-padrao / 2;
+      margin-top: calc($espacamento-padrao / 2);
     }
   }
 }
@@ -104,7 +104,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     justify-content: space-between;
     align-items: center;
     margin-bottom: $espacamento-padrao;
-    padding: 0 $espacamento-padrao / 2;
+    padding: 0 calc($espacamento-padrao / 2);
 
     h3 {
       margin: 0;
@@ -121,7 +121,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
       color: var(--TextGeneral);
       font-size: 1.2rem;
       cursor: pointer;
-      padding: $espacamento-padrao / 2;
+      padding: calc($espacamento-padrao / 2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -142,16 +142,16 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
     font-weight: 500;
     color: var(--TextGeneral);
-    margin-bottom: $espacamento-padrao / 2;
+    margin-bottom: calc($espacamento-padrao / 2);
     font-size: 0.8rem;
-    padding: 0 $espacamento-padrao / 2;
+    padding: 0 calc($espacamento-padrao / 2);
   }
 
   .gridCalendario {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
-    padding: 0 $espacamento-padrao / 2;
+    padding: 0 calc($espacamento-padrao / 2);
 
     .diaCalendario {
       aspect-ratio: 1;
@@ -201,7 +201,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $espacamento-padrao / 2;
+  gap: calc($espacamento-padrao / 2);
   background-color: var(--UiBg);
   border: none;
   border-radius: $borda-arredondada;
@@ -249,15 +249,15 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
       color: var(--TextGeneral);
       font-size: 1.2rem;
       cursor: pointer;
-      padding: $espacamento-padrao / 2;
+      padding: calc($espacamento-padrao / 2);
     }
   }
 
   .diasSemana {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: $espacamento-padrao / 2;
-    margin-bottom: $espacamento-padrao / 2;
+    gap: calc($espacamento-padrao / 2);
+    margin-bottom: calc($espacamento-padrao / 2);
     text-align: center;
     font-weight: 500;
     color: var(--TextGeneral);
@@ -310,7 +310,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 .listaDiagnosticos {
   margin-top: 2rem;
 
-  @media (max-width: 992px) {
+  @media (max-width: 2000px) {
     .listaHeader {
       display: flex;
       justify-content: space-between;
@@ -332,6 +332,8 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
       padding-right: 0.5rem;
 
       .itemDiagnostico {
+        display: flex;
+        align-items: center;
         padding: 1.5rem;
         border-radius: 12px;
         border-left: 4px solid var(--PreferredColor);
@@ -435,10 +437,10 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     .botaoFiltro {
 
       align-items: center;
-      gap: $espacamento-padrao / 2;
+      gap: calc($espacamento-padrao / 2);
       border: 1px solid $cor-borda;
       color: var(--TextGeneral);
-      padding: $espacamento-padrao / 2 $espacamento-padrao;
+      padding: calc($espacamento-padrao / 2) $espacamento-padrao;
       border-radius: $borda-arredondada;
       cursor: pointer;
       background: none;
@@ -477,7 +479,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 
     .grupoFiltro {
       h4 {
-        margin: 0 0 $espacamento-padrao / 2 0;
+        margin: 0 0 calc($espacamento-padrao / 2) 0;
         color: var(--TextGeneral);
         font-size: 0.9rem;
         font-weight: 500;
@@ -544,7 +546,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     gap: $espacamento-padrao;
     max-height: 500px;
     overflow-y: auto;
-    padding-right: $espacamento-padrao / 2;
+    padding-right: calc($espacamento-padrao / 2);
 
     &::-webkit-scrollbar {
       width: 6px;
