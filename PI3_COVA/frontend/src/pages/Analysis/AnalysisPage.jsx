@@ -28,7 +28,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Migraine without aura",
       prioridade: "alta",
-      dataCriacao: "2023-06-15",
+      dataCriacao: "2025-05-15",
       status: "pendente",
     },
     {
@@ -36,7 +36,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Migraine with aura",
       prioridade: "alta",
-      dataCriacao: "2023-06-10",
+      dataCriacao: "2025-05-10",
       status: "pendente",
     },
     {
@@ -44,7 +44,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Chronic migraine",
       prioridade: "alta",
-      dataCriacao: "2023-05-28",
+      dataCriacao: "2025-04-28",
       status: "analisado",
     },
     {
@@ -52,7 +52,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Status migrainosus",
       prioridade: "alta",
-      dataCriacao: "2023-06-05",
+      dataCriacao: "2025-05-05",
       status: "pendente",
     },
     {
@@ -60,7 +60,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Complicated migraine",
       prioridade: "média",
-      dataCriacao: "2023-05-22",
+      dataCriacao: "2025-04-22",
       status: "pendente",
     },
     {
@@ -68,7 +68,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Basilar migraine",
       prioridade: "média",
-      dataCriacao: "2023-06-12",
+      dataCriacao: "2025-05-12",
       status: "analisado",
     },
     {
@@ -76,7 +76,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Ophthalmoplegic migraine",
       prioridade: "baixa",
-      dataCriacao: "2023-05-30",
+      dataCriacao: "2025-05-30",
       status: "pendente",
     },
     {
@@ -84,7 +84,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Retinal migraine",
       prioridade: "média",
-      dataCriacao: "2023-06-08",
+      dataCriacao: "2025-05-30",
       status: "pendente",
     },
 
@@ -94,7 +94,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Episodic tension-type headache",
       prioridade: "média",
-      dataCriacao: "2023-06-18",
+      dataCriacao: "2025-05-18",
       status: "pendente",
     },
     {
@@ -102,7 +102,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Chronic tension-type headache",
       prioridade: "média",
-      dataCriacao: "2023-05-25",
+      dataCriacao: "2025-05-30",
       status: "analisado",
     },
     {
@@ -110,7 +110,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Cluster headache",
       prioridade: "alta",
-      dataCriacao: "2023-06-20",
+      dataCriacao: "2025-04-20",
       status: "pendente",
     },
     {
@@ -118,7 +118,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Post-traumatic headache",
       prioridade: "baixa",
-      dataCriacao: "2023-06-02",
+      dataCriacao: "2025-06-01",
       status: "pendente",
     },
     {
@@ -126,7 +126,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Medication overuse headache",
       prioridade: "média",
-      dataCriacao: "2023-05-20",
+      dataCriacao: "2025-05-20",
       status: "analisado",
     },
     {
@@ -134,7 +134,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Headache attributed to psychiatric disorder",
       prioridade: "baixa",
-      dataCriacao: "2023-06-14",
+      dataCriacao: "2025-05-14",
       status: "pendente",
     },
     {
@@ -142,7 +142,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Cervicogenic headache",
       prioridade: "média",
-      dataCriacao: "2023-05-31",
+      dataCriacao: "2025-05-18",
       status: "pendente",
     },
     {
@@ -150,17 +150,16 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Hypnic headache",
       prioridade: "baixa",
-      dataCriacao: "2023-06-09",
+      dataCriacao: "2025-04-09",
       status: "analisado",
     },
 
-    // Recent cases for testing sorting
     {
       id: 17,
       codigo: "G43",
       descricao: "Vestibular migraine",
       prioridade: "média",
-      dataCriacao: "2023-06-25",
+      dataCriacao: "2025-05-25",
       status: "pendente",
     },
     {
@@ -168,7 +167,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "New daily persistent headache",
       prioridade: "alta",
-      dataCriacao: "2023-06-24",
+      dataCriacao: "2025-05-24",
       status: "pendente",
     },
     {
@@ -176,7 +175,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Menstrual migraine",
       prioridade: "média",
-      dataCriacao: "2023-06-22",
+      dataCriacao: "2025-05-22",
       status: "pendente",
     },
     {
@@ -184,7 +183,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Trigeminal neuralgia headache",
       prioridade: "alta",
-      dataCriacao: "2023-06-21",
+      dataCriacao: "2025-05-21",
       status: "analisado",
     },
 
@@ -194,7 +193,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Prolonged aura migraine",
       prioridade: "alta",
-      dataCriacao: "2023-05-12",
+      dataCriacao: "2025-05-12",
       status: "pendente",
     },
     {
@@ -202,7 +201,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Cough headache",
       prioridade: "baixa",
-      dataCriacao: "2023-06-01",
+      dataCriacao: "2025-05-01",
       status: "analisado",
     },
     {
@@ -210,7 +209,7 @@ const AnalysisPage = () => {
       codigo: "G43",
       descricao: "Familial hemiplegic migraine",
       prioridade: "alta",
-      dataCriacao: "2023-05-08",
+      dataCriacao: "2025-05-08",
       status: "pendente",
     },
     {
@@ -218,7 +217,7 @@ const AnalysisPage = () => {
       codigo: "G44",
       descricao: "Exertional headache",
       prioridade: "média",
-      dataCriacao: "2023-06-17",
+      dataCriacao: "2025-05-17",
       status: "pendente",
     },
   ];
