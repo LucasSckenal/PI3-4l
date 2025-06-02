@@ -3,20 +3,30 @@
   min-height: 100vh;
   padding: var(--Gap3) var(--Gap3) var(--Gap2);
   font-family: "Reddit Sans Condensed", sans-serif;
+  scrollbar-width: none;
+   -ms-overflow-style: none;
+
+   @media screen and (min-width: 1028px) {
+      height: 100%;
+   }
+
+   &::-webkit-scrollbar {
+      display: none;
+   }
 }
 
 .header {
   margin-bottom: var(--Gap3);
   
   h1 {
-    color: var(--Purple);
+    color: var(--PreferredColor);
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: var(--Gap);
   }
   
   .subtitle {
-    color: var(--TextGeneral);
+    color: var(--TextGeneralAlt);
     font-size: 1.1rem;
     font-weight: 400;
   }
@@ -33,11 +43,11 @@
   margin-bottom: var(--Gap3);
 
   .statCard {
-    background-color: var(--White);
+    background-color: var(--UiBg);
     border-radius: var(--BorderRadius);
     padding: var(--Gap2);
-    box-shadow: var(--BoxShadow);
-    border-left: 4px solid var(--Purple);
+    //box-shadow: var(--BoxShadow);
+    border-left: 4px solid var(--PreferredColor);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
@@ -48,7 +58,7 @@
     h3 {
       margin: 0 0 var(--Gap) 0;
       font-size: 1.1rem;
-      color: var(--TextGeneral);
+      color: var(--White);
       font-weight: 500;
     }
 
@@ -56,12 +66,12 @@
       margin: 0;
       font-size: 2.2rem;
       font-weight: 700;
-      color: var(--TextGeneralAlt);
+      color: var(--WhiteAlt);
       line-height: 1;
     }
 
     small {
-      color: var(--TextGeneral);
+      color: var(--White);
       font-size: 0.9rem;
       font-weight: 300;
       display: block;
@@ -69,7 +79,7 @@
     }
 
     &.primary {
-      border-left-color: var(--Purple);
+      border-left-color: var(--PreferredColor);
     }
 
     &.warning {
@@ -93,7 +103,7 @@
 }
 
 .recentCases {
-  background-color: var(--White);
+  background-color: var(--DetailsBg);
   border-radius: var(--BorderRadius);
   padding: var(--Gap2);
   box-shadow: var(--BoxShadow);
@@ -105,23 +115,25 @@
     margin-bottom: var(--Gap2);
 
     h2 {
-      color: var(--TextGeneralAlt);
+      color: var(--WhiteAlt);
       font-size: 1.4rem;
       font-weight: 600;
       margin: 0;
     }
 
     .seeAllButton {
-      background: none;
-      color: var(--Purple);
+      background: var(--PreferredColor);
+      color: var(--White);
       font-weight: 500;
       padding: var(--Gap) var(--Gap2);
-      border: 1px solid var(--Purple);
+      border: 1px solid var(--PreferredColor);
       transition: all 0.3s ease;
 
       &:hover {
-        background-color: var(--Purple);
-        color: var(--TextGeneralReverse);
+        background-color: var(--PreferredColor);
+        border: 1px solid var(--White);
+        box-shadow: var(--BoxShadow2);
+        color: var(--WhiteReverse);
       }
     }
   }
@@ -142,7 +154,7 @@
     }
 
     th {
-      color: var(--TextGeneral);
+      color: var(--White);
       font-weight: 500;
       font-size: 0.95rem;
       text-transform: uppercase;
@@ -150,7 +162,7 @@
     }
 
     tr:hover {
-      background-color: rgba(var(--Purple), 0.05);
+      background-color: rgba(var(--PreferredColor), 0.05);
     }
   }
 
@@ -160,7 +172,7 @@
     
     .patientName {
       font-weight: 500;
-      color: var(--TextGeneralAlt);
+      color: var(--WhiteAlt);
     }
   }
 
@@ -172,8 +184,8 @@
     font-weight: 500;
     
     &.migraine {
-      background-color: rgba(var(--Purple), 0.1);
-      color: var(--Purple);
+      background-color: rgba(var(--PreferredColor), 0.1);
+      color: var(--PreferredColor);
     }
     
     &.other {
@@ -183,8 +195,8 @@
   }
 
   .actionButton {
-    background-color: var(--Purple);
-    color: var(--TextGeneralReverse);
+    background-color: var(--PreferredColor);
+    color: var(--WhiteReverse);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: var(--BorderRadius);
@@ -215,22 +227,22 @@
 
   .actionButton {
     width: 100%;
-    background-color: var(--White);
-    color: var(--TextGeneralAlt);
+    background-color: var(--UiBg);
+    color: var(--White);
     border: none;
     padding: var(--Gap2);
     border-radius: var(--BorderRadius);
     font-weight: 500;
     transition: all 0.3s ease;
-    box-shadow: var(--BoxShadow);
+    //box-shadow: var(--BoxShadow);
     display: flex;
     align-items: center;
+    border: 1px solid var(--PreferredColor);
     gap: var(--Gap);
 
     &:hover {
-      background-color: var(--White);
       box-shadow: var(--BoxShadow2);
-      color: var(--Purple);
+      border: 1px solid var(--White);
     }
 
     .buttonIcon {
@@ -252,6 +264,7 @@
 
 @media (max-width: 768px) {
   .container {
+    max-width: 100%;
     padding: var(--Gap2) var(--Gap);
   }
 
