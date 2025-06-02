@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { IoLanguageSharp, IoLogOutOutline } from "react-icons/io5";
 
 import { ThemeContext } from "../../contexts/ThemeProvider/ThemeProvider";
@@ -25,6 +25,7 @@ const SettingsPage = () => {
   const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
 
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     i18n.changeLanguage(preferredLanguage);
@@ -32,9 +33,11 @@ const SettingsPage = () => {
 
   const handleLogout = async () => {
     try {
+      localStorage.clear();
       const auth = getAuth();
       await signOut(auth);
       console.log("Usuário deslogado com sucesso!");
+      navigate(0);
     } catch (error) {
       console.error("Erro ao deslogar:", error.message);
     }

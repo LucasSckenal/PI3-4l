@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, updateUserProfile } from "../../../api/firebase";
+import { useAuth } from "../../../contexts/AuthProvider/AuthProvider";
 import { useScreenResize } from "../../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import {
   signInWithEmailAndPassword,
@@ -19,32 +20,36 @@ import styles from "./styles.module.scss";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { isMobile } = useScreenResize();
 
-  const waitForAuthCurrentUser = async (timeout = 5000) => {
-    const interval = 100;
-    let waited = 0;
-    while (!auth.currentUser && waited < timeout) {
-      await new Promise((r) => setTimeout(r, interval));
-      waited += interval;
+  // Redireciona se já estiver autenticado
+  useEffect(() => {
+    if (user) {
+      navigate(user.role === "doctor" ? "/doctor/home" : "/", { replace: true });
     }
-    return auth.currentUser;
-  };
+  }, [user, navigate]);
 
-  const handleEmailLogin = async () => {
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // 1. Faz login no Firebase
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // 2. Verificação imediata
+      if (!userCredential?.user) {
+        throw new Error("Autenticação falhou");
+      }
 
-      const user = await waitForAuthCurrentUser();
-      if (!user) throw new Error("Usuário não detectado após login.");
-
+      // 3. Feedback para o usuário
       toast.success("Login realizado com sucesso!");
-      navigate("/");
+      
+      // O useEffect vai lidar com o redirecionamento quando o user mudar no contexto
     } catch (error) {
       toast.error("Erro ao fazer login: " + error.message);
     } finally {
@@ -69,16 +74,8 @@ const LoginPage = () => {
         role,
       });
 
-      const confirmedUser = await waitForAuthCurrentUser();
-      if (!confirmedUser) throw new Error("Usuário não detectado após login com Google.");
-
       toast.success("Login com Google bem-sucedido!");
-
-      if (role === "doctor") {
-        navigate("/doctor/home");
-      } else {
-        navigate("/");
-      }
+      // O useEffect vai lidar com o redirecionamento quando o user mudar no contexto
     } catch (error) {
       console.error("Erro no login com Google:", error);
       toast.error("Erro ao entrar com Google: " + error.message);

@@ -35,7 +35,6 @@ const AccountProvider = ({ children }) => {
 
       const userDocRef = doc(db, "Users", user.uid);
 
-      // Primeiro, garantimos que o documento existe
       try {
         const userDoc = await getDoc(userDocRef);
         if (!userDoc.exists()) {
@@ -60,7 +59,6 @@ const AccountProvider = ({ children }) => {
         return;
       }
 
-      // Agora escutamos o documento em tempo real
       const unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
@@ -86,7 +84,6 @@ const AccountProvider = ({ children }) => {
         setLoading(false);
       });
 
-      // Cleanup do snapshot ao deslogar ou desmontar
       return () => unsubscribeSnapshot();
     });
 

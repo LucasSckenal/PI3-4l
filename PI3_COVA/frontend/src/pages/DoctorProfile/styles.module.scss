@@ -1,0 +1,413 @@
+.neurologistProfile {
+  width: 100%;
+  height: 100vh;
+  font-family: "Reddit Sans Condensed", sans-serif;
+  color: var(--TextGeneral);
+  background: var(--Bg);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+// Header
+.profileHeader {
+  display: flex;
+  padding: 3rem;
+  background: linear-gradient(135deg, var(--PreferredColor) 0%, var(--Black) 100%);
+  color: var(--White);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .profileImage {
+    position: relative;
+    margin-right: 3rem;
+    
+    @media (max-width: 768px) {
+      margin-right: 0;
+      margin-bottom: 1.5rem;
+    }
+    
+    .avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 150px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--White);
+      
+      @media (max-width: 480px) {
+        width: 120px;
+        height: 120px;
+        font-size: 2.5rem;
+      }
+    }
+  }
+  
+  .headerInfo {
+    flex: 1;
+    
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+    
+    .titleContainer {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      
+      @media (max-width: 768px) {
+        justify-content: center;
+      }
+      
+      h1 {
+        margin: 0;
+        font-size: 2.2rem;
+        font-weight: 600;
+        
+        @media (max-width: 480px) {
+          font-size: 1.8rem;
+        }
+      }
+      
+      .crmBadge {
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--White);
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-left: 1.5rem;
+        
+        @media (max-width: 480px) {
+          margin-left: 0;
+          margin-top: 0.5rem;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+    
+    h2 {
+      margin: 0.5rem 0 1.5rem 0;
+      font-size: 1.4rem;
+      font-weight: 400;
+      opacity: 0.9;
+      
+      @media (max-width: 480px) {
+        font-size: 1.2rem;
+      }
+    }
+    
+    .hospitalInfo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      
+      @media (max-width: 768px) {
+        justify-content: center;
+      }
+      
+      .icon {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        color: var(--White);
+      }
+      
+      .hospitalName {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+      
+      .hospitalLocation {
+        margin: 0.2rem 0 0 0;
+        opacity: 0.9;
+        font-size: 0.95rem;
+      }
+    }
+    
+    .specialtiesTags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--Gap);
+      
+      @media (max-width: 768px) {
+        justify-content: center;
+      }
+      
+      .specialtyTag {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--White);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.25);
+        }
+        
+        @media (max-width: 480px) {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+.editButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--White);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--BorderRadius);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .editIcon {
+      font-size: 0.9rem;
+    }
+  }
+
+
+// Main Content
+.profileContent {
+  padding: 2rem 3rem;
+  flex: 1;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+  
+  .sectionTitle {
+    display: flex;
+    align-items: center;
+    color: var(--TextGeneral);
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--PreferredColor);
+    
+    .icon {
+      margin-right: 0.8rem;
+      font-size: 1.3rem;
+    }
+  }
+  
+  .aboutSection {
+    background: var(--DetailsBg);
+    padding: 2rem;
+    border-radius: var(--BorderRadius);
+    margin-bottom: 2.5rem;
+    box-shadow: var(--BoxShadow);
+    
+    @media (max-width: 480px) {
+      padding: 1.5rem;
+    }
+    
+    p {
+      line-height: 1.8;
+      color: var(--White);
+      font-size: 1.05rem;
+    }
+  }
+  
+  .contentColumns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--Gap2);
+    
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Timeline
+.timeline {
+  position: relative;
+  padding-left: 30px;
+  
+  @media (max-width: 480px) {
+    padding-left: 20px;
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--PreferredColor);
+  }
+  
+  .timelineItem {
+    position: relative;
+    margin-bottom: 2rem;
+    
+    .timelineMarker {
+      position: absolute;
+      left: -38px;
+      top: 5px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--White);
+      border: 3px solid var(--PreferredColor);
+      
+      @media (max-width: 480px) {
+        left: -33px;
+        width: 14px;
+        height: 14px;
+      }
+    }
+    
+    .timelineContent {
+      background: var(--DetailsBg);
+      padding: 1.5rem;
+      border-radius: var(--BorderRadius);
+      box-shadow: var(--BoxShadow);
+      
+      @media (max-width: 480px) {
+        padding: 1.2rem;
+      }
+      
+      h4 {
+        margin: 0 0 0.3rem 0;
+        color: var(--PreferredColor);
+        font-size: 1.1rem;
+      }
+      
+      .institution, .period {
+        margin: 0 0 0.3rem 0;
+        color: var(--White);
+        font-weight: 500;
+      }
+      
+      .description {
+        margin: 0.8rem 0 0 0;
+        color: var(--White);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+    }
+  }
+}
+
+// Procedures List
+.proceduresList {
+  background: var(--DetailsBg);
+  padding: 1.5rem;
+  border-radius: var(--BorderRadius);
+  box-shadow: var(--BoxShadow);
+  list-style: none;
+  margin-bottom: 10px;
+  color: var(--White);
+  
+  li {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--White);
+    display: flex;
+    align-items: center;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .icon {
+      color: var(--PreferredColor);
+      margin-right: 0.8rem;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+    .profileFooter {
+      padding: 2% !important;
+    }
+  }
+
+// Contact Section
+.contactInfo {
+  background: var(--DetailsBg);
+  padding: 1.5rem;
+  border-radius: var(--BorderRadius);
+  box-shadow: var(--BoxShadow);
+  
+  .contactItem {
+    display: flex;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--White);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .icon {
+      font-size: 1.4rem;
+      color: var(--PreferredColor);
+      margin-right: 1.2rem;
+      margin-top: 0.2rem;
+      
+      @media (max-width: 480px) {
+        font-size: 1.2rem;
+        margin-right: 0.8rem;
+      }
+    }
+    
+    p {
+      margin: 0 0 0.2rem 0;
+      font-size: 0.9rem;
+      color: var(--White);
+    }
+    
+    a {
+      color: var(--White);
+      font-weight: 500;
+      text-decoration: none;
+      font-size: 1.05rem;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 0.95rem;
+      }
+    }
+    
+    &.emergency {
+      .icon {
+        color: var(--Decline);
+      }
+      
+      a {
+        color: var(--Decline);
+      }
+    }
+  }
+}

@@ -6,10 +6,9 @@ export function IaProvider({ children }) {
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Função para enviar o prompt (streaming)
   const sendPrompt = async (prompt) => {
     setIsLoading(true);
-    setResponse(''); // Reseta a resposta anterior
+    setResponse('');
 
     try {
       const res = await fetch('http://localhost:5000/api/stream', {
@@ -30,7 +29,7 @@ export function IaProvider({ children }) {
         
         lines.forEach(line => {
           const data = JSON.parse(line.replace('data: ', ''));
-          setResponse(prev => prev + data.response); // Atualiza o contexto
+          setResponse(prev => prev + data.response);
         });
       }
     } catch (error) {
@@ -47,4 +46,5 @@ export function IaProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useIA = () => useContext(IaContext);
