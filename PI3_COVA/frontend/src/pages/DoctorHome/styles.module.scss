@@ -1,10 +1,8 @@
 .container {
   width: 100%;
-  min-height: 100vh;
   padding: var(--Gap3) var(--Gap3) var(--Gap2);
   font-family: "Reddit Sans Condensed", sans-serif;
-  scrollbar-width: none;
-   -ms-overflow-style: none;
+  overflow: scroll;
 
    @media screen and (min-width: 1028px) {
       height: 100%;

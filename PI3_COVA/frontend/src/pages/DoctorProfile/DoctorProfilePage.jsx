@@ -2,17 +2,29 @@ import { useState, useEffect } from "react";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import defaultProfileIcon from "../../public/UserDefault.webp";
 import { useTranslation } from "react-i18next";
-
 import { FaRegEdit } from "react-icons/fa";
-
+import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";
 import styles from './styles.module.scss';
 
 const DoctorProfilePage = () => {
   const { userData, loading } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
+  const [experiences, setExperiences] = useState([
+    {
+      position: "Coordenador do Ambulatório de Cefaleias",
+      institution: "Instituto de Neurologia Avançada",
+      period: "2019 - Presente",
+      description: "Liderança da equipe multidisciplinar especializada no tratamento de cefaleias primárias e secundárias."
+    },
+    {
+      position: "Neurologista Clínico",
+      institution: "Hospital Israelita Albert Einstein",
+      period: "2014 - 2019",
+      description: "Atendimento em emergência neurológica e ambulatório especializado em cefaleias."
+    }
+  ]);
 
-  
   const handleEditProfile = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -26,7 +38,21 @@ const DoctorProfilePage = () => {
     return defaultProfileIcon;
   };
 
-  
+  const handleAddExperience = (newExperience) => {
+    setExperiences([...experiences, newExperience]);
+  };
+
+  const handleEditExperience = (index, updatedExperience) => {
+    const updatedExperiences = [...experiences];
+    updatedExperiences[index] = updatedExperience;
+    setExperiences(updatedExperiences);
+  };
+
+  const handleDeleteExperience = (index) => {
+    const updatedExperiences = experiences.filter((_, i) => i !== index);
+    setExperiences(updatedExperiences);
+  };
+
   const doctor = {
     title: "Neurologista Especialista em Cefaleias",
     specialties: [
@@ -39,20 +65,6 @@ const DoctorProfilePage = () => {
     hospital: "Instituto de Neurologia Avançada",
     crm: "CRM-SP 45.678",
     about: "Especialista em diagnóstico e tratamento de cefaleias e enxaquecas com mais de 15 anos de experiência. Membro da Sociedade Brasileira de Cefaleia e da International Headache Society. Atua com abordagem multidisciplinar incluindo tratamentos medicamentosos, toxina botulínica e orientação comportamental.",
-    experience: [
-      {
-        position: "Coordenador do Ambulatório de Cefaleias",
-        institution: "Instituto de Neurologia Avançada",
-        period: "2019 - Presente",
-        description: "Liderança da equipe multidisciplinar especializada no tratamento de cefaleias primárias e secundárias."
-      },
-      {
-        position: "Neurologista Clínico",
-        institution: "Hospital Israelita Albert Einstein",
-        period: "2014 - 2019",
-        description: "Atendimento em emergência neurológica e ambulatório especializado em cefaleias."
-      }
-    ],
     procedures: [
       "Aplicação de Toxina Botulínica para Enxaqueca Crônica",
       "Bloqueios Anestésicos para Cefaleias",
@@ -64,7 +76,7 @@ const DoctorProfilePage = () => {
 
   return (
     <div className={styles.neurologistProfile}>
-      {/* Header */}
+      {/* Header (mantido igual) */}
       <header className={styles.profileHeader}>
         <div className={styles.profileImage}>
           <img
@@ -116,27 +128,15 @@ const DoctorProfilePage = () => {
         <div className={styles.contentColumns}>
           {/* Left Column */}
           <div className={styles.columnLeft}>
-            <section className={styles.experienceSection}>
-              <h3 className={styles.sectionTitle}>
-                <i className={`fas fa-briefcase ${styles.icon}`}></i> Experiência Profissional
-              </h3>
-              <div className={styles.timeline}>
-                {doctor.experience.map((item, index) => (
-                  <div key={index} className={styles.timelineItem}>
-                    <div className={styles.timelineMarker}></div>
-                    <div className={styles.timelineContent}>
-                      <h4>{item.position}</h4>
-                      <p className={styles.institution}>{item.institution}</p>
-                      <p className={styles.period}>{item.period}</p>
-                      <p className={styles.description}>{item.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+            <ExperienceSection 
+              experiences={experiences}
+              onAdd={handleAddExperience}
+              onEdit={handleEditExperience}
+              onDelete={handleDeleteExperience}
+            />
           </div>
 
-          {/* Right Column */}
+          {/* Right Column (mantido igual) */}
           <div className={styles.columnRight}>
             <section className={styles.proceduresSection}>
               <h3 className={styles.sectionTitle}>
