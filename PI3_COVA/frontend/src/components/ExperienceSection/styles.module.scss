@@ -15,7 +15,7 @@
   padding: 3rem;
   background: linear-gradient(135deg, var(--PreferredColor) 0%, var(--Black) 100%);
   color: var(--White);
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     padding: 2rem 1.5rem;
@@ -172,12 +172,10 @@
     justify-content: center;
     gap: 8px;
     width: 100%;
-    margin-top: 1rem;
     padding: 0.5rem;
     background: rgba(255, 255, 255, 0.2);
     color: var(--White);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: var(--BorderRadius);
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -421,6 +419,21 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .titleUnderline {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--PreferredColor);
+  }
+
+  .addButtonContainer {
+    text-align: right;
+    margin-top: 1rem;
   }
 
   .addButton {
@@ -473,6 +486,12 @@
         border-color: var(--PreferredColor);
       }
     }
+    
+    .disabledInput {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.05);
+    }
 
     textarea {
       min-height: 100px;
@@ -514,40 +533,129 @@
     }
   }
 
-  .experienceHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .experienceActions {
-    display: flex;
-    gap: 0.5rem;
-
-    button {
-      background: transparent;
-      border: none;
-      color: var(--White);
-      cursor: pointer;
-      font-size: 0.9rem;
-      padding: 0.3rem;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
+  .timelineItem {
+    &:hover {
+      .experienceActions {
+        opacity: 1;
+      }
+    }
+    
+    .experienceHeader {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s ease;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
+    .experienceActions {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      gap: 0.5rem;
+      
+      button {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: var(--White);
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 0.3rem;
+        border-radius: 8px;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.8);
+        }
+      }
+
+      .deleteButton {
+        &:hover {
+          color: var(--Decline);
+          border-color: var(--Decline);
+        }
       }
     }
   }
-
-  .deleteButton {
-    &:hover {
-      color: var(--Decline);
+  
+  .addButtonContainer {
+    text-align: right;
+    margin-top: 1rem;
+  }
+  
+  .formRow {
+    display: flex;
+    gap: 1rem;
+    
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .formGroup {
+      flex: 1;
+    }
+  }
+  
+  .required {
+    color: var(--Decline);
+  }
+  
+  .checkboxContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    user-select: none;
+    
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+      
+      &:checked ~ .checkmark {
+        background-color: var(--PreferredColor);
+        
+        &:after {
+          display: block;
+        }
+      }
+    }
+    
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      
+      &:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        transform: rotate(45deg);
+      }
+    }
+    
+    &:hover input ~ .checkmark {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }

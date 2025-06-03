@@ -172,12 +172,11 @@
     justify-content: center;
     gap: 8px;
     width: 100%;
-    margin-top: 1rem;
     padding: 0.5rem;
+    margin-top: 1rem;
     background: rgba(255, 255, 255, 0.2);
     color: var(--White);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: var(--BorderRadius);
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -488,7 +487,6 @@
     button {
       padding: 0.7rem 1.5rem;
       border: none;
-      border-radius: var(--BorderRadius);
       font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -531,7 +529,7 @@
       cursor: pointer;
       font-size: 0.9rem;
       padding: 0.3rem;
-      border-radius: 50%;
+      border-radius: 8px;
       width: 28px;
       height: 28px;
       display: flex;

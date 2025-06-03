@@ -109,12 +109,16 @@
     "emergencies": "On-call/Emergencies:",
     "add": "Add",
     "position": "Position",
-  "institution": "Institution",
-  "period": "Period",
-  "description": "Description",
-  "update": "Update",
-  "save": "Save",
-  "cancel": "Cancel"
+    "currentPosition": "Current job",
+    "present": "Currently",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "institution": "Institution",
+    "period": "Period",
+    "description": "Description",
+    "update": "Update",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "editProfile": {
     "title": "Edit Profile",
