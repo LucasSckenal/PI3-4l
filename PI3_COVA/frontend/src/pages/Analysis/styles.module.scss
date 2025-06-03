@@ -22,14 +22,14 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 .mainContent {
   display: flex;
   flex-direction: column;
-  gap: $espacamento-padrao * 2;
+  gap: calc($espacamento-padrao * 2);
 }
 
 /* Cards Section */
 .cardsSection {
   display: flex;
   gap: $espacamento-padrao;
-  margin-bottom: $espacamento-padrao * 2;
+  margin-bottom: calc($espacamento-padrao * 2);
   justify-content: space-between;
   flex-wrap: wrap;
 
@@ -490,7 +490,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
         background-color: var(--UiBg);
         border: 1px solid $cor-borda;
         color: var(--White);
-        padding: $espacamento-padrao / 2;
+        padding: calc($espacamento-padrao / 2);
         font-size: 0.9rem;
         border-radius: $borda-arredondada;
         cursor: pointer;
@@ -520,7 +520,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
         background-color: var(--UiBg);
         border: 1px solid $cor-borda;
         color: var(--White);
-        padding: $espacamento-padrao / 2;
+        padding: calc($espacamento-padrao / 2);
         font-size: 0.9rem;
         border-radius: $borda-arredondada;
         cursor: pointer;
