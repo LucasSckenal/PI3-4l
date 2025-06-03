@@ -337,6 +337,7 @@
         line-height: 16px;
         opacity: 0.3;
         transform: scale(0.85);
+        padding: 1px;
         margin: 0 15px;
         transition: all 0.4s ease-in-out;
         flex-shrink: 0;
@@ -360,7 +361,8 @@
       .HistoryHeader {
         flex-direction: row;
         justify-content: space-around;
-        margin-top: 3vh;
+        margin-top: -5%;
+        margin-bottom: 5px;
         font-size: 16px;
 
         .ViewMoreButton {
@@ -376,12 +378,9 @@
       .InnerHistory {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
         width: 100%;
         max-width: 1000px;
-        margin: 0 auto;
-
-
+        margin: -20px auto;
 
         .box {
           border-bottom: 1.5px solid var(--PreferredColor);
@@ -395,6 +394,7 @@
 
             p {
               color: var(--TextGeneral);
+              font-size: 1rem;
             }
           }
         }
