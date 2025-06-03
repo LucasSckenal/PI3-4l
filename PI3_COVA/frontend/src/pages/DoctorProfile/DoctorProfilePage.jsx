@@ -1,8 +1,33 @@
+import { useState, useEffect } from "react";
+import { useAccount } from "../../contexts/Account/AccountProvider";
+import defaultProfileIcon from "../../public/UserDefault.webp";
+import { useTranslation } from "react-i18next";
+
+import { FaRegEdit } from "react-icons/fa";
+
 import styles from './styles.module.scss';
 
 const DoctorProfilePage = () => {
+  const { userData, loading } = useAccount();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useTranslation();
+
+  
+  const handleEditProfile = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const getProfileImageSource = () => {
+    if (!userData.photo) return defaultProfileIcon;
+    if (
+      userData.photo.startsWith("http") ||
+      userData.photo.startsWith("data:image")
+    )
+      return userData.photo;
+    return defaultProfileIcon;
+  };
+
+  
   const doctor = {
-    name: "Dr. Rafael Oliveira",
     title: "Neurologista Especialista em Cefaleias",
     specialties: [
       "Enxaqueca (CID-10 G43)",
@@ -12,11 +37,7 @@ const DoctorProfilePage = () => {
       "Cefaleias Crônicas Diárias"
     ],
     hospital: "Instituto de Neurologia Avançada",
-    location: "São Paulo, SP",
     crm: "CRM-SP 45.678",
-    email: "dr.rafael.oliveira@inaneuro.com.br",
-    phone: "(11) 9876-5432",
-    emergencyContact: "(11) 9876-5000",
     about: "Especialista em diagnóstico e tratamento de cefaleias e enxaquecas com mais de 15 anos de experiência. Membro da Sociedade Brasileira de Cefaleia e da International Headache Society. Atua com abordagem multidisciplinar incluindo tratamentos medicamentosos, toxina botulínica e orientação comportamental.",
     experience: [
       {
@@ -41,37 +62,37 @@ const DoctorProfilePage = () => {
     ]
   };
 
-  const handleEditProfile = () => {
-      // Função vazia por enquanto, como solicitado
-  };
-
   return (
     <div className={styles.neurologistProfile}>
       {/* Header */}
       <header className={styles.profileHeader}>
         <div className={styles.profileImage}>
-          <div className={styles.avatar}>RO</div>
+          <img
+              src={getProfileImageSource()}
+              alt={t("profile.alt")}
+              className={styles.avatar}
+              onError={(e) => (e.target.src = defaultProfileIcon)}
+            />
           <button 
             className={styles.editButton}
             onClick={handleEditProfile}
           >
-            <i className={`fas fa-edit ${styles.editIcon}`}></i> Editar Perfil
+            Editar Perfil
           </button>
         </div>
         
         <div className={styles.headerInfo}>
           <div className={styles.titleContainer}>
-            <h1>{doctor.name}</h1>
+            <h1>{userData.name}</h1>
             <div className={styles.crmBadge}>{doctor.crm}</div>
           </div>
           
           <h2>{doctor.title}</h2>
           
           <div className={styles.hospitalInfo}>
-            <i className={`fas fa-hospital ${styles.icon}`}></i>
             <div>
               <p className={styles.hospitalName}>{doctor.hospital}</p>
-              <p className={styles.hospitalLocation}>{doctor.location}</p>
+              <p className={styles.hospitalLocation}>{userData?.location}</p>
             </div>
           </div>
           
@@ -139,7 +160,7 @@ const DoctorProfilePage = () => {
                   <i className={`fas fa-phone ${styles.icon}`}></i>
                   <div>
                     <p>Telefone para consultas:</p>
-                    <a href={`tel:${doctor.phone}`}>{doctor.phone}</a>
+                    <a href={`tel:${userData?.phone}`}>{userData?.phone}</a>
                   </div>
                 </div>
                 
@@ -147,7 +168,7 @@ const DoctorProfilePage = () => {
                   <i className={`fas fa-envelope ${styles.icon}`}></i>
                   <div>
                     <p>E-mail profissional:</p>
-                    <a href={`mailto:${doctor.email}`}>{doctor.email}</a>
+                    <a href={`mailto:${userData?.email}`}>{userData?.email}</a>
                   </div>
                 </div>
                 
@@ -155,7 +176,7 @@ const DoctorProfilePage = () => {
                   <i className={`fas fa-exclamation-triangle ${styles.icon}`}></i>
                   <div>
                     <p>Plantão/Urgências:</p>
-                    <a href={`tel:${doctor.emergencyContact}`}>{doctor.emergencyContact}</a>
+                    <a href={`tel:${userData?.phone}`}>{userData?.phone}</a>
                   </div>
                 </div>
               </div>

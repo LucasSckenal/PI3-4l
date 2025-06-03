@@ -21,25 +21,37 @@ const isValidPhoto = (photo) => {
 };
 
 const AccountProvider = ({ children }) => {
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [accountData, setAccountData] = useState({
+    userData: null,
+    userId: null,
+    role: null,
+    loading: true
+  });
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      // Estado inicial quando não há usuário
       if (!user) {
-        setUserData(null);
-        setLoading(false);
+        setAccountData({
+          userData: null,
+          userId: null,
+          role: null,
+          loading: false
+        });
         return;
       }
 
       const userDocRef = doc(db, "Users", user.uid);
 
       try {
+        // Verificar se o documento existe
         const userDoc = await getDoc(userDocRef);
+        
         if (!userDoc.exists()) {
           const photoSource = isValidPhoto(user.photoURL) ? user.photoURL : "";
 
+          // Dados iniciais com role padrão
           const initialData = {
             uid: user.uid,
             name: user.displayName || "",
@@ -49,49 +61,60 @@ const AccountProvider = ({ children }) => {
             gender: "",
             phone: "",
             location: "",
+            role: "User"
           };
 
           await setDoc(userDocRef, initialData);
         }
+
+        // Configurar listener para atualizações em tempo real
+        const unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            
+            const photoSource =
+              isValidPhoto(data.photo) ? data.photo :
+              isValidPhoto(user.photoURL) ? user.photoURL : "";
+
+            setAccountData({
+              userData: {
+                uid: user.uid,
+                name: data.name || user.displayName || "",
+                email: data.email || user.email || "",
+                photo: photoSource,
+                birthDate: data.birthDate || "",
+                gender: data.gender || "",
+                phone: data.phone || "",
+                location: data.location || "",
+              },
+              userId: user.uid,
+              role: data.role || "User",
+              loading: false
+            });
+          }
+        }, (error) => {
+          console.error("Erro ao escutar dados do usuário:", error);
+          setAccountData(prev => ({...prev, loading: false}));
+        });
+
+        return () => unsubscribeSnapshot();
+        
       } catch (error) {
-        console.error("Erro ao criar documento de usuário:", error);
-        setLoading(false);
-        return;
+        console.error("Erro ao processar conta:", error);
+        setAccountData({
+          userData: null,
+          userId: user.uid,
+          role: null,
+          loading: false
+        });
       }
-
-      const unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-
-          const photoSource =
-            isValidPhoto(data.photo) ? data.photo :
-            isValidPhoto(user.photoURL) ? user.photoURL : "";
-
-          setUserData({
-            uid: user.uid,
-            name: data.name || user.displayName || "",
-            email: data.email || user.email || "",
-            photo: photoSource,
-            birthDate: data.birthDate || "",
-            gender: data.gender || "",
-            phone: data.phone || "",
-            location: data.location || "",
-          });
-        }
-        setLoading(false);
-      }, (error) => {
-        console.error("Erro ao escutar dados do usuário:", error);
-        setLoading(false);
-      });
-
-      return () => unsubscribeSnapshot();
     });
 
     return () => unsubscribeAuth();
   }, []);
 
   return (
-    <AccountContext.Provider value={{ userData, loading }}>
+    <AccountContext.Provider value={accountData}>
       {children}
     </AccountContext.Provider>
   );

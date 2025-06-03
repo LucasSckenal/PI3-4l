@@ -1,10 +1,21 @@
 import { useAccount } from '../../contexts/Account/AccountProvider';
 import { useTranslation } from 'react-i18next';
-import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+  Tooltip,
+  Legend
+} from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import styles from './styles.module.scss';
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../api/firebase/';
 
-// Registre os componentes do Chart.js
 ChartJS.register(
   LineElement,
   PointElement,
@@ -19,23 +30,86 @@ const DoctorHomePage = () => {
   const { userData, loading } = useAccount();
   const { t } = useTranslation();
 
-  // Dados fictícios para demonstração
-  const stats = {
-    totalCases: 1243,
-    g43Cases: 876,
-    g44Cases: 367,
-    recentCases: 42,
-    criticalCases: 18
-  };
+  const [stats, setStats] = useState({
+    totalCases: 0,
+    g43Cases: 0,
+    g44Cases: 0,
+    criticalCases: 0
+  });
 
-  // Dados para o gráfico - evolução mensal
+  useEffect(() => {
+    const fetchCases = async () => {
+      const casesRef = collection(db, 'Cases');
+      console.log(casesRef)
+      const snapshot = await getDocs(casesRef);
+
+      let g43 = 0, g44 = 0, critical = 0;
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const cid = data.cid;
+        const intensidade = data.intensidade;
+
+        if (typeof cid === 'string') {
+          if (cid.startsWith('G43')) g43++;
+          else if (cid.startsWith('G44')) g44++;
+        }
+
+        if (intensidade === 'incapacitante') {
+          critical++;
+        }
+      });
+
+      setStats({
+        totalCases: snapshot.size,
+        g43Cases: g43,
+        g44Cases: g44,
+        criticalCases: critical
+      });
+    };
+
+    fetchCases();
+  }, []);
+
+  // Dados mockados para a tabela de casos recentes
+  const mockRecentPatients = [
+    {
+      id: 'ABC123',
+      name: 'João Silva',
+      age: 34,
+      diagnosis: 'G43.0',
+      lastVisit: '10/05/2025'
+    },
+    {
+      id: 'DEF456',
+      name: 'Maria Oliveira',
+      age: 28,
+      diagnosis: 'G44.2',
+      lastVisit: '08/05/2025'
+    },
+    {
+      id: 'GHI789',
+      name: 'Carlos Souza',
+      age: 45,
+      diagnosis: 'G43.1',
+      lastVisit: '05/05/2025'
+    },
+    {
+      id: 'JKL012',
+      name: 'Ana Paula',
+      age: 38,
+      diagnosis: 'G44.8',
+      lastVisit: '01/05/2025'
+    }
+  ];
+
   const monthlyData = {
     labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
     datasets: [
       {
         label: 'CID-10 G43 (Enxaqueca)',
         data: [65, 59, 70, 81, 76, 75, 80, 91, 85, 93, 106, 102],
-        borderColor: '#4e79a7', // Cor para G43
+        borderColor: '#4e79a7',
         backgroundColor: 'rgba(78, 121, 167, 0.1)',
         tension: 0.3,
         borderWidth: 2,
@@ -45,7 +119,7 @@ const DoctorHomePage = () => {
       {
         label: 'CID-10 G44 (Outras cefaleias)',
         data: [28, 32, 35, 40, 42, 38, 45, 50, 48, 52, 55, 60],
-        borderColor: '#f28e2b', // Cor para G44
+        borderColor: '#f28e2b',
         backgroundColor: 'rgba(242, 142, 43, 0.1)',
         tension: 0.3,
         borderWidth: 2,
@@ -93,28 +167,18 @@ const DoctorHomePage = () => {
           color: 'rgba(255, 255, 255, 0.1)'
         },
         ticks: {
-          color: '#b0b0b0',
-          callback: function(value) {
-            return value;
-          }
+          color: '#b0b0b0'
         }
       }
     }
   };
 
-  const recentPatients = [
-    { id: 1001, name: 'Maria Silva', age: 34, diagnosis: 'G43.1', lastVisit: '15/06/2023' },
-    { id: 1002, name: 'João Santos', age: 45, diagnosis: 'G44.2', lastVisit: '14/06/2023' },
-    { id: 1003, name: 'Ana Oliveira', age: 28, diagnosis: 'G43.0', lastVisit: '14/06/2023' },
-    { id: 1004, name: 'Carlos Mendes', age: 52, diagnosis: 'G43.9', lastVisit: '13/06/2023' },
-  ];
-
-  if (loading) return <div>{t("common.loading")}</div>;
+  if (loading) return <div>{t('common.loading')}</div>;
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Bem-vindo, {userData?.name?.split(" ").slice(0, 4).join(" ") ?? t("home.user")}</h1>
+        <h1>Bem-vindo, {userData?.name?.split(' ').slice(0, 4).join(' ') ?? t('home.user')}</h1>
         <p className={styles.subtitle}>Painel de acompanhamento de casos CID-10 G43 e G44</p>
       </header>
 
@@ -161,7 +225,7 @@ const DoctorHomePage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {recentPatients.map(patient => (
+                  {mockRecentPatients.map(patient => (
                     <tr key={patient.id}>
                       <td>{patient.id}</td>
                       <td>
@@ -177,9 +241,7 @@ const DoctorHomePage = () => {
                       </td>
                       <td>{patient.lastVisit}</td>
                       <td>
-                        <button className={styles.actionButton}>
-                          Visualizar
-                        </button>
+                        <button className={styles.actionButton}>Visualizar</button>
                       </td>
                     </tr>
                   ))}
@@ -188,7 +250,6 @@ const DoctorHomePage = () => {
             </div>
           </section>
 
-          {/* Nova seção de gráfico substituindo as ações rápidas */}
           <section className={styles.chartsSection}>
             <h2>Evolução Mensal de Casos</h2>
             <div className={styles.chartContainer}>
