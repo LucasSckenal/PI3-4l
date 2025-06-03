@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import styles from './styles.module.scss';
+import { useTranslation } from "react-i18next";
+
 
 const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
+  const { t } = useTranslation();
+
   const [isAdding, setIsAdding] = useState(false);
   const [currentExperience, setCurrentExperience] = useState(null);
   const [formData, setFormData] = useState({
@@ -51,20 +55,18 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
     <section className={styles.experienceSection}>
       <div className={styles.sectionHeader}>
         <h3 className={styles.sectionTitle}>
-          <i className={`fas fa-briefcase ${styles.icon}`}></i> Experiência Profissional
+          <i className={`fas fa-briefcase ${styles.icon}`}></i>{" "}
+          {t("profile.experience")}
         </h3>
-        <button 
-          className={styles.addButton}
-          onClick={() => setIsAdding(true)}
-        >
-          <FaPlus /> Adicionar
+        <button className={styles.addButton} onClick={() => setIsAdding(true)}>
+          <FaPlus /> {t("profile.add")}
         </button>
       </div>
 
       {isAdding && (
         <form onSubmit={handleSubmit} className={styles.experienceForm}>
           <div className={styles.formGroup}>
-            <label>Cargo/Posição</label>
+            <label>{t("profile.")}</label>
             <input
               type="text"
               name="position"
@@ -104,10 +106,10 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
           </div>
           <div className={styles.formActions}>
             <button type="submit" className={styles.saveButton}>
-              {currentExperience !== null ? 'Atualizar' : 'Salvar'}
+              {currentExperience !== null ? "Atualizar" : "Salvar"}
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className={styles.cancelButton}
               onClick={resetForm}
             >
@@ -125,13 +127,13 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
               <div className={styles.experienceHeader}>
                 <h4>{item.position}</h4>
                 <div className={styles.experienceActions}>
-                  <button 
+                  <button
                     className={styles.editButton}
                     onClick={() => handleEditClick(index)}
                   >
                     <FaEdit />
                   </button>
-                  <button 
+                  <button
                     className={styles.deleteButton}
                     onClick={() => onDelete(index)}
                   >

@@ -99,7 +99,22 @@
       "female": "Female",
       "other": "Other"
     },
-    "edit": "Edit Profile"
+    "edit": "Edit Profile",
+    "about": "About the Specialist",
+    "experience": "Professional Experience",
+    "procedures": "Performed Procedures",
+    "contact": "Contact",
+    "tell": "Phone for appointments:",
+    "emailP": "Professional email:",
+    "emergencies": "On-call/Emergencies:",
+    "add": "Add",
+    "position": "Position",
+  "institution": "Institution",
+  "period": "Period",
+  "description": "Description",
+  "update": "Update",
+  "save": "Save",
+  "cancel": "Cancel"
   },
   "editProfile": {
     "title": "Edit Profile",

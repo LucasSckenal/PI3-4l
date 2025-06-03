@@ -76,41 +76,39 @@ const DoctorProfilePage = () => {
 
   return (
     <div className={styles.neurologistProfile}>
-      {/* Header (mantido igual) */}
       <header className={styles.profileHeader}>
         <div className={styles.profileImage}>
           <img
-              src={getProfileImageSource()}
-              alt={t("profile.alt")}
-              className={styles.avatar}
-              onError={(e) => (e.target.src = defaultProfileIcon)}
-            />
-          <button 
-            className={styles.editButton}
-            onClick={handleEditProfile}
-          >
-            Editar Perfil
+            src={getProfileImageSource()}
+            alt={t("profile.alt")}
+            className={styles.avatar}
+            onError={(e) => (e.target.src = defaultProfileIcon)}
+          />
+          <button className={styles.editButton} onClick={handleEditProfile}>
+            {t("profile.edit")}
           </button>
         </div>
-        
+
         <div className={styles.headerInfo}>
           <div className={styles.titleContainer}>
             <h1>{userData.name}</h1>
             <div className={styles.crmBadge}>{doctor.crm}</div>
           </div>
-          
+
           <h2>{doctor.title}</h2>
-          
+
           <div className={styles.hospitalInfo}>
             <div>
               <p className={styles.hospitalName}>{doctor.hospital}</p>
               <p className={styles.hospitalLocation}>{userData?.location}</p>
             </div>
           </div>
-          
+
           <div className={styles.specialtiesTags}>
             {doctor.specialties.map((specialty, index) => (
-              <span key={index} className={styles.specialtyTag}>{specialty}</span>
+              <span key={index} className={styles.specialtyTag}>
+                {specialty}
+              </span>
             ))}
           </div>
         </div>
@@ -119,8 +117,9 @@ const DoctorProfilePage = () => {
       {/* Main Content */}
       <main className={styles.profileContent}>
         <section className={styles.aboutSection}>
-          <h3 className={styles.sectionTitle} style={{color:"#ffffff"}}>
-            <i className={`fas fa-user-md ${styles.icon}`}></i> Sobre o Especialista
+          <h3 className={styles.sectionTitle} style={{ color: "#ffffff" }}>
+            <i className={`fas fa-user-md ${styles.icon}`}></i>{" "}
+            {t("profile.about")}
           </h3>
           <p>{doctor.about}</p>
         </section>
@@ -128,7 +127,7 @@ const DoctorProfilePage = () => {
         <div className={styles.contentColumns}>
           {/* Left Column */}
           <div className={styles.columnLeft}>
-            <ExperienceSection 
+            <ExperienceSection
               experiences={experiences}
               onAdd={handleAddExperience}
               onEdit={handleEditExperience}
@@ -140,12 +139,14 @@ const DoctorProfilePage = () => {
           <div className={styles.columnRight}>
             <section className={styles.proceduresSection}>
               <h3 className={styles.sectionTitle}>
-                <i className={`fas fa-procedures ${styles.icon}`}></i> Procedimentos Realizados
+                <i className={`fas fa-procedures ${styles.icon}`}></i>{" "}
+                {t("profile.procedures")}
               </h3>
               <ul className={styles.proceduresList}>
                 {doctor.procedures.map((procedure, index) => (
                   <li key={index}>
-                    <i className={`fas fa-check-circle ${styles.icon}`}></i> {procedure}
+                    <i className={`fas fa-check-circle ${styles.icon}`}></i>{" "}
+                    {procedure}
                   </li>
                 ))}
               </ul>
@@ -153,29 +154,32 @@ const DoctorProfilePage = () => {
 
             <section className={styles.contactSection}>
               <h3 className={styles.sectionTitle}>
-                <i className={`fas fa-address-card ${styles.icon}`}></i> Contato
+                <i className={`fas fa-address-card ${styles.icon}`}></i>{" "}
+                {t("profile.contact")}
               </h3>
               <div className={styles.contactInfo}>
                 <div className={styles.contactItem}>
                   <i className={`fas fa-phone ${styles.icon}`}></i>
                   <div>
-                    <p>Telefone para consultas:</p>
+                    <p>{t("profile.tell")}</p>
                     <a href={`tel:${userData?.phone}`}>{userData?.phone}</a>
                   </div>
                 </div>
-                
+
                 <div className={styles.contactItem}>
                   <i className={`fas fa-envelope ${styles.icon}`}></i>
                   <div>
-                    <p>E-mail profissional:</p>
+                    <p>{t("profile.emailP")}</p>
                     <a href={`mailto:${userData?.email}`}>{userData?.email}</a>
                   </div>
                 </div>
-                
+
                 <div className={`${styles.contactItem} ${styles.emergency}`}>
-                  <i className={`fas fa-exclamation-triangle ${styles.icon}`}></i>
+                  <i
+                    className={`fas fa-exclamation-triangle ${styles.icon}`}
+                  ></i>
                   <div>
-                    <p>Plantão/Urgências:</p>
+                    <p>{t("profile.emergencies")}</p>
                     <a href={`tel:${userData?.phone}`}>{userData?.phone}</a>
                   </div>
                 </div>

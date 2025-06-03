@@ -100,7 +100,22 @@
       "female": "Femenino",
       "other": "Otro"
     },
-    "edit": "Editar perfil"
+    "edit": "Editar perfil",
+    "about": "Sobre el Especialista",
+    "experience": "Experiencia Profesional",
+    "procedures": "Procedimientos Realizados",
+    "contact": "Contacto",
+    "tell": "Teléfono para consultas:",
+    "emailP": "Correo electrónico profesional:",
+    "emergencies": "Guardia/Urgencias:",
+    "add": "",
+    "position": "Cargo/Posición",
+  "institution": "Institución",
+  "period": "Período",
+  "description": "Descripción",
+  "update": "Actualizar",
+  "save": "Guardar",
+  "cancel": "Cancelar"
   },
   "editProfile": {
     "title": "Editar perfil",
