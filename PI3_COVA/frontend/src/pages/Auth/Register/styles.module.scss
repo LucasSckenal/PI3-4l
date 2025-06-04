@@ -1,300 +1,338 @@
+/* Contêiner principal */
 .loginContainer {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  height: 100vh;
-  gap: var(--Gap);
-  justify-content: center;
   align-items: center;
-  padding: 8px;
+  justify-content: flex-start;
+  overflow: hidden;
+  background-color: #121212; /* Fundo escuro por padrão */
 
-  p,
-  label,
-  span {
-    color: var(--TextGeneral);
-  }
-
-  input {
-    background-color: var(--Bg);
-    border: 1px solid var(--TextGeneral);
-    z-index: 1;
-  }
-
+  /* Imagem de fundo cobrindo toda a área */
   .bgImg {
     position: absolute;
-    top: -15%;
+    top: 0;
     left: 0;
-    height: 100%;
-    object-fit: cove;
-    pointer-events: none;
-  }
-
-  .title {
-    font-size: clamp(1.5rem, 2vw, 2.5rem);
-    text-align: center;
-    color: var(--TextGeneral);
-    z-index: 1;
-  }
-
-  .inputRegister,
-  select {
-    width: 90%;
-    max-width: 400px;
-    height: 45px;
-    border-radius: 16px;
-    padding: 10px;
-    font-size: 1rem;
-    background-color: var(--TextGeneralReverse);
-    color: var(--TextGeneral);
-  }
-
-  .namesInput {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    max-width: 400px;
-    gap: 10px;
-
-    .inputRegister {
-      width: 100%;
-    }
-
-    @media screen and (min-width: 768px) {
-      flex-direction: row;
-      justify-content: space-between;
-
-      .inputRegister {
-        width: 48%;
-      }
-    }
-  }
-
-  .navigateBtn {
-    color: var(--PreferredColor);
-    cursor: pointer;
-
-    &:hover {
-      color: var(--PreferredColor);
-      text-decoration: underline;
-    }
-  }
-
-  .bottomLogin {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    gap: var(--Gap);
-    flex-wrap: wrap;
-    width: 90%;
-    max-width: 400px;
-  }
-
-  .loginBtn {
-    width: 90%;
-    max-width: 300px;
-    height: 45px;
-    background-color: var(--PreferredColor) !important;
-    border: 1px solid var(--TextGeneral);
-    border-radius: 16px;
-    color: white;
-    transition: 0.3s ease;
-
-    &:hover {
-      color: var(--TextGeneralReverse);
-      transform: scale(1.05);
-    }
-  }
-
-  input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #555;
-    border-radius: 50%;
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-    position: relative;
-  }
-
-  input[type="checkbox"]:checked {
-    background-color: var(--PreferredColor);
-  }
-
-  .redirect {
-    display: flex;
-    flex-direction: row;
-    gap: var(--Gap);
-  }
-
-  .bottomPage {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--Gap2);
-
-    .google {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 50px;
-      height: 50px;
-      border: 1px solid var(--TextGeneral);
-      border-radius: 50%;
-      cursor: pointer;
-      background: none;
-
-      img {
-        width: 50px;
-        height: 50px;
-      }
-
-      &:hover {
-        transform: scale(1.1);
-        background-color: var(--PreferredColor);
-      }
-    }
-  }
-
-  .labelUpload {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 90%;
-    max-width: 400px;
-    font-weight: bold;
-    gap: 5px;
-  }
-
-  .previewImg {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-top: 10px;
-    border: 2px solid var(--PreferredColor);
-  }
-
-  .profilePhotoWrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative;
-  }
-
-  .profilePhotoLabel {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #e0e0e0;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .profilePhoto {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
+    z-index: -2;
+    opacity: 1; /* Totalmente visível */
   }
 
-  .addIcon {
+  /* Sobreposição escura para garantir contraste de texto */
+  &::before {
+    content: "";
     position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: #007bff;
-    color: white;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 16px;
-    border: 2px solid white;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: -1;
   }
 
+  /* Título */
+  .title {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    color: #f1f1f1;
+    text-align: center;
+    z-index: 1;
+  }
+
+  /* Container para escolher tipo de conta */
+  .accountTypeContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+    z-index: 1;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 700px;
+    }
+
+    .accountTypeCard {
+      background: rgba(30, 30, 30, 0.9);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      flex: 1;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      transition: transform 0.2s, border 0.2s;
+      text-align: center;
+
+      h2 {
+        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+        color: #4fc3f7;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #cfcfcf;
+      }
+
+      &:hover {
+        transform: scale(1.02);
+      }
+
+      &.selected {
+        border: 2px solid #4fc3f7;
+      }
+    }
+  }
+
+  /* Botão de voltar */
+  .backButton {
+    margin-top: 1.5rem;
+    background-color: #4fc3f7;
+    color: #121212;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    z-index: 1;
+    font-weight: 500;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #38a0c5;
+    }
+  }
+
+  /* Registro (médico/usuário) */
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    color: #f1f1f1;
+    z-index: 1;
+  }
+
+  .profilePhotoWrapper {
+    position: relative;
+    margin-bottom: 1.5rem;
+    z-index: 1;
+
+    .profilePhotoLabel {
+      cursor: pointer;
+      display: inline-block;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #4fc3f7;
+      width: 100px;
+      height: 100px;
+      background: #1e1e1e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profilePhoto {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hiddenInput {
+      display: none;
+    }
+  }
+
+  /* Inputs em linha para nome/sobrenome e dados de saúde */
+  .namesInput,
+  .healthData {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
+    z-index: 1;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      gap: 1rem;
+      max-width: 700px;
+    }
+  }
+
+  /* Estilo genérico para inputs e selects */
+  .inputRegister {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #333;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #f1f1f1;
+    background-color: #1e1e1e;
+    box-sizing: border-box;
+    z-index: 1;
+
+    &::placeholder {
+      color: #888;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #4fc3f7;
+      box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
+      background-color: #2a2a2a;
+    }
+
+    select {
+      background-color: #1e1e1e;
+      color: #f1f1f1;
+    }
+  }
+
+  /* Container específico para especializações CID-10 */
+  .specialtiesContainer {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1.5rem;
+    z-index: 1;
+
+    @media (min-width: 768px) {
+      max-width: 700px;
+    }
+
+    .specialtiesTitle {
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+      color: #4fc3f7;
+    }
+
+    .specialtyRow {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+
+      select {
+        flex: 1;
+      }
+
+      .removeButton {
+        margin-left: 0.5rem;
+        background: transparent;
+        border: none;
+        color: #e57373;
+        font-size: 1.25rem;
+        cursor: pointer;
+
+        &:hover {
+          color: #ef5350;
+        }
+      }
+    }
+
+    .addButton {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #4fc3f7;
+      color: #121212;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      z-index: 1;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #38a0c5;
+      }
+    }
+  }
+
+  /* Contêiner para inputs de senha */
   .pass {
     position: relative;
-    width: 90%;
+    width: 100%;
     max-width: 400px;
+    margin-bottom: 1rem;
+    z-index: 1;
+
+    @media (min-width: 768px) {
+      max-width: 700px;
+    }
 
     input {
       width: 100%;
-      height: 45px;
-      border-radius: 16px;
-      padding-right: 40px;
+      padding-right: 3rem;
+      background-color: #1e1e1e;
+      color: #f1f1f1;
+      border: 1px solid #333;
+      border-radius: 0.5rem;
+
+      &::placeholder {
+        color: #888;
+      }
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4fc3f7;
+      box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
+      background-color: #2a2a2a;
     }
 
     .icon {
       position: absolute;
-      right: 15px;
-      top: 25%;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
       cursor: pointer;
-      color: var(--TextGeneral);
+      color: #ccc;
       font-size: 1.2rem;
 
       &:hover {
-        color: var(--PreferredColor);
+        color: #fff;
       }
     }
   }
 
-  .hiddenInput {
-    display: none;
-  }
-
+  /* Botão de registrar */
   .registerBtn {
-    margin-top: 20px;
-    width: 90%;
-    max-width: 300px;
-    height: 45px;
-    color: white;
-    font-weight: bold;
-    border: 1px solid var(--TextGeneral);
-    background-color: var(--PreferredColor);
-    border-radius: 16px;
-    transition: 0.3s ease;
+    background-color: #4fc3f7;
+    color: #121212;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    z-index: 1;
+    font-weight: 500;
+    transition: background-color 0.2s;
 
     &:hover {
-      background-color: var(--PreferredColor);
-      color: var(--White);
-      transform: scale(1.05);
+      background-color: #38a0c5;
     }
   }
 
+  /* Link de voltar (texto) */
   .pBack {
-    color: var(--PreferredColor);
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #4fc3f7;
     cursor: pointer;
+    z-index: 1;
 
     &:hover {
       text-decoration: underline;
-    }
-  }
-
-  // Ajustes adicionais para telas maiores
-  @media screen and (min-width: 1024px) {
-
-    .inputRegister,
-    .pass,
-    select,
-    .registerBtn {
-      width: 30vw;
-    }
-
-    .title {
-      font-size: 2.5rem;
-    }
-
-    .bgImg {
-      top: -3%;
-      width: 100vw;
     }
   }
 }
