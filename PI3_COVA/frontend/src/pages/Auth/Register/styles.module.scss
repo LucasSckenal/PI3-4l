@@ -10,7 +10,18 @@
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  background-color: #121212; /* Fundo escuro por padrão */
+
+  /* Form container */
+  .formContainer {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 1;
+  }
 
   /* Imagem de fundo cobrindo toda a área */
   .bgImg {
@@ -21,7 +32,7 @@
     height: 100%;
     object-fit: cover;
     z-index: -2;
-    opacity: 1; /* Totalmente visível */
+    opacity: 1;
   }
 
   /* Sobreposição escura para garantir contraste de texto */
@@ -41,9 +52,15 @@
     margin-top: 2rem;
     margin-bottom: 1.5rem;
     font-size: 1.75rem;
-    color: #f1f1f1;
+    color: var(--White);
     text-align: center;
     z-index: 1;
+
+    @media (min-width: 768px) {
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
   }
 
   /* Container para escolher tipo de conta */
@@ -63,7 +80,7 @@
     }
 
     .accountTypeCard {
-      background: rgba(30, 30, 30, 0.9);
+      background: var(--DetailsBg);
       border-radius: 0.75rem;
       padding: 1rem;
       flex: 1;
@@ -75,12 +92,12 @@
       h2 {
         margin-bottom: 0.5rem;
         font-size: 1.25rem;
-        color: #4fc3f7;
+        color: var(--PreferredColor);
       }
 
       p {
         font-size: 0.9rem;
-        color: #cfcfcf;
+        color: var(--White);
       }
 
       &:hover {
@@ -88,7 +105,7 @@
       }
 
       &.selected {
-        border: 2px solid #4fc3f7;
+        border: 2px solid var(--PreferredColor);
       }
     }
   }
@@ -96,8 +113,8 @@
   /* Botão de voltar */
   .backButton {
     margin-top: 1.5rem;
-    background-color: #4fc3f7;
-    color: #121212;
+    background-color: var(--PreferredColor);
+    color: var(--White);
     padding: 0.75rem 1.25rem;
     border: none;
     border-radius: 0.5rem;
@@ -107,7 +124,7 @@
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: #38a0c5;
+      background-color: var(--PreferredColor);
     }
   }
 
@@ -115,7 +132,7 @@
   h1 {
     margin-bottom: 1rem;
     font-size: 1.75rem;
-    color: #f1f1f1;
+    color: var(--White);
     z-index: 1;
   }
 
@@ -123,16 +140,18 @@
     position: relative;
     margin-bottom: 1.5rem;
     z-index: 1;
+    display: flex;
+    justify-content: center;
 
     .profilePhotoLabel {
       cursor: pointer;
       display: inline-block;
       border-radius: 50%;
       overflow: hidden;
-      border: 2px solid #4fc3f7;
+      border: 2px solid var(--PreferredColor);
       width: 100px;
       height: 100px;
-      background: #1e1e1e;
+      background: var(--DetailsBg);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -156,29 +175,30 @@
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-    max-width: 400px;
     margin-bottom: 1rem;
-    z-index: 1;
 
     @media (min-width: 768px) {
       flex-direction: row;
-      gap: 1rem;
-      max-width: 700px;
+      gap: 1.5rem;
+    }
+
+    > * {
+      flex: 1;
+      min-width: 0;
     }
   }
 
   /* Estilo genérico para inputs e selects */
   .inputRegister {
     width: 100%;
-    max-width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #333;
     border-radius: 0.5rem;
     font-size: 1rem;
-    color: #f1f1f1;
+    color: var(--White);
     background-color: #1e1e1e;
     box-sizing: border-box;
-    z-index: 1;
+    margin-bottom: 0.5rem;
 
     &::placeholder {
       color: #888;
@@ -186,37 +206,37 @@
 
     &:focus {
       outline: none;
-      border-color: #4fc3f7;
+      border-color: var(--PreferredColor);
       box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
       background-color: #2a2a2a;
     }
+  }
 
-    select {
-      background-color: #1e1e1e;
-      color: #f1f1f1;
-    }
+  select.inputRegister {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5rem;
+    padding-right: 2.5rem;
   }
 
   /* Container específico para especializações CID-10 */
   .specialtiesContainer {
     width: 100%;
-    max-width: 400px;
     margin-bottom: 1.5rem;
     z-index: 1;
-
-    @media (min-width: 768px) {
-      max-width: 700px;
-    }
 
     .specialtiesTitle {
       margin-bottom: 0.75rem;
       font-size: 1.25rem;
-      color: #4fc3f7;
+      color: var(--PreferredColor);
     }
 
     .specialtyRow {
       display: flex;
       align-items: center;
+      gap: 0.5rem;
       margin-bottom: 0.75rem;
 
       select {
@@ -224,15 +244,14 @@
       }
 
       .removeButton {
-        margin-left: 0.5rem;
         background: transparent;
         border: none;
-        color: #e57373;
+        color: var(--Decline);
         font-size: 1.25rem;
         cursor: pointer;
 
         &:hover {
-          color: #ef5350;
+          color: var(--Red);
         }
       }
     }
@@ -241,8 +260,8 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      background-color: #4fc3f7;
-      color: #121212;
+      background-color: var(--PreferredColor);
+      color: var(--White);
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 0.5rem;
@@ -252,7 +271,7 @@
       transition: background-color 0.2s;
 
       &:hover {
-        background-color: #38a0c5;
+        background-color: var(--PreferredColor);
       }
     }
   }
@@ -261,19 +280,14 @@
   .pass {
     position: relative;
     width: 100%;
-    max-width: 400px;
     margin-bottom: 1rem;
     z-index: 1;
-
-    @media (min-width: 768px) {
-      max-width: 700px;
-    }
 
     input {
       width: 100%;
       padding-right: 3rem;
       background-color: #1e1e1e;
-      color: #f1f1f1;
+      color: var(--White);
       border: 1px solid #333;
       border-radius: 0.5rem;
 
@@ -284,7 +298,7 @@
 
     input:focus {
       outline: none;
-      border-color: #4fc3f7;
+      border-color: var(--PreferredColor);
       box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
       background-color: #2a2a2a;
     }
@@ -295,19 +309,19 @@
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
-      color: #ccc;
+      color: var(--White);
       font-size: 1.2rem;
 
       &:hover {
-        color: #fff;
+        color: var(--White);
       }
     }
   }
 
   /* Botão de registrar */
   .registerBtn {
-    background-color: #4fc3f7;
-    color: #121212;
+    background-color: var(--PreferredColor);
+    color: var(--White);
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 0.5rem;
@@ -319,7 +333,7 @@
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: #38a0c5;
+      background-color: var(--PreferredColor);
     }
   }
 
@@ -327,12 +341,17 @@
   .pBack {
     margin-top: 1rem;
     font-size: 0.9rem;
-    color: #4fc3f7;
+    color: var(--PreferredColor);
     cursor: pointer;
     z-index: 1;
+    text-align: center;
 
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  @media (min-width: 768px) {
+    padding: 2rem;
   }
 }

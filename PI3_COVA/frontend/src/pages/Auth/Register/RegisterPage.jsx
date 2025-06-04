@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -17,9 +17,12 @@ const RegisterPage = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isVisible2, setIsVisible2] = useState(false);
-  const [accountType, setAccountType] = useState(""); // 'doctor' ou 'user'
+  const [accountType, setAccountType] = useState("");
+  const [errors, setErrors] = useState({
+    doctor: {},
+    user: {},
+  });
 
-  // Estados específicos para médicos
   const [doctorFormData, setDoctorFormData] = useState({
     firstName: "",
     lastName: "",
@@ -28,13 +31,12 @@ const RegisterPage = () => {
     location: "",
     password: "",
     confirmPassword: "",
-    crm: "",
+    crm: "CRM-",
     specialization: "",
     onCallPhone: "",
-    cidSpecialties: [""], // Array para múltiplas especializações
+    cidSpecialties: [""],
   });
 
-  // Estados específicos para usuários
   const [userFormData, setUserFormData] = useState({
     firstName: "",
     lastName: "",
@@ -49,7 +51,6 @@ const RegisterPage = () => {
     gender: "",
   });
 
-  // Opções para selects
   const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const specializations = [
     "Cardiologia",
@@ -70,7 +71,129 @@ const RegisterPage = () => {
     "G44.2 - Cefaleia tensional",
   ];
 
-  // Adicionar nova especialização CID-10
+  useEffect(() => {
+    if (accountType === "doctor") {
+      validateDoctorFields();
+    } else if (accountType === "user") {
+      validateUserFields();
+    }
+  }, [doctorFormData, userFormData, accountType]);
+
+  const validateCRM = (crm) => {
+    const crmRegex = /^CRM-[A-Z]{2}\s\d{1,6}$/;
+    return crmRegex.test(crm);
+  };
+
+  const validatePhone = (phone) => {
+    const digits = phone.replace(/\D/g, "");
+    return digits.length >= 10 && digits.length <= 11;
+  };
+
+  const validateDoctorFields = () => {
+    const newErrors = {};
+    const { crm, phone, onCallPhone, password, confirmPassword } =
+      doctorFormData;
+
+    if (crm && !validateCRM(crm)) {
+      newErrors.crm = "Formato inválido (ex: CRM-SP 123456)";
+    }
+
+    if (phone && !validatePhone(phone)) {
+      newErrors.phone = "Celular inválido (ex: (11) 91234-5678)";
+    }
+
+    if (onCallPhone && !validatePhone(onCallPhone)) {
+      newErrors.onCallPhone = "Celular de plantão inválido";
+    }
+
+    if (password && password.length < 6) {
+      newErrors.password = "Mínimo 6 caracteres";
+    }
+
+    if (confirmPassword && password !== confirmPassword) {
+      newErrors.confirmPassword = "Senhas não coincidem";
+    }
+
+    setErrors((prev) => ({ ...prev, doctor: newErrors }));
+  };
+
+  const validateUserFields = () => {
+    const newErrors = {};
+    const { phone, password, confirmPassword } = userFormData;
+
+    if (phone && !validatePhone(phone)) {
+      newErrors.phone = "Celular inválido (ex: (11) 91234-5678)";
+    }
+
+    if (password && password.length < 6) {
+      newErrors.password = "Mínimo 6 caracteres";
+    }
+
+    if (confirmPassword && password !== confirmPassword) {
+      newErrors.confirmPassword = "Senhas não coincidem";
+    }
+
+    setErrors((prev) => ({ ...prev, user: newErrors }));
+  };
+
+  const formatCRM = (value) => {
+    let cleaned = value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+
+    if (cleaned.startsWith("CRM")) {
+      cleaned = cleaned.slice(3);
+    }
+
+    const match = cleaned.match(/^([A-Z]{0,2})(\d{0,6})/);
+    if (!match) return value;
+
+    const [, state, numbers] = match;
+    let formatted = "CRM";
+
+    if (state) formatted += `-${state}`;
+    if (numbers) formatted += ` ${numbers}`;
+
+    return formatted;
+  };
+
+  const formatPhone = (value) => {
+    const cleaned = value.replace(/\D/g, "").slice(0, 11);
+    const match = cleaned.match(/^(\d{0,2})(\d{0,5})(\d{0,4})$/);
+
+    if (!match) return value;
+
+    const [, ddd, part1, part2] = match;
+    let formatted = "";
+
+    if (ddd) {
+      formatted += `(${ddd}`;
+      if (ddd.length === 2) formatted += ") ";
+    }
+
+    if (part1) formatted += part1;
+    if (part2) formatted += `-${part2}`;
+
+    return formatted.trim();
+  };
+
+  const handleDoctorChange = (e) => {
+    const { name, value } = e.target;
+    let newValue = value;
+
+    if (name === "crm") {
+      newValue = formatCRM(value);
+    } else if (name.includes("Phone")) {
+      newValue = formatPhone(value);
+    }
+
+    setDoctorFormData((prev) => ({ ...prev, [name]: newValue }));
+  };
+
+  const handleUserChange = (e) => {
+    const { name, value } = e.target;
+    const newValue = name === "phone" ? formatPhone(value) : value;
+    setUserFormData((prev) => ({ ...prev, [name]: newValue }));
+  };
+
   const addCidSpecialty = () => {
     setDoctorFormData((prev) => ({
       ...prev,
@@ -78,7 +201,6 @@ const RegisterPage = () => {
     }));
   };
 
-  // Remover especialização CID-10
   const removeCidSpecialty = (index) => {
     if (doctorFormData.cidSpecialties.length <= 1) return;
 
@@ -89,7 +211,6 @@ const RegisterPage = () => {
     });
   };
 
-  // Atualizar especialização CID-10
   const handleCidSpecialtyChange = (index, value) => {
     setDoctorFormData((prev) => {
       const updated = [...prev.cidSpecialties];
@@ -107,36 +228,7 @@ const RegisterPage = () => {
     }
   };
 
-  const formatPhone = (value) => {
-    const cleaned = value.replace(/\D/g, "").slice(0, 11);
-    const match = cleaned.match(/^(\d{0,2})(\d{0,5})(\d{0,4})$/);
-
-    if (!match) return value;
-
-    const [, ddd, part1, part2] = match;
-    let formatted = "";
-    if (ddd) formatted += `(${ddd}`;
-    if (ddd && ddd.length === 2) formatted += `) `;
-    if (part1) formatted += part1;
-    if (part2) formatted += `-${part2}`;
-    return formatted.trim();
-  };
-
-  // Manipuladores genéricos para cada tipo de formulário
-  const handleDoctorChange = (e) => {
-    const { name, value } = e.target;
-    const newValue = name.includes("Phone") ? formatPhone(value) : value;
-    setDoctorFormData((prev) => ({ ...prev, [name]: newValue }));
-  };
-
-  const handleUserChange = (e) => {
-    const { name, value } = e.target;
-    const newValue = name === "phone" ? formatPhone(value) : value;
-    setUserFormData((prev) => ({ ...prev, [name]: newValue }));
-  };
-
   const handleRegister = async () => {
-    // Validação para médicos
     if (accountType === "doctor") {
       const {
         firstName,
@@ -152,7 +244,6 @@ const RegisterPage = () => {
         cidSpecialties,
       } = doctorFormData;
 
-      // Verificar se pelo menos uma especialização foi preenchida
       const hasValidCid = cidSpecialties.some((cid) => cid.trim() !== "");
 
       if (
@@ -187,6 +278,11 @@ const RegisterPage = () => {
         return;
       }
 
+      if (!validateCRM(crm)) {
+        toast.error("CRM inválido. Formato: CRM-SP 123456");
+        return;
+      }
+
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
@@ -217,9 +313,7 @@ const RegisterPage = () => {
       } catch (error) {
         handleAuthError(error);
       }
-    }
-    // Validação para usuários
-    else if (accountType === "user") {
+    } else if (accountType === "user") {
       const {
         firstName,
         lastName,
@@ -306,9 +400,7 @@ const RegisterPage = () => {
     }
   };
 
-  // Função auxiliar para obter opções únicas de CID-10 por índice
   const getAvailableCidOptions = (index) => {
-    // Todas as especializações já selecionadas, exceto a posição atual
     const selectedExcludingCurrent = doctorFormData.cidSpecialties.filter(
       (val, idx) => val && idx !== index
     );
@@ -319,7 +411,6 @@ const RegisterPage = () => {
     );
   };
 
-  // Renderização inicial (seleção de tipo de conta)
   if (!accountType) {
     return (
       <div className={styles.loginContainer}>
@@ -364,367 +455,430 @@ const RegisterPage = () => {
       <ToastContainer />
       <img src={registerImg} alt="" className={styles.bgImg} />
 
-      {accountType === "doctor" ? (
-        <>
-          <h1 className={styles.title}>Cadastro de Médico</h1>
+      <div className={styles.formContainer}>
+        {accountType === "doctor" ? (
+          <>
+            <h1 className={styles.title}>Cadastro de Médico</h1>
 
-          <div className={styles.profilePhotoWrapper}>
-            <label htmlFor="profilePhoto" className={styles.profilePhotoLabel}>
-              <img
-                src={photoPreview || defaultProfileIcon}
-                alt="Preview"
-                className={styles.profilePhoto}
+            <div className={styles.profilePhotoWrapper}>
+              <label
+                htmlFor="profilePhoto"
+                className={styles.profilePhotoLabel}
+              >
+                <img
+                  src={photoPreview || defaultProfileIcon}
+                  alt="Preview"
+                  className={styles.profilePhoto}
+                />
+              </label>
+              <input
+                id="profilePhoto"
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className={styles.hiddenInput}
               />
-            </label>
-            <input
-              id="profilePhoto"
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className={styles.hiddenInput}
-            />
-          </div>
+            </div>
 
-          <div className={styles.namesInput}>
+            <div className={styles.namesInput}>
+              <input
+                className={styles.inputRegister}
+                name="firstName"
+                placeholder="Nome"
+                type="text"
+                value={doctorFormData.firstName}
+                onChange={handleDoctorChange}
+                required
+              />
+              <input
+                className={styles.inputRegister}
+                name="lastName"
+                placeholder="Sobrenome"
+                type="text"
+                value={doctorFormData.lastName}
+                onChange={handleDoctorChange}
+                required
+              />
+            </div>
+
             <input
-              className={styles.inputRegister}
-              name="firstName"
-              placeholder="Nome"
+              className={`${styles.inputRegister} ${
+                errors.doctor.crm ? styles.inputError : ""
+              }`}
+              name="crm"
+              placeholder="CRM"
               type="text"
-              value={doctorFormData.firstName}
+              value={doctorFormData.crm}
               onChange={handleDoctorChange}
+              maxLength={13}
               required
             />
-            <input
+            {errors.doctor.crm && (
+              <span className={styles.errorText}>{errors.doctor.crm}</span>
+            )}
+
+            <select
               className={styles.inputRegister}
-              name="lastName"
-              placeholder="Sobrenome"
-              type="text"
-              value={doctorFormData.lastName}
+              name="specialization"
+              value={doctorFormData.specialization}
               onChange={handleDoctorChange}
               required
-            />
-          </div>
-
-          <input
-            className={styles.inputRegister}
-            name="crm"
-            placeholder="CRM"
-            type="text"
-            value={doctorFormData.crm}
-            onChange={handleDoctorChange}
-            required
-          />
-
-          <select
-            className={styles.inputRegister}
-            name="specialization"
-            value={doctorFormData.specialization}
-            onChange={handleDoctorChange}
-            required
-          >
-            <option value="" hidden>
-              Selecione sua especialização
-            </option>
-            {specializations.map((spec) => (
-              <option key={spec} value={spec}>
-                {spec}
+            >
+              <option value="" hidden>
+                Selecione sua especialização
               </option>
-            ))}
-          </select>
+              {specializations.map((spec) => (
+                <option key={spec} value={spec}>
+                  {spec}
+                </option>
+              ))}
+            </select>
 
-          <div className={styles.specialtiesContainer}>
-            <h3 className={styles.specialtiesTitle}>Especializações CID-10</h3>
-            {doctorFormData.cidSpecialties.map((specialty, index) => (
-              <div key={index} className={styles.specialtyRow}>
-                <select
-                  className={styles.inputRegister}
-                  value={specialty}
-                  onChange={(e) =>
-                    handleCidSpecialtyChange(index, e.target.value)
-                  }
-                  required={index === 0}
-                >
-                  <option value="" hidden>
-                    {index === 0
-                      ? "Selecione especialização CID-10 (obrigatório)"
-                      : "Selecione especialização adicional"}
-                  </option>
-                  {getAvailableCidOptions(index).map((cid) => (
-                    <option key={cid} value={cid}>
-                      {cid}
-                    </option>
-                  ))}
-                </select>
-
-                {index > 0 && (
-                  <button
-                    type="button"
-                    className={styles.removeButton}
-                    onClick={() => removeCidSpecialty(index)}
+            <div className={styles.specialtiesContainer}>
+              <h3 className={styles.specialtiesTitle}>
+                Especializações CID-10
+              </h3>
+              {doctorFormData.cidSpecialties.map((specialty, index) => (
+                <div key={index} className={styles.specialtyRow}>
+                  <select
+                    className={styles.inputRegister}
+                    value={specialty}
+                    onChange={(e) =>
+                      handleCidSpecialtyChange(index, e.target.value)
+                    }
+                    required={index === 0}
                   >
-                    <IoClose />
-                  </button>
-                )}
-              </div>
-            ))}
+                    <option value="" hidden>
+                      {index === 0
+                        ? "Selecione especialização CID-10 (obrigatório)"
+                        : "Selecione especialização adicional"}
+                    </option>
+                    {getAvailableCidOptions(index).map((cid) => (
+                      <option key={cid} value={cid}>
+                        {cid}
+                      </option>
+                    ))}
+                  </select>
 
-            <button
-              type="button"
-              className={styles.addButton}
-              onClick={addCidSpecialty}
-            >
-              <IoAdd /> Adicionar especialização
-            </button>
-          </div>
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      className={styles.removeButton}
+                      onClick={() => removeCidSpecialty(index)}
+                    >
+                      <IoClose />
+                    </button>
+                  )}
+                </div>
+              ))}
 
-          <input
-            className={styles.inputRegister}
-            name="email"
-            placeholder="Email"
-            type="email"
-            value={doctorFormData.email}
-            onChange={handleDoctorChange}
-            required
-          />
+              <button
+                type="button"
+                className={styles.addButton}
+                onClick={addCidSpecialty}
+              >
+                <IoAdd /> Adicionar especialização
+              </button>
+            </div>
 
-          <input
-            className={styles.inputRegister}
-            name="phone"
-            placeholder="Celular"
-            type="tel"
-            value={doctorFormData.phone}
-            onChange={handleDoctorChange}
-            required
-          />
-
-          <input
-            className={styles.inputRegister}
-            name="onCallPhone"
-            placeholder="Celular de plantão"
-            type="tel"
-            value={doctorFormData.onCallPhone}
-            onChange={handleDoctorChange}
-            required
-          />
-
-          <input
-            className={styles.inputRegister}
-            name="location"
-            placeholder="Localização"
-            type="text"
-            value={doctorFormData.location}
-            onChange={handleDoctorChange}
-            required
-          />
-
-          <div className={styles.pass}>
             <input
               className={styles.inputRegister}
-              name="password"
-              placeholder="Senha"
-              type={isVisible ? "text" : "password"}
-              value={doctorFormData.password}
+              name="email"
+              placeholder="Email"
+              type="email"
+              value={doctorFormData.email}
               onChange={handleDoctorChange}
               required
             />
-            <span onClick={() => setIsVisible(!isVisible)} className={styles.icon}>
-              {isVisible ? <IoEyeOff /> : <IoEye />}
-            </span>
-          </div>
 
-          <div className={styles.pass}>
             <input
-              className={styles.inputRegister}
-              name="confirmPassword"
-              placeholder="Confirmar senha"
-              type={isVisible2 ? "text" : "password"}
-              value={doctorFormData.confirmPassword}
+              className={`${styles.inputRegister} ${
+                errors.doctor.phone ? styles.inputError : ""
+              }`}
+              name="phone"
+              placeholder="Celular"
+              type="tel"
+              value={doctorFormData.phone}
               onChange={handleDoctorChange}
               required
             />
-            <span
-              onClick={() => setIsVisible2(!isVisible2)}
-              className={styles.icon}
-            >
-              {isVisible2 ? <IoEyeOff /> : <IoEye />}
-            </span>
-          </div>
+            {errors.doctor.phone && (
+              <span className={styles.errorText}>{errors.doctor.phone}</span>
+            )}
 
-          <button className={styles.registerBtn} onClick={handleRegister}>
-            Registrar como Médico
-          </button>
-          <p className={styles.pBack} onClick={() => setAccountType("")}>
-            Voltar para seleção
-          </p>
-        </>
-      ) : (
-        <>
-          <h1 className={styles.title}>Cadastro de Usuário</h1>
+            <input
+              className={`${styles.inputRegister} ${
+                errors.doctor.onCallPhone ? styles.inputError : ""
+              }`}
+              name="onCallPhone"
+              placeholder="Celular de plantão"
+              type="tel"
+              value={doctorFormData.onCallPhone}
+              onChange={handleDoctorChange}
+              required
+            />
+            {errors.doctor.onCallPhone && (
+              <span className={styles.errorText}>
+                {errors.doctor.onCallPhone}
+              </span>
+            )}
 
-          <div className={styles.profilePhotoWrapper}>
-            <label htmlFor="profilePhoto" className={styles.profilePhotoLabel}>
-              <img
-                src={photoPreview || defaultProfileIcon}
-                alt="Preview"
-                className={styles.profilePhoto}
+            <input
+              className={styles.inputRegister}
+              name="location"
+              placeholder="Localização"
+              type="text"
+              value={doctorFormData.location}
+              onChange={handleDoctorChange}
+              required
+            />
+
+            <div className={styles.pass}>
+              <input
+                className={`${styles.inputRegister} ${
+                  errors.doctor.password ? styles.inputError : ""
+                }`}
+                name="password"
+                placeholder="Senha"
+                type={isVisible ? "text" : "password"}
+                value={doctorFormData.password}
+                onChange={handleDoctorChange}
+                required
               />
-            </label>
-            <input
-              id="profilePhoto"
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className={styles.hiddenInput}
-            />
-          </div>
+              <span
+                onClick={() => setIsVisible(!isVisible)}
+                className={styles.icon}
+              >
+                {isVisible ? <IoEyeOff /> : <IoEye />}
+              </span>
+            </div>
+            {errors.doctor.password && (
+              <span className={styles.errorText}>{errors.doctor.password}</span>
+            )}
 
-          <div className={styles.namesInput}>
+            <div className={styles.pass}>
+              <input
+                className={`${styles.inputRegister} ${
+                  errors.doctor.confirmPassword ? styles.inputError : ""
+                }`}
+                name="confirmPassword"
+                placeholder="Confirmar senha"
+                type={isVisible2 ? "text" : "password"}
+                value={doctorFormData.confirmPassword}
+                onChange={handleDoctorChange}
+                required
+              />
+              <span
+                onClick={() => setIsVisible2(!isVisible2)}
+                className={styles.icon}
+              >
+                {isVisible2 ? <IoEyeOff /> : <IoEye />}
+              </span>
+            </div>
+            {errors.doctor.confirmPassword && (
+              <span className={styles.errorText}>
+                {errors.doctor.confirmPassword}
+              </span>
+            )}
+
+            <button className={styles.registerBtn} onClick={handleRegister}>
+              Registrar como Médico
+            </button>
+            <p className={styles.pBack} onClick={() => setAccountType("")}>
+              Voltar para seleção
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className={styles.title}>Cadastro de Usuário</h1>
+
+            <div className={styles.profilePhotoWrapper}>
+              <label
+                htmlFor="profilePhoto"
+                className={styles.profilePhotoLabel}
+              >
+                <img
+                  src={photoPreview || defaultProfileIcon}
+                  alt="Preview"
+                  className={styles.profilePhoto}
+                />
+              </label>
+              <input
+                id="profilePhoto"
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className={styles.hiddenInput}
+              />
+            </div>
+
+            <div className={styles.namesInput}>
+              <input
+                className={styles.inputRegister}
+                name="firstName"
+                placeholder="Nome"
+                type="text"
+                value={userFormData.firstName}
+                onChange={handleUserChange}
+                required
+              />
+              <input
+                className={styles.inputRegister}
+                name="lastName"
+                placeholder="Sobrenome"
+                type="text"
+                value={userFormData.lastName}
+                onChange={handleUserChange}
+                required
+              />
+            </div>
+
             <input
               className={styles.inputRegister}
-              name="firstName"
-              placeholder="Nome"
-              type="text"
-              value={userFormData.firstName}
-              onChange={handleUserChange}
-              required
-            />
-            <input
-              className={styles.inputRegister}
-              name="lastName"
-              placeholder="Sobrenome"
-              type="text"
-              value={userFormData.lastName}
-              onChange={handleUserChange}
-              required
-            />
-          </div>
-
-          <input
-            className={styles.inputRegister}
-            name="birthDate"
-            placeholder="Data de nascimento"
-            type="date"
-            value={userFormData.birthDate}
-            onChange={handleUserChange}
-            required
-          />
-
-          <select
-            className={styles.inputRegister}
-            name="gender"
-            value={userFormData.gender}
-            onChange={handleUserChange}
-            required
-          >
-            <option value="" hidden>
-              Selecione o gênero
-            </option>
-            <option value="male">Masculino</option>
-            <option value="female">Feminino</option>
-            <option value="other">Outro</option>
-          </select>
-
-          <div className={styles.healthData}>
-            <input
-              className={styles.inputRegister}
-              name="weight"
-              placeholder="Peso (kg)"
-              type="number"
-              value={userFormData.weight}
+              name="birthDate"
+              placeholder="Data de nascimento"
+              type="date"
+              value={userFormData.birthDate}
               onChange={handleUserChange}
               required
             />
 
             <select
               className={styles.inputRegister}
-              name="bloodType"
-              value={userFormData.bloodType}
+              name="gender"
+              value={userFormData.gender}
               onChange={handleUserChange}
               required
             >
               <option value="" hidden>
-                Tipo sanguíneo
+                Selecione o gênero
               </option>
-              {bloodTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
+              <option value="male">Masculino</option>
+              <option value="female">Feminino</option>
+              <option value="other">Outro</option>
             </select>
-          </div>
 
-          <input
-            className={styles.inputRegister}
-            name="email"
-            placeholder="Email"
-            type="email"
-            value={userFormData.email}
-            onChange={handleUserChange}
-            required
-          />
+            <div className={styles.healthData}>
+              <input
+                className={styles.inputRegister}
+                name="weight"
+                placeholder="Peso (kg)"
+                type="number"
+                value={userFormData.weight}
+                onChange={handleUserChange}
+                required
+              />
 
-          <input
-            className={styles.inputRegister}
-            name="phone"
-            placeholder="Celular"
-            type="tel"
-            value={userFormData.phone}
-            onChange={handleUserChange}
-            required
-          />
+              <select
+                className={styles.inputRegister}
+                name="bloodType"
+                value={userFormData.bloodType}
+                onChange={handleUserChange}
+                required
+              >
+                <option value="" hidden>
+                  Tipo sanguíneo
+                </option>
+                {bloodTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <input
-            className={styles.inputRegister}
-            name="location"
-            placeholder="Localização"
-            type="text"
-            value={userFormData.location}
-            onChange={handleUserChange}
-            required
-          />
-
-          <div className={styles.pass}>
             <input
               className={styles.inputRegister}
-              name="password"
-              placeholder="Senha"
-              type={isVisible ? "text" : "password"}
-              value={userFormData.password}
+              name="email"
+              placeholder="Email"
+              type="email"
+              value={userFormData.email}
               onChange={handleUserChange}
               required
             />
-            <span onClick={() => setIsVisible(!isVisible)} className={styles.icon}>
-              {isVisible ? <IoEyeOff /> : <IoEye />}
-            </span>
-          </div>
 
-          <div className={styles.pass}>
             <input
-              className={styles.inputRegister}
-              name="confirmPassword"
-              placeholder="Confirmar senha"
-              type={isVisible2 ? "text" : "password"}
-              value={userFormData.confirmPassword}
+              className={`${styles.inputRegister} ${
+                errors.user.phone ? styles.inputError : ""
+              }`}
+              name="phone"
+              placeholder="celular"
+              type="tel"
+              value={userFormData.phone}
               onChange={handleUserChange}
               required
             />
-            <span
-              onClick={() => setIsVisible2(!isVisible2)}
-              className={styles.icon}
-            >
-              {isVisible2 ? <IoEyeOff /> : <IoEye />}
-            </span>
-          </div>
+            {errors.user.phone && (
+              <span className={styles.errorText}>{errors.user.phone}</span>
+            )}
 
-          <button className={styles.registerBtn} onClick={handleRegister}>
-            Registrar como Usuário
-          </button>
-          <p className={styles.pBack} onClick={() => setAccountType("")}>
-            Voltar para seleção
-          </p>
-        </>
-      )}
+            <input
+              className={styles.inputRegister}
+              name="location"
+              placeholder="Localização"
+              type="text"
+              value={userFormData.location}
+              onChange={handleUserChange}
+              required
+            />
+
+            <div className={styles.pass}>
+              <input
+                className={`${styles.inputRegister} ${
+                  errors.user.password ? styles.inputError : ""
+                }`}
+                name="password"
+                placeholder="Senha"
+                type={isVisible ? "text" : "password"}
+                value={userFormData.password}
+                onChange={handleUserChange}
+                required
+              />
+              <span
+                onClick={() => setIsVisible(!isVisible)}
+                className={styles.icon}
+              >
+                {isVisible ? <IoEyeOff /> : <IoEye />}
+              </span>
+            </div>
+            {errors.user.password && (
+              <span className={styles.errorText}>{errors.user.password}</span>
+            )}
+
+            <div className={styles.pass}>
+              <input
+                className={`${styles.inputRegister} ${
+                  errors.user.confirmPassword ? styles.inputError : ""
+                }`}
+                name="confirmPassword"
+                placeholder="Confirmar senha"
+                type={isVisible2 ? "text" : "password"}
+                value={userFormData.confirmPassword}
+                onChange={handleUserChange}
+                required
+              />
+              <span
+                onClick={() => setIsVisible2(!isVisible2)}
+                className={styles.icon}
+              >
+                {isVisible2 ? <IoEyeOff /> : <IoEye />}
+              </span>
+            </div>
+            {errors.user.confirmPassword && (
+              <span className={styles.errorText}>
+                {errors.user.confirmPassword}
+              </span>
+            )}
+
+            <button className={styles.registerBtn} onClick={handleRegister}>
+              Registrar como Usuário
+            </button>
+            <p className={styles.pBack} onClick={() => setAccountType("")}>
+              Voltar para seleção
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 };
