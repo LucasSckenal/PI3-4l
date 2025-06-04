@@ -353,7 +353,7 @@
 // Contact Section
 .contactInfo {
   background: var(--DetailsBg);
-  padding: 1.5rem;
+  padding: 0.5rem;
   border-radius: var(--BorderRadius);
   box-shadow: var(--BoxShadow);
   
@@ -548,4 +548,76 @@
       color: var(--Decline);
     }
   }
+}
+
+.aboutSection {
+  position: relative;
+  padding: 1rem;
+  background-color: #2c2c2c;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+
+  &:hover .editAboutButton {
+    visibility: visible;
+  }
+}
+
+.editAboutButton {
+  visibility: hidden;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.editAboutContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.editAboutTextarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #555;
+  background-color: #1e1e1e;
+  color: #fff;
+  resize: vertical;
+}
+
+.editAboutActions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.saveAboutButton,
+.cancelAboutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.saveAboutButton {
+  background-color: var(--PreferredColor);
+  color: var(--White);
+}
+
+.cancelAboutButton {
+  border: 1px solid var(--White);
+  color: var(--White);
+}
+
+.aboutText {
+  white-space: pre-wrap;
+  color: var(--White);
 }

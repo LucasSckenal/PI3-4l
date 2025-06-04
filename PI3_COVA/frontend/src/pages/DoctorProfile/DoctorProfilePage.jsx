@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import defaultProfileIcon from "../../public/UserDefault.webp";
 import { useTranslation } from "react-i18next";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaSave, FaTimes } from "react-icons/fa";
 import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";
 import styles from "./styles.module.scss";
 
@@ -17,15 +17,14 @@ import {
 const DoctorProfilePage = () => {
   const { userData, loading } = useAccount();
   const { t } = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // --- Estados para os dados básicos do Usuário ---
+  // ─── Estados para os dados básicos do Usuário ─────────────────────────────
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  // --- Estados para “Sobre o Médico” ---
+  // ─── Estados para “Sobre o Médico” ────────────────────────────────────────
   const [title, setTitle] = useState("");
   const [specialties, setSpecialties] = useState([]);
   const [hospital, setHospital] = useState("");
@@ -34,10 +33,17 @@ const DoctorProfilePage = () => {
   const [procedures, setProcedures] = useState([]);
   const [experiences, setExperiences] = useState([]);
 
-  // OBS.: usamos agora o UID do usuário autenticado como chave para Firestore
+  // ─── Estado para controlar se o usuário está editando o campo “Sobre” ─────
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
+  // ─── Estado para exibir o botão de edição somente em hover ───────────────
+  const [isAboutHover, setIsAboutHover] = useState(false);
+  // ─── Armazena temporariamente o texto editado até salvar ─────────────────
+  const [draftAbout, setDraftAbout] = useState("");
+
+  // ─── userID com base no UID do usuário autenticado ─────────────────────────
   const userID = userData?.uid;
 
-  // Função para obter a URL da imagem (se houver)
+  // ─── Função para obter a URL da imagem (se houver) ────────────────────────
   const getProfileImageSource = () => {
     if (!userData.photo) return defaultProfileIcon;
     if (
@@ -48,9 +54,7 @@ const DoctorProfilePage = () => {
     return defaultProfileIcon;
   };
 
-  // Ao montar o componente (ou quando userData for carregado), busca do Firestore:
-  // 1. Dados básicos (nome, location, phone, email) em Users/{userID}
-  // 2. Dados de “About” em Users/{userID}/About/Info
+  // ─── Carregar dados do Firestore assim que o userID estiver disponível ─────
   useEffect(() => {
     if (!userID) return;
 
@@ -64,7 +68,7 @@ const DoctorProfilePage = () => {
           setPhone(basic.phone || "");
           setEmail(basic.email || "");
         } else {
-          // Se não existir ainda no Firestore, inicializa com dados vindos do context (se houver)
+          // Se documento ainda não existe, pegamos valores vindos do context (se houver)
           setName(userData.name || "");
           setLocation(userData.location || "");
           setPhone(userData.phone || "");
@@ -88,6 +92,7 @@ const DoctorProfilePage = () => {
           setProcedures(about.procedures || []);
           setExperiences(about.experiences || []);
         } else {
+          // Inicializa vazios se não existir
           setTitle("");
           setSpecialties([]);
           setHospital("");
@@ -105,14 +110,14 @@ const DoctorProfilePage = () => {
     loadDoctorAbout();
   }, [userID, userData]);
 
-  // Abre e fecha o modal de edição de perfil
+  // ─── Abre e fecha o modal de edição de perfil geral (não incluí “About” aqui) ──
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleEditProfile = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // === Funções de sincronização no Firestore ===
+  // ─── Funções de persistência no Firestore ──────────────────────────────────
 
-  // 1) Sempre que o médico alterar dados básicos (nome, location, phone, email),
-  // chamamos esta função para salvar em "Users/{userID}"
+  // 1) Atualiza campos básicos em Users/{userID}
   const persistBasicInfo = async (novoName, novoLocation, novoPhone, novoEmail) => {
     if (!userID) return;
     const basicData = {
@@ -128,8 +133,7 @@ const DoctorProfilePage = () => {
     }
   };
 
-  // 2) Sempre que o médico alterar QUALQUER campo de “Sobre o Médico”,
-  // chamamos esta função para salvar em "Users/{userID}/About/Info"
+  // 2) Atualiza TODO o “About” (incluindo aboutText) em Users/{userID}/About/Info
   const persistDoctorAbout = async (
     novoTitle,
     novoSpecialties,
@@ -156,13 +160,10 @@ const DoctorProfilePage = () => {
     }
   };
 
-  // === Handlers de ExperienceSection ===
-
-  // Ao adicionar uma nova experiência:
+  // ─── Handlers de ExperienceSection (sem alteração) ────────────────────────
   const handleAddExperience = (newExperience) => {
     const updated = [...experiences, newExperience];
     setExperiences(updated);
-    // Persiste já no Firestore
     persistDoctorAbout(
       title,
       specialties,
@@ -174,12 +175,10 @@ const DoctorProfilePage = () => {
     );
   };
 
-  // Ao editar uma experiência (recebemos índice e objeto atualizado):
   const handleEditExperience = (index, updatedExperience) => {
     const updatedArr = [...experiences];
     updatedArr[index] = updatedExperience;
     setExperiences(updatedArr);
-    // Persiste no Firestore
     persistDoctorAbout(
       title,
       specialties,
@@ -191,11 +190,9 @@ const DoctorProfilePage = () => {
     );
   };
 
-  // Ao deletar uma experiência:
   const handleDeleteExperience = (index) => {
     const updatedArr = experiences.filter((_, i) => i !== index);
     setExperiences(updatedArr);
-    // Persiste no Firestore
     persistDoctorAbout(
       title,
       specialties,
@@ -207,15 +204,13 @@ const DoctorProfilePage = () => {
     );
   };
 
-  // === Handlers para edição geral de “Sobre o Médico” (no modal) ===
+  // ─── Salvar todas as informações quando fechar modal geral (exceto “About”) ──
   const handleSaveAllDoctorInfo = () => {
-    // 1) Persistimos basic info (name, location, phone, email)
+    // 1) Persistir campos básicos
     persistBasicInfo(name, location, phone, email);
-
-    // 2) Persistimos “Sobre”:
+    // 2) Persistir TODO o “About” (title, specialties, hospital, crm, aboutText, procedures, experiences)
     persistDoctorAbout(title, specialties, hospital, crm, aboutText, procedures, experiences);
-
-    // 3) Fechamos o modal
+    // 3) Fechar modal
     setIsModalOpen(false);
   };
 
@@ -225,6 +220,7 @@ const DoctorProfilePage = () => {
 
   return (
     <div className={styles.neurologistProfile}>
+      {/* ─── HEADER ──────────────────────────────────────────────────────────────── */}
       <header className={styles.profileHeader}>
         <div className={styles.profileImage}>
           <img
@@ -263,17 +259,94 @@ const DoctorProfilePage = () => {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* ─── MAIN CONTENT ───────────────────────────────────────────────────────── */}
       <main className={styles.profileContent}>
-        <section className={styles.aboutSection}>
+        {/* ─── SEÇÃO “SOBRE” ─────────────────────────────────────────────────────── */}
+        <section
+          className={styles.aboutSection}
+          onMouseEnter={() => setIsAboutHover(true)}
+          onMouseLeave={() => setIsAboutHover(false)}
+          style={{ position: "relative" }}
+        >
           <h3 className={styles.sectionTitle} style={{ color: "#ffffff" }}>
             <i className={`fas fa-user-md ${styles.icon}`}></i> {t("profile.about")}
           </h3>
-          <p>{aboutText}</p>
+
+          {/* ─── BOTÃO DE EDIÇÃO QUE APARECE AO PASSAR O MOUSE ─────────────────────── */}
+          {isAboutHover && !isEditingAbout && (
+            <button
+              className={styles.editAboutButton}
+              onClick={() => {
+                setDraftAbout(aboutText);
+                setIsEditingAbout(true);
+              }}
+              style={{
+                position: "absolute",
+                top: "8px",
+                right: "8px",
+                background: "transparent",
+                border: "none",
+                color: "#ffffff",
+                cursor: "pointer",
+                fontSize: "1.1rem",
+              }}
+            >
+              <FaRegEdit />
+            </button>
+          )}
+
+          {/* ─── SE ESTÁ EDITANDO, MOSTRAMOS UMA TEXTAREA E BOTÕES “Salvar”/“Cancelar” ─ */}
+          {isEditingAbout ? (
+            <div className={styles.editAboutContainer}>
+              <textarea
+                className={styles.editAboutTextarea}
+                value={draftAbout}
+                onChange={(e) => setDraftAbout(e.target.value)}
+                rows={4}
+              />
+
+              <div className={styles.editAboutActions}>
+                <button
+                  className={styles.saveAboutButton}
+                  onClick={() => {
+                    // Salva no Firestore
+                    const novoAbout = draftAbout.trim();
+                    setAboutText(novoAbout);
+                    persistDoctorAbout(
+                      title,
+                      specialties,
+                      hospital,
+                      crm,
+                      novoAbout,
+                      procedures,
+                      experiences
+                    );
+                    setIsEditingAbout(false);
+                  }}
+                >
+                  <FaSave /> {t("profile.save")}
+                </button>
+
+                <button
+                  className={styles.cancelAboutButton}
+                  onClick={() => {
+                    // Cancela a edição, sem persistir
+                    setDraftAbout(aboutText);
+                    setIsEditingAbout(false);
+                  }}
+                >
+                  <FaTimes /> {t("profile.cancel")}
+                </button>
+              </div>
+            </div>
+          ) : (
+            // ─── SE NÃO ESTÁ EDITANDO, MOSTRA O PARÁGRAFO NORMAL ───────────────────
+            <p className={styles.aboutText}>{aboutText}</p>
+          )}
         </section>
 
         <div className={styles.contentColumns}>
-          {/* Coluna Esquerda */}
+          {/* ─── Coluna Esquerda: EXPERIÊNCIAS ──────────────────────────────────────── */}
           <div className={styles.columnLeft}>
             <ExperienceSection
               experiences={experiences}
@@ -283,8 +356,9 @@ const DoctorProfilePage = () => {
             />
           </div>
 
-          {/* Coluna Direita */}
+          {/* ─── Coluna Direita: PROCEDIMENTOS E CONTATO ───────────────────────────── */}
           <div className={styles.columnRight}>
+            {/* ─── PROCEDURES (pode ignorar por ora) ──────────────────────────────── */}
             <section className={styles.proceduresSection}>
               <h3 className={styles.sectionTitle}>
                 <i className={`fas fa-procedures ${styles.icon}`}></i>{" "}
@@ -300,6 +374,7 @@ const DoctorProfilePage = () => {
               </ul>
             </section>
 
+            {/* ─── CONTATO (telefone, email, emergência) ────────────────────────────── */}
             <section className={styles.contactSection}>
               <h3 className={styles.sectionTitle}>
                 <i className={`fas fa-address-card ${styles.icon}`}></i>{" "}
@@ -335,9 +410,7 @@ const DoctorProfilePage = () => {
         </div>
       </main>
 
-      {/* ==============================
-           Modal de Edição de Perfil
-           ================================= */}
+      {/* ─── MODAL DE EDIÇÃO GERAL (não inclui “About”) ─────────────────────────── */}
       {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
@@ -377,40 +450,7 @@ const DoctorProfilePage = () => {
               />
             </div>
 
-            {/* FORMULÁRIO “SOBRE O MÉDICO”: */}
-            <div className={styles.formGroup}>
-              <label>{t("profile.title")}</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label>{t("profile.specialties")}</label>
-              <input
-                type="text"
-                placeholder={t("profile.specialtiesPlaceholder")}
-                value={specialties.join(", ")}
-                onChange={(e) =>
-                  setSpecialties(
-                    e.target.value
-                      .split(",")
-                      .map((s) => s.trim())
-                      .filter((s) => s.length > 0)
-                  )
-                }
-              />
-              <small>{t("profile.specialtiesHint")}</small>
-            </div>
-            <div className={styles.formGroup}>
-              <label>{t("profile.hospital")}</label>
-              <input
-                type="text"
-                value={hospital}
-                onChange={(e) => setHospital(e.target.value)}
-              />
-            </div>
+            {/* CAMPOS ADICIONAIS COMO “número de emergência”, “CRM” ETC. */}
             <div className={styles.formGroup}>
               <label>{t("profile.crm")}</label>
               <input
@@ -419,30 +459,8 @@ const DoctorProfilePage = () => {
                 onChange={(e) => setCrm(e.target.value)}
               />
             </div>
-            <div className={styles.formGroup}>
-              <label>{t("profile.about")}</label>
-              <textarea
-                value={aboutText}
-                onChange={(e) => setAboutText(e.target.value)}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label>{t("profile.procedures")}</label>
-              <input
-                type="text"
-                placeholder={t("profile.proceduresPlaceholder")}
-                value={procedures.join(", ")}
-                onChange={(e) =>
-                  setProcedures(
-                    e.target.value
-                      .split(",")
-                      .map((p) => p.trim())
-                      .filter((p) => p.length > 0)
-                  )
-                }
-              />
-              <small>{t("profile.proceduresHint")}</small>
-            </div>
+
+            {/* ...adicione aqui qualquer outro campo que queira editar no modal geral... */}
 
             <div className={styles.modalActions}>
               <button
