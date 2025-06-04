@@ -1,7 +1,15 @@
+// firebase.jsx
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; // Importando os métodos necessários do Firestore
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  collection,
+} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -21,15 +29,125 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-const updateUserProfile = async (userData) => {
+/**
+ * Salva ou atualiza os campos básicos (nome, location, phone, email)
+ * no documento Users/{userID}.
+ *
+ * @param {string} userID             — geralmente o email ou UID do usuário
+ * @param {{ name: string, location: string, phone: string, email: string }} basicData
+ */
+const saveUserBasicInfo = async (userID, basicData) => {
   try {
-    const userRef = doc(db, "Users", userData.email); // Usando o email como ID
-    await setDoc(userRef, userData, { merge: true }); // Atualizando os dados no Firestore
-    console.log("Perfil atualizado com sucesso!");
+    const userRef = doc(db, "Users", userID);
+    await setDoc(userRef, basicData, { merge: true });
+    console.log("✅ User basic info atualizado em Users/" + userID);
   } catch (error) {
-    console.error("Erro ao atualizar perfil:", error);
+    console.error("❌ Erro ao salvar User basic info:", error);
     throw error;
   }
 };
 
-export { app, analytics, auth, db, storage, updateUserProfile }; // Exportando a função junto com as instâncias
+/**
+ * Salva ou atualiza TODOS os campos “Sobre o Médico” no documento
+ * Users/{userID}/About/Info.
+ *
+ * A estrutura do objeto aboutData deve ser:
+ * {
+ *   title: string,
+ *   specialties: array[string],
+ *   hospital: string,
+ *   crm: string,
+ *   about: string,
+ *   procedures: array[string],
+ *   experiences: array[ { position, institution, period, description } ]
+ * }
+ *
+ * @param {string} userID
+ * @param {{
+ *   title: string,
+ *   specialties: string[],
+ *   hospital: string,
+ *   crm: string,
+ *   about: string,
+ *   procedures: string[],
+ *   experiences: Array<{ position: string, institution: string, period: string, description: string }>
+ * }} aboutData
+ */
+const saveDoctorAbout = async (userID, aboutData) => {
+  try {
+    // Cria (ou atualiza) o documento “Info” dentro da subcoleção “About”
+    const aboutRef = doc(db, "Users", userID, "About", "Info");
+    await setDoc(aboutRef, aboutData, { merge: true });
+    console.log("✅ Doctor About salvo em Users/" + userID + "/About/Info");
+  } catch (error) {
+    console.error("❌ Erro ao salvar Doctor About:", error);
+    throw error;
+  }
+};
+
+/**
+ * Busca os dados básicos do usuário (nome, location, phone, email)
+ * no documento Users/{userID}. Retorna null se não existir.
+ *
+ * @param {string} userID
+ * @returns {Promise<{ name: string, location: string, phone: string, email: string } | null>}
+ */
+const fetchUserBasicInfo = async (userID) => {
+  try {
+    const userRef = doc(db, "Users", userID);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      return snap.data();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("❌ Erro ao buscar User basic info:", error);
+    throw error;
+  }
+};
+
+/**
+ * Busca o documento Users/{userID}/About/Info e retorna um objeto com:
+ * {
+ *   title, specialties, hospital, crm, about, procedures, experiences
+ * }
+ * Ou null se não existir.
+ *
+ * @param {string} userID
+ * @returns {Promise<{
+ *   title: string,
+ *   specialties: string[],
+ *   hospital: string,
+ *   crm: string,
+ *   about: string,
+ *   procedures: string[],
+ *   experiences: Array<{ position, institution, period, description }>
+ * } | null>}
+ */
+const fetchDoctorAbout = async (userID) => {
+  try {
+    const aboutRef = doc(db, "Users", userID, "About", "Info");
+    const snap = await getDoc(aboutRef);
+    if (snap.exists()) {
+      return snap.data();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("❌ Erro ao buscar Doctor About:", error);
+    throw error;
+  }
+};
+
+export {
+  app,
+  analytics,
+  auth,
+  db,
+  storage,
+  saveUserBasicInfo,
+  saveDoctorAbout,
+  fetchUserBasicInfo,
+  fetchDoctorAbout,
+};

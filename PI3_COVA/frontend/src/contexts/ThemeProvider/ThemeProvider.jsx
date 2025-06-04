@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useRef } from "react";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
@@ -58,6 +59,7 @@ export const ThemeProvider = ({ children }) => {
     };
 
     loadPreferences();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
@@ -101,6 +103,7 @@ export const ThemeProvider = ({ children }) => {
     };
 
     savePreferences();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDarkMode, preferredColor, preferredLanguage, user]);
 
   const toggleTheme = () => setIsDarkMode((prev) => !prev);

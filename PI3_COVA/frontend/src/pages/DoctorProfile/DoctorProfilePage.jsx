@@ -1,33 +1,43 @@
+// DoctorProfilePage.jsx
 import { useState, useEffect } from "react";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import defaultProfileIcon from "../../public/UserDefault.webp";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit } from "react-icons/fa";
 import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
+
+import {
+  saveUserBasicInfo,
+  saveDoctorAbout,
+  fetchUserBasicInfo,
+  fetchDoctorAbout,
+} from "../../api/firebase"; // Ajuste o path conforme sua estrutura
 
 const DoctorProfilePage = () => {
   const { userData, loading } = useAccount();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
-  const [experiences, setExperiences] = useState([
-    {
-      position: "Coordenador do Ambulatório de Cefaleias",
-      institution: "Instituto de Neurologia Avançada",
-      period: "2019 - Presente",
-      description: "Liderança da equipe multidisciplinar especializada no tratamento de cefaleias primárias e secundárias."
-    },
-    {
-      position: "Neurologista Clínico",
-      institution: "Hospital Israelita Albert Einstein",
-      period: "2014 - 2019",
-      description: "Atendimento em emergência neurológica e ambulatório especializado em cefaleias."
-    }
-  ]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleEditProfile = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  // --- Estados para os dados básicos do Usuário ---
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
+  // --- Estados para “Sobre o Médico” ---
+  const [title, setTitle] = useState("");
+  const [specialties, setSpecialties] = useState([]);
+  const [hospital, setHospital] = useState("");
+  const [crm, setCrm] = useState("");
+  const [aboutText, setAboutText] = useState("");
+  const [procedures, setProcedures] = useState([]);
+  const [experiences, setExperiences] = useState([]);
+
+  // OBS.: usamos agora o UID do usuário autenticado como chave para Firestore
+  const userID = userData?.uid;
+
+  // Função para obter a URL da imagem (se houver)
   const getProfileImageSource = () => {
     if (!userData.photo) return defaultProfileIcon;
     if (
@@ -38,41 +48,180 @@ const DoctorProfilePage = () => {
     return defaultProfileIcon;
   };
 
+  // Ao montar o componente (ou quando userData for carregado), busca do Firestore:
+  // 1. Dados básicos (nome, location, phone, email) em Users/{userID}
+  // 2. Dados de “About” em Users/{userID}/About/Info
+  useEffect(() => {
+    if (!userID) return;
+
+    // 1) Busca dados básicos
+    const loadBasicInfo = async () => {
+      try {
+        const basic = await fetchUserBasicInfo(userID);
+        if (basic) {
+          setName(basic.name || "");
+          setLocation(basic.location || "");
+          setPhone(basic.phone || "");
+          setEmail(basic.email || "");
+        } else {
+          // Se não existir ainda no Firestore, inicializa com dados vindos do context (se houver)
+          setName(userData.name || "");
+          setLocation(userData.location || "");
+          setPhone(userData.phone || "");
+          setEmail(userData.email || "");
+        }
+      } catch (error) {
+        console.error("Erro ao carregar basic info:", error);
+      }
+    };
+
+    // 2) Busca dados de “About”
+    const loadDoctorAbout = async () => {
+      try {
+        const about = await fetchDoctorAbout(userID);
+        if (about) {
+          setTitle(about.title || "");
+          setSpecialties(about.specialties || []);
+          setHospital(about.hospital || "");
+          setCrm(about.crm || "");
+          setAboutText(about.about || "");
+          setProcedures(about.procedures || []);
+          setExperiences(about.experiences || []);
+        } else {
+          setTitle("");
+          setSpecialties([]);
+          setHospital("");
+          setCrm("");
+          setAboutText("");
+          setProcedures([]);
+          setExperiences([]);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar Doctor About:", error);
+      }
+    };
+
+    loadBasicInfo();
+    loadDoctorAbout();
+  }, [userID, userData]);
+
+  // Abre e fecha o modal de edição de perfil
+  const handleEditProfile = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  // === Funções de sincronização no Firestore ===
+
+  // 1) Sempre que o médico alterar dados básicos (nome, location, phone, email),
+  // chamamos esta função para salvar em "Users/{userID}"
+  const persistBasicInfo = async (novoName, novoLocation, novoPhone, novoEmail) => {
+    if (!userID) return;
+    const basicData = {
+      name: novoName,
+      location: novoLocation,
+      phone: novoPhone,
+      email: novoEmail,
+    };
+    try {
+      await saveUserBasicInfo(userID, basicData);
+    } catch (err) {
+      console.error("Erro ao persistir basic info:", err);
+    }
+  };
+
+  // 2) Sempre que o médico alterar QUALQUER campo de “Sobre o Médico”,
+  // chamamos esta função para salvar em "Users/{userID}/About/Info"
+  const persistDoctorAbout = async (
+    novoTitle,
+    novoSpecialties,
+    novoHospital,
+    novoCrm,
+    novoAboutText,
+    novoProcedures,
+    novoExperiences
+  ) => {
+    if (!userID) return;
+    const aboutData = {
+      title: novoTitle,
+      specialties: novoSpecialties,
+      hospital: novoHospital,
+      crm: novoCrm,
+      about: novoAboutText,
+      procedures: novoProcedures,
+      experiences: novoExperiences,
+    };
+    try {
+      await saveDoctorAbout(userID, aboutData);
+    } catch (err) {
+      console.error("Erro ao persistir Doctor About:", err);
+    }
+  };
+
+  // === Handlers de ExperienceSection ===
+
+  // Ao adicionar uma nova experiência:
   const handleAddExperience = (newExperience) => {
-    setExperiences([...experiences, newExperience]);
+    const updated = [...experiences, newExperience];
+    setExperiences(updated);
+    // Persiste já no Firestore
+    persistDoctorAbout(
+      title,
+      specialties,
+      hospital,
+      crm,
+      aboutText,
+      procedures,
+      updated
+    );
   };
 
+  // Ao editar uma experiência (recebemos índice e objeto atualizado):
   const handleEditExperience = (index, updatedExperience) => {
-    const updatedExperiences = [...experiences];
-    updatedExperiences[index] = updatedExperience;
-    setExperiences(updatedExperiences);
+    const updatedArr = [...experiences];
+    updatedArr[index] = updatedExperience;
+    setExperiences(updatedArr);
+    // Persiste no Firestore
+    persistDoctorAbout(
+      title,
+      specialties,
+      hospital,
+      crm,
+      aboutText,
+      procedures,
+      updatedArr
+    );
   };
 
+  // Ao deletar uma experiência:
   const handleDeleteExperience = (index) => {
-    const updatedExperiences = experiences.filter((_, i) => i !== index);
-    setExperiences(updatedExperiences);
+    const updatedArr = experiences.filter((_, i) => i !== index);
+    setExperiences(updatedArr);
+    // Persiste no Firestore
+    persistDoctorAbout(
+      title,
+      specialties,
+      hospital,
+      crm,
+      aboutText,
+      procedures,
+      updatedArr
+    );
   };
 
-  const doctor = {
-    title: "Neurologista Especialista em Cefaleias",
-    specialties: [
-      "Enxaqueca (CID-10 G43)",
-      "Cefaleias Tensionais (CID-10 G44.2)",
-      "Cefaleias em Salvas (CID-10 G44.0)",
-      "Neuralgia do Trigêmeo (CID-10 G44.847)",
-      "Cefaleias Crônicas Diárias"
-    ],
-    hospital: "Instituto de Neurologia Avançada",
-    crm: "CRM-SP 45.678",
-    about: "Especialista em diagnóstico e tratamento de cefaleias e enxaquecas com mais de 15 anos de experiência. Membro da Sociedade Brasileira de Cefaleia e da International Headache Society. Atua com abordagem multidisciplinar incluindo tratamentos medicamentosos, toxina botulínica e orientação comportamental.",
-    procedures: [
-      "Aplicação de Toxina Botulínica para Enxaqueca Crônica",
-      "Bloqueios Anestésicos para Cefaleias",
-      "Infusões Intravenosas para Crises Agudas",
-      "Terapia de Estimulação Magnética Transcraniana",
-      "Orientações sobre Gatilhos e Prevenção"
-    ]
+  // === Handlers para edição geral de “Sobre o Médico” (no modal) ===
+  const handleSaveAllDoctorInfo = () => {
+    // 1) Persistimos basic info (name, location, phone, email)
+    persistBasicInfo(name, location, phone, email);
+
+    // 2) Persistimos “Sobre”:
+    persistDoctorAbout(title, specialties, hospital, crm, aboutText, procedures, experiences);
+
+    // 3) Fechamos o modal
+    setIsModalOpen(false);
   };
+
+  if (loading) {
+    return <p>{t("profile.loading")}...</p>;
+  }
 
   return (
     <div className={styles.neurologistProfile}>
@@ -91,21 +240,21 @@ const DoctorProfilePage = () => {
 
         <div className={styles.headerInfo}>
           <div className={styles.titleContainer}>
-            <h1>{userData.name}</h1>
-            <div className={styles.crmBadge}>{doctor.crm}</div>
+            <h1>{name}</h1>
+            <div className={styles.crmBadge}>{crm}</div>
           </div>
 
-          <h2>{doctor.title}</h2>
+          <h2>{title}</h2>
 
           <div className={styles.hospitalInfo}>
             <div>
-              <p className={styles.hospitalName}>{doctor.hospital}</p>
-              <p className={styles.hospitalLocation}>{userData?.location}</p>
+              <p className={styles.hospitalName}>{hospital}</p>
+              <p className={styles.hospitalLocation}>{location}</p>
             </div>
           </div>
 
           <div className={styles.specialtiesTags}>
-            {doctor.specialties.map((specialty, index) => (
+            {specialties.map((specialty, index) => (
               <span key={index} className={styles.specialtyTag}>
                 {specialty}
               </span>
@@ -118,14 +267,13 @@ const DoctorProfilePage = () => {
       <main className={styles.profileContent}>
         <section className={styles.aboutSection}>
           <h3 className={styles.sectionTitle} style={{ color: "#ffffff" }}>
-            <i className={`fas fa-user-md ${styles.icon}`}></i>{" "}
-            {t("profile.about")}
+            <i className={`fas fa-user-md ${styles.icon}`}></i> {t("profile.about")}
           </h3>
-          <p>{doctor.about}</p>
+          <p>{aboutText}</p>
         </section>
 
         <div className={styles.contentColumns}>
-          {/* Left Column */}
+          {/* Coluna Esquerda */}
           <div className={styles.columnLeft}>
             <ExperienceSection
               experiences={experiences}
@@ -135,7 +283,7 @@ const DoctorProfilePage = () => {
             />
           </div>
 
-          {/* Right Column (mantido igual) */}
+          {/* Coluna Direita */}
           <div className={styles.columnRight}>
             <section className={styles.proceduresSection}>
               <h3 className={styles.sectionTitle}>
@@ -143,7 +291,7 @@ const DoctorProfilePage = () => {
                 {t("profile.procedures")}
               </h3>
               <ul className={styles.proceduresList}>
-                {doctor.procedures.map((procedure, index) => (
+                {procedures.map((procedure, index) => (
                   <li key={index}>
                     <i className={`fas fa-check-circle ${styles.icon}`}></i>{" "}
                     {procedure}
@@ -162,7 +310,7 @@ const DoctorProfilePage = () => {
                   <i className={`fas fa-phone ${styles.icon}`}></i>
                   <div>
                     <p>{t("profile.tell")}</p>
-                    <a href={`tel:${userData?.phone}`}>{userData?.phone}</a>
+                    <a href={`tel:${phone}`}>{phone}</a>
                   </div>
                 </div>
 
@@ -170,17 +318,15 @@ const DoctorProfilePage = () => {
                   <i className={`fas fa-envelope ${styles.icon}`}></i>
                   <div>
                     <p>{t("profile.emailP")}</p>
-                    <a href={`mailto:${userData?.email}`}>{userData?.email}</a>
+                    <a href={`mailto:${email}`}>{email}</a>
                   </div>
                 </div>
 
                 <div className={`${styles.contactItem} ${styles.emergency}`}>
-                  <i
-                    className={`fas fa-exclamation-triangle ${styles.icon}`}
-                  ></i>
+                  <i className={`fas fa-exclamation-triangle ${styles.icon}`}></i>
                   <div>
                     <p>{t("profile.emergencies")}</p>
-                    <a href={`tel:${userData?.phone}`}>{userData?.phone}</a>
+                    <a href={`tel:${phone}`}>{phone}</a>
                   </div>
                 </div>
               </div>
@@ -188,6 +334,133 @@ const DoctorProfilePage = () => {
           </div>
         </div>
       </main>
+
+      {/* ==============================
+           Modal de Edição de Perfil
+           ================================= */}
+      {isModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2>{t("profile.editProfile")}</h2>
+
+            {/* FORMULÁRIO BÁSICO: Nome, Location, Phone, Email */}
+            <div className={styles.formGroup}>
+              <label>{t("profile.name")}</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.location")}</label>
+              <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.phone")}</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.emailP")}</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            {/* FORMULÁRIO “SOBRE O MÉDICO”: */}
+            <div className={styles.formGroup}>
+              <label>{t("profile.title")}</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.specialties")}</label>
+              <input
+                type="text"
+                placeholder={t("profile.specialtiesPlaceholder")}
+                value={specialties.join(", ")}
+                onChange={(e) =>
+                  setSpecialties(
+                    e.target.value
+                      .split(",")
+                      .map((s) => s.trim())
+                      .filter((s) => s.length > 0)
+                  )
+                }
+              />
+              <small>{t("profile.specialtiesHint")}</small>
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.hospital")}</label>
+              <input
+                type="text"
+                value={hospital}
+                onChange={(e) => setHospital(e.target.value)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.crm")}</label>
+              <input
+                type="text"
+                value={crm}
+                onChange={(e) => setCrm(e.target.value)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.about")}</label>
+              <textarea
+                value={aboutText}
+                onChange={(e) => setAboutText(e.target.value)}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label>{t("profile.procedures")}</label>
+              <input
+                type="text"
+                placeholder={t("profile.proceduresPlaceholder")}
+                value={procedures.join(", ")}
+                onChange={(e) =>
+                  setProcedures(
+                    e.target.value
+                      .split(",")
+                      .map((p) => p.trim())
+                      .filter((p) => p.length > 0)
+                  )
+                }
+              />
+              <small>{t("profile.proceduresHint")}</small>
+            </div>
+
+            <div className={styles.modalActions}>
+              <button
+                className={styles.saveButton}
+                onClick={handleSaveAllDoctorInfo}
+              >
+                {t("profile.save")}
+              </button>
+              <button
+                className={styles.cancelButton}
+                onClick={handleCloseModal}
+              >
+                {t("profile.cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, updateUserProfile } from "../../../api/firebase";
+import { auth, saveUserBasicInfo } from "../../../api/firebase";
 import { useAuth } from "../../../contexts/AuthProvider/AuthProvider";
 import { useScreenResize } from "../../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import {
@@ -66,7 +66,7 @@ const LoginPage = () => {
 
       const role = user.role ?? "user";
 
-      await updateUserProfile({
+      await saveUserBasicInfo({
         email: user.email,
         name: user.displayName,
         photo: user.photoURL,

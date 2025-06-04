@@ -295,20 +295,26 @@
       
       h4 {
         margin: 0 0 0.3rem 0;
-        color: var(--PreferredColor);
+        color: var(--White);
         font-size: 1.1rem;
+        font-weight: bold;
+        border-left: 4px solid var(--PreferredColor);
+        padding-left: 4px;
       }
       
       .institution, .period {
         margin: 0 0 0.3rem 0;
         color: var(--White);
-        font-weight: 500;
+        font-weight: bold;
+        border-bottom: 1px solid var(--White);
+        padding: 8px;
       }
       
       .description {
         margin: 0.8rem 0 0 0;
         color: var(--White);
         font-size: 0.95rem;
+        text-align: justify;
         line-height: 1.6;
       }
     }
