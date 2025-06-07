@@ -268,7 +268,7 @@
     
     .timelineMarker {
       position: absolute;
-      left: -38px;
+      left: -37px;
       top: 5px;
       width: 16px;
       height: 16px;
@@ -277,7 +277,7 @@
       border: 3px solid var(--PreferredColor);
       
       @media (max-width: 480px) {
-        left: -33px;
+        left: -26px;
         width: 14px;
         height: 14px;
       }

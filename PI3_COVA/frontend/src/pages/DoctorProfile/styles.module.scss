@@ -58,6 +58,9 @@
     
     @media (max-width: 768px) {
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     
     .titleContainer {
@@ -551,22 +554,31 @@
   border-radius: 0.5rem;
   margin-bottom: 2rem;
 
-  &:hover .editAboutButton {
-    visibility: visible;
-  }
+    .editAboutButton {
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    gap: 8px;
+    margin-right: 1rem;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--White);
+    border: 1px solid var(--White) !important;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--Transition);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.3) !important;
+    }
+    .editIcon {
+      font-size: 0.9rem;
+    }
+}
 }
 
-.editAboutButton {
-  visibility: hidden;
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
+
 
 .editAboutContainer {
   display: flex;
