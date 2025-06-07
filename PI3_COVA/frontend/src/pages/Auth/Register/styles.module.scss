@@ -354,4 +354,195 @@
   @media (min-width: 768px) {
     padding: 2rem;
   }
+  .professionalIdContainer {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  flex-direction: column;
+ 
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.warpInpput{
+  display: flex;
+  width: 100%;
+  flex-direction:row;
+  flex-wrap: wrap;
+ background-color: #1e1e1e;
+  border: 1px solid var(--TextGeneral);
+  border-radius: 8px;
+
+  input, select{
+    height: 100%;
+    border: none;
+    box-shadow: none;
+  }
+
+  input{
+    width: 100%;
+  }
+
+  select{
+    padding: 0;
+  }
+}
+
+.countrySelectWrapper {
+  flex: 0 0 140px;
+
+  @media (max-width: 480px) {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+.countrySelect {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: var(--White);
+  background-color: #1e1e1e;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.5rem;
+  padding-right: 2.5rem;
+}
+
+.professionalIdInputWrapper {
+  flex: 1;
+}
+
+/* Estilo para inputs com erro */
+.inputError {
+  border-color: #ff6b6b !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.3) !important;
+}
+
+.errorText {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+}
+
+.crmInputGroup {
+  display: flex;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: white;
+
+  select,
+  input {
+    border: none;
+    outline: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  select {
+    width: 100px;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ccc;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  input {
+    flex: 1;
+    background-color: white;
+  }
+}
+
+.inputError {
+  border: 1px solid #e63946 !important;
+}
+
+.professionalIdContainer {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.crmInputGroup {
+  display: flex;
+  width: 100%;
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #1e1e1e;
+  
+  &:focus-within {
+    border-color: var(--PreferredColor);
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
+  }
+
+  .countrySelect {
+    flex: 0 0 120px;
+    border: none;
+    border-right: 1px solid #333;
+    border-radius: 0.5rem 0 0 0.5rem;
+    background-color: #1e1e1e;
+    color: var(--White);
+    padding: 0.75rem 1rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5rem;
+    padding-right: 2rem;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .professionalIdInput {
+    flex: 1;
+    border: none;
+    background-color: #1e1e1e;
+    color: var(--White);
+    padding: 0.75rem 1rem;
+    
+    &::placeholder {
+      color: #888;
+    }
+    
+    &:focus {
+      outline: none;
+      background-color: #2a2a2a;
+    }
+  }
+}
+
+// Mantenha as outras classes de erro que você já tem
+.inputError {
+  border-color: #ff6b6b !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.3) !important;
+}
+
+.errorText {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.crmInputGroup {
+  transition: border-color 0.2s, box-shadow 0.2s;
+  
+  .countrySelect, .professionalIdInput {
+    transition: background-color 0.2s;
+  }
 }

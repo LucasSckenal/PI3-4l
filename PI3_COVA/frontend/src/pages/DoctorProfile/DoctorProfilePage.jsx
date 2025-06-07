@@ -12,8 +12,7 @@ import {
   saveDoctorAbout,
   fetchUserBasicInfo,
   fetchDoctorAbout,
-} from "../../api/firebase"; // Ajuste o path conforme sua estrutura
-
+} from "../../api/firebase"; 
 const DoctorProfilePage = () => {
   const { userData, loading } = useAccount();
   const { t } = useTranslation();
