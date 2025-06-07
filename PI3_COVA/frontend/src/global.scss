@@ -35,15 +35,28 @@
   --PreferredColor: #7f41e2;
   --UiBg: #494949;
   --UiBg2: #a8a8a8;
+    --Gray200: #e9ecef;
+  --Gray300: #dee2e6;
+  --Gray400: #ced4da;
+  --Gray500: #adb5bd;
+  --Gray600: #6c757d;
+  --Gray700: #495057;
+  --Gray800: #343a40;
+  --Gray900: #212529;
+    --Danger: #fa3e3e;
+
 
   // Utilidades
 
   --BoxShadow: 0px 4px 24px rgba(168, 168, 168, 0.25);
   --BoxShadow2: 0px 4px 24px rgba(168, 168, 168, 0.80);
+  --BoxShadowHover: 0 8px 25px rgba(0, 0, 0, 0.12);
   --BorderRadius: 8px;
   --Gap: 8px;
   --Gap2: 16px;
-  --Gap3: 50px
+  --Gap3: 50px;
+    --Transition: all 0.3s ease;
+
 }
 
 [data-theme='light'] {

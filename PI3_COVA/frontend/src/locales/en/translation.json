@@ -118,6 +118,7 @@
     "description": "Description",
     "update": "Update",
     "save": "Save",
+    "emailLocked": "Email is locked",
     "cancel": "Cancel"
   },
   "editProfile": {
@@ -125,6 +126,7 @@
     "avatarAlt": "User avatar",
     "name": "Full name",
     "phone": "Phone",
+    "email": "Email",
     "location": "Location",
     "gender": {
       "select": "Select gender",
@@ -146,6 +148,7 @@
     "removePhoto": "Remove photo",
     "changePhoto": "Change photo",
     "cidSpecialties": "CID Specialties",
+    "selectCid": "Select CID",
     "country": "Country"
   },
   "sidebar": {

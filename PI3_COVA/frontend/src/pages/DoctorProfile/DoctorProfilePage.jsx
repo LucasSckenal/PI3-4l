@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { FaRegEdit, FaSave, FaTimes } from "react-icons/fa";
 import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";
 import styles from "./styles.module.scss";
-import DoctorProfileEditModal from "../../components/DocotorEditModal/DocotorEditModal";
+import DoctorProfileEditModal from "../../components/DoctorEditModal/DoctorEditModal";
 
 import {
   saveUserBasicInfo,
@@ -277,6 +277,7 @@ const DoctorProfilePage = () => {
           specialization={specialization}
           setSpecialization={setSpecialization}
           cidSpecialties={cidSpecialties || []}
+          setCidSpecialties={setCidSpecialties} 
           professionalId={professionalId}
           setProfessionalId={setProfessionalId}
           onSave={handleSaveAllDoctorInfo}

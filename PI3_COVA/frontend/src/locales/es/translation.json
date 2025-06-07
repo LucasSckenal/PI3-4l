@@ -118,6 +118,7 @@
     "period": "Período",
     "description": "Descripción",
     "update": "Actualizar",
+    "emailLocked": "Correo electrónico bloqueado",
     "save": "Guardar",
     "cancel": "Cancelar"
   },
@@ -139,7 +140,17 @@
     "saving": "Guardando...",
     "cancel": "Cancelar",
     "success": "Perfil actualizado con éxito!",
-    "error": "Error al actualizar el perfil"
+    "error": "Error al actualizar el perfil",
+    "professionalId": "ID profesional",
+    "professionalInfo": "Información del profesional",
+    "personalInfo": "Informações Pessoais",
+    "specialization": "Especialización",
+    "removePhoto": "Eliminar foto",
+    "changePhoto": "Cambiar foto de perfil",
+    "cidSpecialties": "Código de especialidad",
+    "selectCid": "Seleccione la especialidad del CID",
+    "country": "País",
+    "email":"Correo electrónico"
   },
   "sidebar": {
     "home": "Inicio",

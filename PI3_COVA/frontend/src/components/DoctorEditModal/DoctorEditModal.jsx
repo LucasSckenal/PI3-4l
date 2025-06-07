@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import styles from "./styles.module.scss";
-import { FaUserMd, FaIdCard, FaTimes, FaLock, FaPlus, FaMinus } from "react-icons/fa";
+import { FaUserMd, FaIdCard, FaTimes, FaLock, FaPlus, FaMinus, FaChevronDown  } from "react-icons/fa";
 
 const DoctorProfileEditModal = ({
   name,
@@ -16,7 +16,6 @@ const DoctorProfileEditModal = ({
   setName,
   setLocation,
   setPhone,
-  setEmail,
   setCountry,
   cidSpecialties = [],
   setCidSpecialties,
@@ -52,25 +51,24 @@ const DoctorProfileEditModal = ({
     }
   };
 
-  const handleRemoveCid = (index, e) => {
-  e.stopPropagation(); // Impede a propagação do evento
-  const newCids = [...cidSpecialties];
-  newCids.splice(index, 1);
-  setCidSpecialties(newCids);
-};
+   const handleRemoveCid = (cidToRemove) => {
+    setCidSpecialties(cidSpecialties.filter(cid => cid !== cidToRemove));
+  };
 
 // No JSX, ajuste o botão de remoção:
-{cidSpecialties.map((cid, index) => (
-  <div key={index} className={styles.cidTag}>
+<div className={styles.cidTags}>
+  {cidSpecialties.map((cid) => (
+  <div key={cid} className={styles.cidTag}>
     {cid}
     <button 
+      onClick={() => handleRemoveCid(cid)}
       className={styles.removeCidTag}
-      onClick={(e) => handleRemoveCid(index, e)}
     >
       <FaTimes />
     </button>
   </div>
 ))}
+</div>
 
   return (
     <div className={styles.modalOverlay}>
@@ -141,7 +139,7 @@ const DoctorProfileEditModal = ({
               <h3 className={styles.sectionTitle}>{t("editProfile.personalInfo")}</h3>
               
               <div className={styles.formGroup}>
-                <label>{t("editProfile.name")} *</label>
+                <label>{t("editProfile.name")}</label>
                 <input
                   type="text"
                   value={name}
@@ -151,25 +149,24 @@ const DoctorProfileEditModal = ({
               </div>
 
               <div className={styles.formGroup}>
-                <label>{t("editProfile.email")} *</label>
+                <label>{t("editProfile.email")}</label>
                 <div className={styles.emailField}>
-  <label htmlFor="email">Email</label>
-  <input
-    type="email"
-    id="email"
-    value={email}
-    disabled
-    className={styles.disabledInput}
-  />
-  <span className={styles.emailLocked}>
-    <FaLock style={{ marginRight: "4px" }} />
-    {t("profile.emailLocked")}
-  </span>
-</div>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    disabled
+                    className={styles.disabledInput}
+                  />
+                  <span className={styles.emailLocked}>
+                    <FaLock style={{ marginRight: "4px" }} />
+                    {t("profile.emailLocked")}
+                  </span>
+                </div>
               </div>
 
               <div className={styles.formGroup}>
-                <label>{t("editProfile.phone")} *</label>
+                <label>{t("editProfile.phone")} </label>
                 <input
                   type="text"
                   value={phone}
@@ -186,7 +183,7 @@ const DoctorProfileEditModal = ({
               <h3 className={styles.sectionTitle}>{t("editProfile.professionalInfo")}</h3>
               
               <div className={styles.formGroup}>
-                <label>{t("editProfile.country")} *</label>
+                <label>{t("editProfile.country")} </label>
                 <input
                   type="text"
                   value={country}
@@ -196,18 +193,21 @@ const DoctorProfileEditModal = ({
               </div>
 
               <div className={styles.formGroup}>
-                <label>{t("editProfile.specialization")} *</label>
-                <select
-                  value={specialization}
-                  onChange={(e) => setSpecialization(e.target.value)}
-                  required
-                  className={styles.selectInput}
-                >
-                  <option value="">{t("editProfile.selectSpecialization")}</option>
-                  {specializations.map((spec, index) => (
-                    <option key={index} value={spec}>{spec}</option>
-                  ))}
-                </select>
+                <label>{t("editProfile.specialization")}</label>
+                <div className={styles.selectWrapper}>
+                  <select
+                    value={specialization}
+                    onChange={(e) => setSpecialization(e.target.value)}
+                    required
+                    className={styles.selectInput}
+                  >
+                    <option value="" hidden>{t("editProfile.selectSpecialization")}</option>
+                    {specializations.map((spec, index) => (
+                      <option key={index} value={spec}>{spec}</option>
+                    ))}
+                  </select>
+                  <FaChevronDown className={styles.selectIcon} />
+                </div>
               </div>
 
               <div className={styles.formGroup}>
@@ -227,16 +227,19 @@ const DoctorProfileEditModal = ({
           <h3 className={styles.sectionTitle}>{t("editProfile.cidSpecialties")}</h3>
           <div className={styles.formGroup}>
             <div className={styles.cidInputContainer}>
-              <select
-                value={newCid}
-                onChange={(e) => setNewCid(e.target.value)}
-                className={styles.cidSelect}
-              >
-                <option value="">{t("editProfile.selectCid")}</option>
-                {cidSpecialtiesList.map((cid, index) => (
-                  <option key={index} value={cid}>{cid}</option>
-                ))}
-              </select>
+              <div className={styles.selectWrapper}>
+                  <select
+                    value={newCid}
+                    onChange={(e) => setNewCid(e.target.value)}
+                    className={styles.selectInput}
+                  >
+                    <option value="" hidden>{t("editProfile.selectCid")}</option>
+                    {cidSpecialtiesList.map((cid, index) => (
+                      <option key={index} value={cid}>{cid}</option>
+                    ))}
+                  </select>
+                  <FaChevronDown className={styles.selectIcon} />
+                </div>
               <button 
                 className={styles.addCidButton}
                 onClick={handleAddCid}
@@ -252,7 +255,7 @@ const DoctorProfileEditModal = ({
                   {cid}
                   <button 
                     className={styles.removeCidTag}
-                    onClick={() => handleRemoveCid(index)}
+                    onClick={() => handleRemoveCid(cid)}
                   >
                     <FaTimes />
                   </button>
