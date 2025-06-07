@@ -1,0 +1,512 @@
+// Variáveis atualizadas para look profissional
+:root {
+  --Primary: #4a6cf7;
+  --PrimaryLight: #6d8af8;
+  --PrimaryDark: #3451b2;
+  --Secondary: #6c757d;
+  --Success: #3cc27f;
+  --Danger: #fa3e3e;
+  --Warning: #ffc107;
+  --Info: #17a2b8;
+  --Light: #f8f9fa;
+  --Dark: #343a40;
+  --White: #ffffff;
+  --Gray100: #f8f9fa;
+  --Gray200: #e9ecef;
+  --Gray300: #dee2e6;
+  --Gray400: #ced4da;
+  --Gray500: #adb5bd;
+  --Gray600: #6c757d;
+  --Gray700: #495057;
+  --Gray800: #343a40;
+  --Gray900: #212529;
+  --BorderRadius: 12px;
+  --BoxShadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --BoxShadowHover: 0 8px 25px rgba(0, 0, 0, 0.12);
+  --Transition: all 0.3s ease;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background-color: var(--UiBg);
+  padding: 2rem;
+  border-radius: var(--BorderRadius);
+  width: 90%;
+  max-width: 850px;
+  box-shadow: var(--BoxShadow);
+  color: var(--TextGeneral);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-y: auto;
+  max-height: 90vh;
+  position: relative;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--Gray200);
+}
+
+.modalTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.8rem;
+  color: var(--PreferredColor);
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: var(--Black);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--Transition);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background: var(--Gray200);
+    color: var(--Danger);
+  }
+}
+
+// Cards para seções
+.profileCard,
+.formCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  background: var(--DetailsBg);
+  border-radius: var(--BorderRadius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--Gray200);
+}
+
+.profileHeader {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.photoSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+}
+
+.photoContainer {
+  position: relative;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--Gray200);
+  transition: var(--Transition);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    border-color: var(--PreferredColor);
+    transform: translateY(-3px);
+    box-shadow: var(--BoxShadowHover);
+  }
+}
+
+.photoPreview {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+.photoPlaceholder {
+  width: 150px;
+  height: 150px;
+  background: var(--Gray100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(31, 31, 32, 0.7);
+  color: var(--White);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--Transition);
+  font-weight: 500;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 50%;
+  
+  .photoContainer:hover & {
+    opacity: 1;
+  }
+}
+
+.placeholderIcon {
+  font-size: 3rem;
+  color: var(--TextGeneral);
+}
+
+.photoActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.fileInput {
+  display: none;
+}
+
+.removePhotoButton {
+  padding: 0.7rem;
+  background: var(--Bg);
+  color: var(--TextGeneral);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  transition: var(--Transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  
+  &:hover {
+    color: var(--Danger);
+    border: 1px solid var(--Danger);
+  }
+}
+
+.professionalIds {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width:70%;
+
+}
+
+.idField {
+  background: var(--UiBg);
+  border-radius: 8px;
+  padding: 1.2rem;
+  border-left: 4px solid var(--PreferredColor);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--Gray700);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+.idInput {
+  width: 100%;
+  padding: 0.9rem;
+  border: 1px solid var(--Gray300);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  background: var(--White);
+  color: var(--Gray800);
+  transition: var(--Transition);
+  
+  &:focus {
+    outline: none;
+    border-color: var(--PreferredColor);
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+  }
+}
+
+.formColumns {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.formColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionTitle {
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  color: var(--PreferredColor);
+  font-weight: 600;
+  font-size: 1.3rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--Gray200);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  
+  label {
+    font-weight: 500;
+    color: var(--Gray700);
+    font-size: 0.95rem;
+    
+    &::after {
+      content: ' *';
+      color: var(--Danger);
+      opacity: 0.8;
+    }
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  select {
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--Gray300);
+    background: var(--White);
+    color: var(--Gray800);
+    font-size: 1rem;
+    transition: var(--Transition);
+    
+    &:focus {
+      outline: none;
+      border-color: var(--PreferredColor);
+      box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+    }
+  }
+}
+
+// Campo de email desabilitado
+.emailField {
+  display: flex;
+  flex-direction: column; // Deixa label, input e aviso em coluna
+  align-items: flex-start; // Alinha à esquerda
+  gap: 4px; // Espaçamento entre os elementos (opcional)
+}
+
+.disabledInput {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.emailLocked {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #999;
+}
+
+.selectInput {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+// Estilos para o componente CID
+.cidInputContainer {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.cidSelect {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--Gray300);
+  background: var(--White);
+  color: var(--Gray800);
+  font-size: 1rem;
+  transition: var(--Transition);
+  
+  &:focus {
+    outline: none;
+    border-color: var(--PreferredColor);
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+  }
+}
+
+.addCidButton {
+  padding: 0 1.5rem;
+  background: var(--PreferredColor);
+  color: var(--White);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--Transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  &:hover:not(:disabled) {
+    background: var(--PreferredColor);
+  }
+  
+  &:disabled {
+    background: var(--Gray400);
+    cursor: not-allowed;
+  }
+}
+
+.cidTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.cidTag {
+  background: var(--PreferredColor);
+  color: var(--White);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: var(--Transition);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.removeCidTag {
+  background: none;
+  border: none;
+  color: var(--White);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  transition: var(--Transition);
+  
+  &:hover {
+    color: var(--Gray200);
+  }
+}
+
+.noCid {
+  color: var(--Gray500);
+  font-style: italic;
+  margin: 0.5rem 0;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--Gray500);
+  margin-top: 0.3rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--Gray200);
+}
+
+.saveButton,
+.cancelButton {
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: var(--Transition);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 120px;
+  justify-content: center;
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.saveButton {
+  background: var(--Success);
+  color: var(--White);
+  box-shadow: 0 4px 10px rgba(60, 194, 127, 0.3);
+  
+  &:hover:not(:disabled) {
+    background: darken(#3CC27F, 8%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(60, 194, 127, 0.4);
+  }
+}
+
+.cancelButton {
+  background: var(--Gray300);
+  color: var(--Gray700);
+  
+  &:hover {
+    background: var(--Gray400);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+  }
+}
+

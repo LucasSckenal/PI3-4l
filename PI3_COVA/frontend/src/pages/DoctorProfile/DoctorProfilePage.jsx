@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { FaRegEdit, FaSave, FaTimes } from "react-icons/fa";
 import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";
 import styles from "./styles.module.scss";
+import DoctorProfileEditModal from "../../components/DocotorEditModal/DocotorEditModal";
 
 import {
   saveUserBasicInfo,
@@ -22,6 +23,12 @@ const DoctorProfilePage = () => {
   const [location, setLocation] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [cidSpecialties, setCidSpecialties] = useState([]);
+  const [professionalId, setProfessionalId] = useState("");
+  const [photo, setPhoto] = useState("");
+
 
   // ─── Estados para “Sobre o Médico” ────────────────────────────────────────
   const [title, setTitle] = useState("");
@@ -66,12 +73,22 @@ const DoctorProfilePage = () => {
           setLocation(basic.location || "");
           setPhone(basic.phone || "");
           setEmail(basic.email || "");
+          setCountry(basic.country || "");
+          setSpecialization(basic.specialization || "");
+          setCidSpecialties(basic.cidSpecialties || []);
+          setProfessionalId(basic.professionalId || "");
+          setPhoto(basic.photo || "");
         } else {
-          // Se documento ainda não existe, pegamos valores vindos do context (se houver)
+          // fallback se não houver documento
           setName(userData.name || "");
           setLocation(userData.location || "");
           setPhone(userData.phone || "");
           setEmail(userData.email || "");
+          setCountry(userData.country || "");
+          setSpecialization(userData.specialization || "");
+          setCidSpecialties(userData.cidSpecialties || []);
+          setProfessionalId(userData.professionalId || "");
+          setPhoto(userData.photo || "")
         }
       } catch (error) {
         console.error("Erro ao carregar basic info:", error);
@@ -117,20 +134,35 @@ const DoctorProfilePage = () => {
   // ─── Funções de persistência no Firestore ──────────────────────────────────
 
   // 1) Atualiza campos básicos em Users/{userID}
-  const persistBasicInfo = async (novoName, novoLocation, novoPhone, novoEmail) => {
-    if (!userID) return;
-    const basicData = {
-      name: novoName,
-      location: novoLocation,
-      phone: novoPhone,
-      email: novoEmail,
-    };
-    try {
-      await saveUserBasicInfo(userID, basicData);
-    } catch (err) {
-      console.error("Erro ao persistir basic info:", err);
-    }
+  const persistBasicInfo = async (
+  novoName,
+  novoLocation,
+  novoPhone,
+  novoEmail,
+  novoCountry,
+  novoSpecialization,
+  novoCidSpecialties,
+  novoProfessionalId,
+  novoPhoto
+) => {
+  if (!userID) return;
+  const basicData = {
+    name: novoName,
+    location: novoLocation,
+    phone: novoPhone,
+    email: novoEmail,
+    country: novoCountry,
+    specialization: novoSpecialization,
+    cidSpecialties: novoCidSpecialties,
+    professionalId: novoProfessionalId,
+    photo: novoPhoto,
   };
+  try {
+    await saveUserBasicInfo(userID, basicData);
+  } catch (err) {
+    console.error("Erro ao persistir basic info:", err);
+  }
+};
 
   // 2) Atualiza TODO o “About” (incluindo aboutText) em Users/{userID}/About/Info
   const persistDoctorAbout = async (
@@ -206,7 +238,17 @@ const DoctorProfilePage = () => {
   // ─── Salvar todas as informações quando fechar modal geral (exceto “About”) ──
   const handleSaveAllDoctorInfo = () => {
     // 1) Persistir campos básicos
-    persistBasicInfo(name, location, phone, email);
+    persistBasicInfo(
+  name,
+  location,
+  phone,
+  email,
+  country,
+  specialization,
+  cidSpecialties,
+  professionalId,
+  photo
+);
     // 2) Persistir TODO o “About” (title, specialties, hospital, crm, aboutText, procedures, experiences)
     persistDoctorAbout(title, specialties, hospital, crm, aboutText, procedures, experiences);
     // 3) Fechar modal
@@ -219,6 +261,30 @@ const DoctorProfilePage = () => {
 
   return (
     <div className={styles.neurologistProfile}>
+      {isModalOpen && (
+        <DoctorProfileEditModal
+          name={name}
+          setName={setName}
+          location={location}
+          setLocation={setLocation}
+          phone={phone}
+          setPhone={setPhone}
+          email={email}
+          setEmail={setEmail}
+          setCrm={setCrm}
+          country={country}
+          setCountry={setCountry}
+          specialization={specialization}
+          setSpecialization={setSpecialization}
+          cidSpecialties={cidSpecialties || []}
+          professionalId={professionalId}
+          setProfessionalId={setProfessionalId}
+          onSave={handleSaveAllDoctorInfo}
+          onCancel={handleCloseModal}
+          photo={photo}
+          setPhoto={setPhoto}
+        />
+      )}
       {/* ─── HEADER ──────────────────────────────────────────────────────────────── */}
       <header className={styles.profileHeader}>
         <div className={styles.profileImage}>
@@ -236,22 +302,19 @@ const DoctorProfilePage = () => {
         <div className={styles.headerInfo}>
           <div className={styles.titleContainer}>
             <h1>{name}</h1>
-            <div className={styles.crmBadge}>{crm}</div>
+            <div className={styles.crmBadge}>{professionalId}</div>
           </div>
 
-          <h2>{title}</h2>
+          <h2>{specialization}</h2>
 
           <div className={styles.hospitalInfo}>
-            <div>
-              <p className={styles.hospitalName}>{hospital}</p>
-              <p className={styles.hospitalLocation}>{location}</p>
-            </div>
+              <p className={styles.hospitalLocation}>{country + " " + location}</p>
           </div>
 
           <div className={styles.specialtiesTags}>
-            {specialties.map((specialty, index) => (
+            {cidSpecialties.map((cidSpecialties, index) => (
               <span key={index} className={styles.specialtyTag}>
-                {specialty}
+                {cidSpecialties}
               </span>
             ))}
           </div>
@@ -409,75 +472,7 @@ const DoctorProfilePage = () => {
         </div>
       </main>
 
-      {/* ─── MODAL DE EDIÇÃO GERAL (não inclui “About”) ─────────────────────────── */}
-      {isModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h2>{t("profile.editProfile")}</h2>
-
-            {/* FORMULÁRIO BÁSICO: Nome, Location, Phone, Email */}
-            <div className={styles.formGroup}>
-              <label>{t("profile.name")}</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label>{t("profile.location")}</label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label>{t("profile.phone")}</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label>{t("profile.emailP")}</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            {/* CAMPOS ADICIONAIS COMO “número de emergência”, “CRM” ETC. */}
-            <div className={styles.formGroup}>
-              <label>{t("profile.crm")}</label>
-              <input
-                type="text"
-                value={crm}
-                onChange={(e) => setCrm(e.target.value)}
-              />
-            </div>
-
-            {/* ...adicione aqui qualquer outro campo que queira editar no modal geral... */}
-
-            <div className={styles.modalActions}>
-              <button
-                className={styles.saveButton}
-                onClick={handleSaveAllDoctorInfo}
-              >
-                {t("profile.save")}
-              </button>
-              <button
-                className={styles.cancelButton}
-                onClick={handleCloseModal}
-              >
-                {t("profile.cancel")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+     
     </div>
   );
 };

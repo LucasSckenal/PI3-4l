@@ -138,7 +138,15 @@
     "saving": "Saving...",
     "cancel": "Cancel",
     "success": "Profile updated successfully!",
-    "error": "Error updating profile"
+    "error": "Error updating profile",
+    "professionalId": "Professional ID",
+    "professionalInfo": "Professional Information",
+    "personalInfo": "Personal Information",
+    "specialization": "Specialization",
+    "removePhoto": "Remove photo",
+    "changePhoto": "Change photo",
+    "cidSpecialties": "CID Specialties",
+    "country": "Country"
   },
   "sidebar": {
     "home": "Home",
