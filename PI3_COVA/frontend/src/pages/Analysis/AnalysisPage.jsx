@@ -42,6 +42,17 @@ const AnalysisPage = () => {
     carregarDiagnosticos();
   }, []);
 
+  const formatarDataBrasilia = (date) => {
+  return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(date);
+};
+
   // Função para extrair o código CID das mensagens (G43 ou G44)
   const extrairCodigoCID = (messages) => {
     const mensagemIA = messages.find(msg => msg.role === "assistant")?.content || "";
@@ -54,7 +65,6 @@ const AnalysisPage = () => {
   // Transformar dados do Firebase no formato esperado pela página
   const transformarDados = (diagnosticosReais) => {
     return diagnosticosReais.map((doc, index) => {
-      // Extrair data do timestamp do Firebase
       const dataCriacao = doc.timestamp.toDate();
       
       return {
@@ -64,9 +74,9 @@ const AnalysisPage = () => {
           `${msg.role === 'user' ? 'Paciente' : 'Assistente'}: ${msg.content}`
         ).join('\n\n'),
         prioridade: doc.priority,
-        dataCriacao: dataCriacao.toISOString().split('T')[0],
+        dataCriacao: formatarDataBrasilia(dataCriacao), // Usar novo formatter
         status: "pendente",
-        timestamp: dataCriacao, // Mantemos o objeto Date para filtros
+        timestamp: dataCriacao,
       };
     });
   };
@@ -75,7 +85,7 @@ const AnalysisPage = () => {
   const diagnosticosTransformados = transformarDados(diagnosticos);
 
   const getDiagnosticosPorData = (date) => {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = formatarDataBrasilia(date); // Usar novo formatter
     return diagnosticosTransformados.filter(
       (d) => d.dataCriacao === dateStr
     );
@@ -136,10 +146,10 @@ const AnalysisPage = () => {
         (a, b) => ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade]
       );
     } else if (ordemSelecionada === "data") {
-      diagnosticos.sort(
-        (a, b) => new Date(a.dataCriacao) - new Date(b.dataCriacao)
-      );
-    }
+    diagnosticos.sort(
+      (a, b) => a.timestamp - b.timestamp
+    );
+  }
 
     return diagnosticos;
   };
@@ -291,7 +301,7 @@ const AnalysisPage = () => {
           <div className={styles.listaHeader}>
             <h2 className={styles.sectionTitle}>
               {mostrarCalendario
-                ? `${t("analysis.diagnoses")} - ${dataSelecionada.toLocaleDateString()}`
+                ? `${t("analysis.diagnoses")} - ${formatarDataBrasilia(dataSelecionada)}`
                 : t("analysis.diagnoses")}
             </h2>
 
