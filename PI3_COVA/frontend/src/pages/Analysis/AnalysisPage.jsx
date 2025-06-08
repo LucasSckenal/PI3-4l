@@ -9,7 +9,8 @@ import {
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import { fetchPendingReviews } from "../../api/firebase"; // Importe a função
+import { fetchPendingReviews } from "../../api/firebase"; 
+import CalendarModal from "../../components/Calendar/Calendar";
 
 const AnalysisPage = () => {
   const { isMobile } = useScreenResize();
@@ -23,6 +24,7 @@ const AnalysisPage = () => {
   const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [filtroDataAtivo, setFiltroDataAtivo] = useState(false);
 
   // Buscar diagnósticos reais do Firebase
   useEffect(() => {
@@ -134,7 +136,7 @@ const AnalysisPage = () => {
   let diagnosticos = [...diagnosticosTransformados];
 
   // Filtro por data (comparação por dia, ignorando hora)
-  if (mostrarCalendario) {
+  if (filtroDataAtivo) {
     diagnosticos = diagnosticos.filter((d) => {
       const dData = d.timestamp;
       return (
@@ -172,7 +174,7 @@ const AnalysisPage = () => {
 };
 
 
-  return (
+return (
     <div className={styles.container}>
       <main className={styles.mainContent}>
         {/* Cards de resumo */}
@@ -193,7 +195,10 @@ const AnalysisPage = () => {
             </div>
             <div
               className={`${styles.card} ${styles.cardCalendar}`}
-              onClick={() => setMostrarCalendario(!mostrarCalendario)}
+              onClick={() => {
+                setMostrarCalendario(!mostrarCalendario);
+                setFiltroDataAtivo(true); // Ativa o filtro quando abre o calendário
+              }}
             >
               <h3>{t("analysis.date")}</h3>
               <div className={styles.calendarIcon}>
@@ -204,6 +209,7 @@ const AnalysisPage = () => {
         )}
 
         {mostrarCalendario && !isMobile && (
+          <CalendarModal onClose={() => setMostrarCalendario(false)}>
           <section className={styles.calendarioDesktop}>
             <div className={styles.calendarioHeader}>
               <button
@@ -245,7 +251,13 @@ const AnalysisPage = () => {
                       ? styles.diaComPendentes
                       : ""
                   }`}
-                  onClick={() => dia && setDataSelecionada(dia.data)}
+                  onClick={() => {
+                    if (dia) {
+                      setDataSelecionada(dia.data);
+                      setMostrarCalendario(false);
+                      setFiltroDataAtivo(true);
+                    }
+                  }}
                 >
                   {dia?.numero}
                   {dia?.temPendentes && (
@@ -255,12 +267,16 @@ const AnalysisPage = () => {
               ))}
             </div>
           </section>
+          </CalendarModal>
         )}
 
         {isMobile && (
           <button
             className={styles.botaoCalendarioMobile}
-            onClick={() => setMostrarCalendario(!mostrarCalendario)}
+            onClick={() => {
+              setMostrarCalendario(!mostrarCalendario);
+              setFiltroDataAtivo(true); 
+            }}
           >
             <FiCalendar className={styles.iconeCalendario} />
             {t("analysis.viewByDate")}
@@ -303,7 +319,13 @@ const AnalysisPage = () => {
                       ? styles.diaComPendentes
                       : ""
                   }`}
-                  onClick={() => dia && setDataSelecionada(dia.data)}
+                  onClick={() => {
+                    if (dia) {
+                      setDataSelecionada(dia.data);
+                      setMostrarCalendario(false);
+                      setFiltroDataAtivo(true); 
+                    }
+                  }}
                 >
                   {dia?.numero}
                   {dia?.temPendentes && (
@@ -317,11 +339,23 @@ const AnalysisPage = () => {
 
         <section className={styles.listaDiagnosticos}>
           <div className={styles.listaHeader}>
-            <h2 className={styles.sectionTitle}>
-              {mostrarCalendario
-                ? `${t("analysis.diagnoses")} - ${formatarDataBrasilia(dataSelecionada)}`
-                : t("analysis.diagnoses")}
-            </h2>
+            <div className={styles.tituloContainer}>
+              <h2 className={styles.sectionTitle}>
+                {filtroDataAtivo
+                  ? `${t("analysis.diagnoses")} - ${formatarDataBrasilia(dataSelecionada)}`
+                  : t("analysis.diagnoses")}
+              </h2>
+              
+              {/* Botão para limpar filtro de data */}
+              {filtroDataAtivo && (
+                <button 
+                  className={styles.botaoLimparFiltro}
+                  onClick={() => setFiltroDataAtivo(false)}
+                >
+                  {t("analysis.clearFilter")}
+                </button>
+              )}
+            </div>
 
             {isMobile ? (
               <div className={styles.filtroMobile}>
@@ -347,7 +381,7 @@ const AnalysisPage = () => {
                       setCategoriaSelecionada(e.target.value || null)
                     }
                   >
-                    <option value="" hidden>{t("analysis.allCategories")}</option>
+                    <option value="" >{t("analysis.allCategories")}</option>
                     <option value="G43">G43</option>
                     <option value="G44">G44</option>
                   </select>

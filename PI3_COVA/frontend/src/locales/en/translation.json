@@ -201,6 +201,7 @@
     "date": "Date",
     "category": "Category",
     "default": "Default",
+    "clearFilter": "Clear filter",
     "viewByDate": "View by date"
   },
   "date": {

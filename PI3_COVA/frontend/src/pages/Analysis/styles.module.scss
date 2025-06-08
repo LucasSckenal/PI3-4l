@@ -309,6 +309,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 /* Diagnoses List */
 .listaDiagnosticos {
   margin-top: 2rem;
+  height: 100%;
 
   @media (max-width: 2000px) {
     .listaHeader {
@@ -327,7 +328,6 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .listaItens {
-      max-height: none;
       gap: 1.5rem;
       padding-right: 0.5rem;
 

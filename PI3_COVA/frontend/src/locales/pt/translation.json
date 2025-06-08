@@ -206,6 +206,7 @@
     "date": "Data",
     "category": "Categoria",
     "default": "Padrão",
+    "clearFilter": "Limpar Filtro",
     "viewByDate": "Visualizar por data"
   },
   "date": {
