@@ -85,10 +85,14 @@ const AnalysisPage = () => {
   const diagnosticosTransformados = transformarDados(diagnosticos);
 
   const getDiagnosticosPorData = (date) => {
-    const dateStr = formatarDataBrasilia(date); // Usar novo formatter
-    return diagnosticosTransformados.filter(
-      (d) => d.dataCriacao === dateStr
-    );
+    return diagnosticosTransformados.filter((d) => {
+      const dData = d.timestamp;
+      return (
+        dData.getFullYear() === date.getFullYear() &&
+        dData.getMonth() === date.getMonth() &&
+        dData.getDate() === date.getDate()
+      );
+    });
   };
 
 
@@ -127,32 +131,46 @@ const AnalysisPage = () => {
   const nomesDias = t("date.days", { returnObjects: true });
 
   const getDiagnosticosFiltrados = () => {
-    let diagnosticos = [...diagnosticosTransformados];
+  let diagnosticos = [...diagnosticosTransformados];
 
-    if (mostrarCalendario) {
-      const dateStr = dataSelecionada.toISOString().split("T")[0];
-      diagnosticos = diagnosticos.filter((d) => d.dataCriacao === dateStr);
-    }
-
-    if (categoriaSelecionada) {
-      diagnosticos = diagnosticos.filter(
-        (d) => d.codigo === categoriaSelecionada
+  // Filtro por data (comparação por dia, ignorando hora)
+  if (mostrarCalendario) {
+    diagnosticos = diagnosticos.filter((d) => {
+      const dData = d.timestamp;
+      return (
+        dData.getFullYear() === dataSelecionada.getFullYear() &&
+        dData.getMonth() === dataSelecionada.getMonth() &&
+        dData.getDate() === dataSelecionada.getDate()
       );
-    }
+    });
+  }
 
-    if (ordemSelecionada === "prioridade") {
-      const ordemPrioridade = { Vermelho: 1, Laranja: 2, Amarelo: 3, Verde: 4, Azul: 5 };
-      diagnosticos.sort(
-        (a, b) => ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade]
-      );
-    } else if (ordemSelecionada === "data") {
-    diagnosticos.sort(
-      (a, b) => a.timestamp - b.timestamp
+  // Filtro por categoria CID
+  if (categoriaSelecionada) {
+    diagnosticos = diagnosticos.filter(
+      (d) => d.codigo === categoriaSelecionada
     );
   }
 
-    return diagnosticos;
-  };
+  // Ordenação por prioridade ou por data (timestamp)
+  if (ordemSelecionada === "prioridade") {
+    const ordemPrioridade = {
+      Vermelho: 1,
+      Laranja: 2,
+      Amarelo: 3,
+      Verde: 4,
+      Azul: 5,
+    };
+    diagnosticos.sort(
+      (a, b) => ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade]
+    );
+  } else if (ordemSelecionada === "data") {
+    diagnosticos.sort((a, b) => a.timestamp - b.timestamp); // Mais antigos no topo
+  }
+
+  return diagnosticos;
+};
+
 
   return (
     <div className={styles.container}>
