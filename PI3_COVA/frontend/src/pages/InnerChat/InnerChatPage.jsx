@@ -11,9 +11,10 @@ import {
   orderBy,
   updateDoc,
   getDoc,
+  limit
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "../../api/firebase";
+import { db, addToPendingReviews } from "../../api/firebase";
 import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import { toast } from "react-toastify";
 import styles from "./styles.module.scss";
@@ -297,11 +298,34 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
     setIsRequestingRevision(true);
     
     try {
+      // 1. Atualiza o chat para solicitar revisão
       const chatRef = doc(db, "Users", userId, "chats", chatId);
       await updateDoc(chatRef, {
         doctorRevision: true,
         revisionRequestedAt: serverTimestamp()
       });
+      
+      // 2. Busca as últimas duas mensagens
+      const messagesRef = collection(db, "Users", userId, "chats", chatId, "messages");
+      const messagesQuery = query(messagesRef, orderBy("createdAt", "desc"), limit(2));
+      const snapshot = await getDocs(messagesQuery);
+      
+      const lastMessages = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          content: data.text,
+          role: data.sender === "user" ? "user" : "assistant",
+          createdAt: data.createdAt
+        };
+      }).reverse(); // Ordem cronológica
+      
+      // 3. Adiciona às revisões pendentes
+      await addToPendingReviews(
+        userId,
+        chatId,
+        lastMessages,
+        priority || "medium" // Prioridade padrão se não definida
+      );
       
       setIsDoctorRevisionRequested(true);
       toast.success(t("toast.doctorRevisionRequested"));
@@ -437,6 +461,27 @@ AI:
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isCasesLoaded]);
 
+  useEffect(() => {
+  const fetchChatPriority = async () => {
+    if (!userId || !chatId) return;
+    
+    try {
+      const chatRef = doc(db, "Users", userId, "chats", chatId);
+      const chatSnap = await getDoc(chatRef);
+      
+      if (chatSnap.exists()) {
+        const data = chatSnap.data();
+        setPriority(data.priority || null);
+        setIsDoctorRevisionRequested(data.doctorRevision || false);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar prioridade do chat:", error);
+    }
+  };
+  
+  fetchChatPriority();
+}, [userId, chatId]);
+  
   return (
     <main className={styles.InnerChatContainer}>
       <Header />

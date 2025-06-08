@@ -4,11 +4,17 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import {
   getFirestore,
+  addDoc,
   doc,
   setDoc,
   getDoc,
+  getDocs,
   updateDoc,
   collection,
+  serverTimestamp,
+  orderBy,
+  query,
+  where
 } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -158,6 +164,105 @@ const updateDoctorOnlineStatus = async (userID, isOnline) => {
   }
 };
 
+/**
+ * Adiciona um chat à coleção Pendings para revisão médica
+ * 
+ * @param {string} userId - ID do usuário
+ * @param {string} chatId - ID do chat
+ * @param {Array} messages - Últimas duas mensagens
+ * @param {string} priority - Prioridade do chat
+ */
+const addToPendingReviews = async (userId, chatId, messages, priority) => {
+  try {
+    const pendingRef = doc(collection(db, "Pendings"));
+    await setDoc(pendingRef, {
+      userId,
+      chatId,
+      timestamp: serverTimestamp(),
+      priority,
+      messages,
+      status: "pending"
+    });
+    console.log("✅ Chat adicionado às revisões pendentes:", pendingRef.id);
+    return pendingRef.id;
+  } catch (error) {
+    console.error("❌ Erro ao adicionar às revisões pendentes:", error);
+    throw error;
+  }
+};
+
+/**
+ * Adiciona o diagnóstico médico ao chat original
+ * 
+ * @param {string} userId - ID do usuário
+ * @param {string} chatId - ID do chat
+ * @param {string} diagnosis - Diagnóstico do médico
+ */
+const addDoctorDiagnosis = async (userId, chatId, diagnosis) => {
+  try {
+    const messagesRef = collection(db, "Users", userId, "chats", chatId, "messages");
+    await addDoc(messagesRef, {
+      type: "text",
+      text: diagnosis,
+      sender: "doctor",
+      createdAt: serverTimestamp()
+    });
+    
+    // Atualiza o status do chat
+    const chatRef = doc(db, "Users", userId, "chats", chatId);
+    await updateDoc(chatRef, {
+      doctorRevision: false,
+      reviewed: true,
+      reviewedAt: serverTimestamp()
+    });
+    
+    console.log("✅ Diagnóstico médico adicionado ao chat");
+  } catch (error) {
+    console.error("❌ Erro ao adicionar diagnóstico médico:", error);
+    throw error;
+  }
+};
+
+/**
+ * Busca revisões pendentes para médicos
+ */
+export const fetchPendingReviews = async () => {
+  try {
+    const q = query(
+      collection(db, "Pendings"),
+      where("status", "==", "pending"),
+      orderBy("priority", "desc"),
+      orderBy("timestamp", "asc")
+    );
+    
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("❌ Erro ao buscar revisões pendentes:", error);
+    throw error;
+  }
+};
+
+/**
+ * Atualiza uma revisão pendente com diagnóstico médico
+ * 
+ * @param {string} reviewId - ID da revisão pendente
+ * @param {string} diagnosis - Diagnóstico do médico
+ */
+export const updatePendingReview = async (reviewId, diagnosis) => {
+  try {
+    const reviewRef = doc(db, "Pendings", reviewId);
+    await updateDoc(reviewRef, {
+      diagnosis,
+      status: "completed",
+      reviewedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error("❌ Erro ao atualizar revisão pendente:", error);
+    throw error;
+  }
+};
+
 export {
   app,
   analytics,
@@ -169,4 +274,6 @@ export {
   fetchUserBasicInfo,
   fetchDoctorAbout,
   updateDoctorOnlineStatus,
+  addToPendingReviews,
+  addDoctorDiagnosis
 };

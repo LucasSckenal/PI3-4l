@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FiFilter,
   FiChevronDown,
@@ -9,6 +9,7 @@ import {
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
+import { fetchPendingReviews } from "../../api/firebase"; // Importe a função
 
 const AnalysisPage = () => {
   const { isMobile } = useScreenResize();
@@ -20,214 +21,65 @@ const AnalysisPage = () => {
   const [dataSelecionada, setDataSelecionada] = useState(new Date());
   const [mesAtual, setMesAtual] = useState(new Date().getMonth());
   const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
+  const [diagnosticos, setDiagnosticos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
 
-  const diagnosticosMockados = [
-    // Diagnósticos G43 - Migraines
-    {
-      id: 1,
-      codigo: "G43",
-      descricao: "Migraine without aura",
-      prioridade: "alta",
-      dataCriacao: "2025-05-15",
-      status: "pendente",
-    },
-    {
-      id: 2,
-      codigo: "G43",
-      descricao: "Migraine with aura",
-      prioridade: "alta",
-      dataCriacao: "2025-05-10",
-      status: "pendente",
-    },
-    {
-      id: 3,
-      codigo: "G43",
-      descricao: "Chronic migraine",
-      prioridade: "alta",
-      dataCriacao: "2025-04-28",
-      status: "analisado",
-    },
-    {
-      id: 4,
-      codigo: "G43",
-      descricao: "Status migrainosus",
-      prioridade: "alta",
-      dataCriacao: "2025-05-05",
-      status: "pendente",
-    },
-    {
-      id: 5,
-      codigo: "G43",
-      descricao: "Complicated migraine",
-      prioridade: "média",
-      dataCriacao: "2025-04-22",
-      status: "pendente",
-    },
-    {
-      id: 6,
-      codigo: "G43",
-      descricao: "Basilar migraine",
-      prioridade: "média",
-      dataCriacao: "2025-05-12",
-      status: "analisado",
-    },
-    {
-      id: 7,
-      codigo: "G43",
-      descricao: "Ophthalmoplegic migraine",
-      prioridade: "baixa",
-      dataCriacao: "2025-05-30",
-      status: "pendente",
-    },
-    {
-      id: 8,
-      codigo: "G43",
-      descricao: "Retinal migraine",
-      prioridade: "média",
-      dataCriacao: "2025-05-30",
-      status: "pendente",
-    },
+  // Buscar diagnósticos reais do Firebase
+  useEffect(() => {
+    const carregarDiagnosticos = async () => {
+      try {
+        setCarregando(true);
+        const diagnosticosReais = await fetchPendingReviews();
+        setDiagnosticos(diagnosticosReais);
+      } catch (error) {
+        console.error("Erro ao carregar diagnósticos:", error);
+      } finally {
+        setCarregando(false);
+      }
+    };
 
-    // Diagnósticos G44 - Other headaches
-    {
-      id: 9,
-      codigo: "G44",
-      descricao: "Episodic tension-type headache",
-      prioridade: "média",
-      dataCriacao: "2025-05-18",
-      status: "pendente",
-    },
-    {
-      id: 10,
-      codigo: "G44",
-      descricao: "Chronic tension-type headache",
-      prioridade: "média",
-      dataCriacao: "2025-05-30",
-      status: "analisado",
-    },
-    {
-      id: 11,
-      codigo: "G44",
-      descricao: "Cluster headache",
-      prioridade: "alta",
-      dataCriacao: "2025-04-20",
-      status: "pendente",
-    },
-    {
-      id: 12,
-      codigo: "G44",
-      descricao: "Post-traumatic headache",
-      prioridade: "baixa",
-      dataCriacao: "2025-06-01",
-      status: "pendente",
-    },
-    {
-      id: 13,
-      codigo: "G44",
-      descricao: "Medication overuse headache",
-      prioridade: "média",
-      dataCriacao: "2025-05-20",
-      status: "analisado",
-    },
-    {
-      id: 14,
-      codigo: "G44",
-      descricao: "Headache attributed to psychiatric disorder",
-      prioridade: "baixa",
-      dataCriacao: "2025-05-14",
-      status: "pendente",
-    },
-    {
-      id: 15,
-      codigo: "G44",
-      descricao: "Cervicogenic headache",
-      prioridade: "média",
-      dataCriacao: "2025-05-18",
-      status: "pendente",
-    },
-    {
-      id: 16,
-      codigo: "G44",
-      descricao: "Hypnic headache",
-      prioridade: "baixa",
-      dataCriacao: "2025-04-09",
-      status: "analisado",
-    },
+    carregarDiagnosticos();
+  }, []);
 
-    {
-      id: 17,
-      codigo: "G43",
-      descricao: "Vestibular migraine",
-      prioridade: "média",
-      dataCriacao: "2025-05-25",
-      status: "pendente",
-    },
-    {
-      id: 18,
-      codigo: "G44",
-      descricao: "New daily persistent headache",
-      prioridade: "alta",
-      dataCriacao: "2025-05-24",
-      status: "pendente",
-    },
-    {
-      id: 19,
-      codigo: "G43",
-      descricao: "Menstrual migraine",
-      prioridade: "média",
-      dataCriacao: "2025-05-22",
-      status: "pendente",
-    },
-    {
-      id: 20,
-      codigo: "G44",
-      descricao: "Trigeminal neuralgia headache",
-      prioridade: "alta",
-      dataCriacao: "2025-05-21",
-      status: "analisado",
-    },
+  // Função para extrair o código CID das mensagens (G43 ou G44)
+  const extrairCodigoCID = (messages) => {
+    const mensagemIA = messages.find(msg => msg.role === "assistant")?.content || "";
+    
+    // Expressão regular para encontrar códigos CID
+    const match = mensagemIA.match(/CID-10\s*(G43|G44)/);
+    return match ? match[1] : "G44";
+  };
 
-    // Various cases for testing
-    {
-      id: 21,
-      codigo: "G43",
-      descricao: "Prolonged aura migraine",
-      prioridade: "alta",
-      dataCriacao: "2025-05-12",
-      status: "pendente",
-    },
-    {
-      id: 22,
-      codigo: "G44",
-      descricao: "Cough headache",
-      prioridade: "baixa",
-      dataCriacao: "2025-05-01",
-      status: "analisado",
-    },
-    {
-      id: 23,
-      codigo: "G43",
-      descricao: "Familial hemiplegic migraine",
-      prioridade: "alta",
-      dataCriacao: "2025-05-08",
-      status: "pendente",
-    },
-    {
-      id: 24,
-      codigo: "G44",
-      descricao: "Exertional headache",
-      prioridade: "média",
-      dataCriacao: "2025-05-17",
-      status: "pendente",
-    },
-  ];
+  // Transformar dados do Firebase no formato esperado pela página
+  const transformarDados = (diagnosticosReais) => {
+    return diagnosticosReais.map((doc, index) => {
+      // Extrair data do timestamp do Firebase
+      const dataCriacao = doc.timestamp.toDate();
+      
+      return {
+        id: doc.id || `real-${index}`,
+        codigo: extrairCodigoCID(doc.messages),
+        descricao: doc.messages.map(msg => 
+          `${msg.role === 'user' ? 'Paciente' : 'Assistente'}: ${msg.content}`
+        ).join('\n\n'),
+        prioridade: doc.priority,
+        dataCriacao: dataCriacao.toISOString().split('T')[0],
+        status: "pendente",
+        timestamp: dataCriacao, // Mantemos o objeto Date para filtros
+      };
+    });
+  };
+
+  // Obter diagnósticos transformados
+  const diagnosticosTransformados = transformarDados(diagnosticos);
 
   const getDiagnosticosPorData = (date) => {
     const dateStr = date.toISOString().split("T")[0];
-    return diagnosticosMockados.filter(
-      (d) => d.dataCriacao === dateStr && d.status === "pendente"
+    return diagnosticosTransformados.filter(
+      (d) => d.dataCriacao === dateStr
     );
   };
+
 
   const mudarMes = (offset) => {
     const novaData = new Date(anoAtual, mesAtual + offset, 1);
@@ -264,7 +116,7 @@ const AnalysisPage = () => {
   const nomesDias = t("date.days", { returnObjects: true });
 
   const getDiagnosticosFiltrados = () => {
-    let diagnosticos = [...diagnosticosMockados];
+    let diagnosticos = [...diagnosticosTransformados];
 
     if (mostrarCalendario) {
       const dateStr = dataSelecionada.toISOString().split("T")[0];
@@ -294,25 +146,20 @@ const AnalysisPage = () => {
   return (
     <div className={styles.container}>
       <main className={styles.mainContent}>
+        {/* Cards de resumo */}
         {!isMobile && (
           <section className={styles.cardsSection}>
             <div className={styles.card}>
               <h3>{t("analysis.pendingDiagnoses")}</h3>
               <p className={styles.cardNumber}>
-                {
-                  diagnosticosMockados.filter((d) => d.status === "pendente")
-                    .length
-                }
+                {diagnosticosTransformados.length}
               </p>
             </div>
+            
             <div className={`${styles.card} ${styles.cardGrave}`}>
               <h3>{t("analysis.severeCases")}</h3>
               <p className={styles.cardNumber}>
-                {
-                  diagnosticosMockados.filter(
-                    (d) => d.status === "pendente" && d.prioridade === "alta"
-                  ).length
-                }
+                {diagnosticosTransformados.filter(d => d.prioridade === "alta").length}
               </p>
             </div>
             <div
@@ -443,9 +290,7 @@ const AnalysisPage = () => {
           <div className={styles.listaHeader}>
             <h2 className={styles.sectionTitle}>
               {mostrarCalendario
-                ? `${t(
-                    "analysis.diagnoses"
-                  )} - ${dataSelecionada.toLocaleDateString()}`
+                ? `${t("analysis.diagnoses")} - ${dataSelecionada.toLocaleDateString()}`
                 : t("analysis.diagnoses")}
             </h2>
 
@@ -473,7 +318,7 @@ const AnalysisPage = () => {
                       setCategoriaSelecionada(e.target.value || null)
                     }
                   >
-                    <option value="">{t("analysis.allCategories")}</option>
+                    <option value="" hidden>{t("analysis.allCategories")}</option>
                     <option value="G43">G43</option>
                     <option value="G44">G44</option>
                   </select>
@@ -487,7 +332,7 @@ const AnalysisPage = () => {
                       setOrdemSelecionada(e.target.value || null)
                     }
                   >
-                    <option value="">{t("analysis.sortBy")}</option>
+                    <option value="" hidden>{t("analysis.sortBy")}</option>
                     <option value="prioridade">{t("analysis.priority")}</option>
                     <option value="data">{t("analysis.date")}</option>
                   </select>
@@ -496,7 +341,13 @@ const AnalysisPage = () => {
             )}
           </div>
 
-          {mostrarFiltros && isMobile && (
+          {carregando ? (
+            <div className={styles.carregando}>
+              <p>{t("common.loading")}...</p>
+            </div>
+          ) : (
+            <>
+              {mostrarFiltros && isMobile && (
             <div className={styles.menuFiltros}>
               <div className={styles.grupoFiltro}>
                 <h4>{t("analysis.category")}</h4>
@@ -529,31 +380,34 @@ const AnalysisPage = () => {
           )}
 
           <div className={styles.listaItens}>
-            {getDiagnosticosFiltrados().map((diagnostico) => (
-              <div key={diagnostico.id} className={styles.itemDiagnostico}>
-                <div className={styles.codigo}>{diagnostico.codigo}</div>
-                <div className={styles.detalhes}>
-                  <h3>{diagnostico.descricao}</h3>
-                  <div className={styles.metaInfo}>
-                    <span
-                      className={styles.prioridade}
-                      data-prioridade={diagnostico.prioridade}
-                    >
-                      {diagnostico.prioridade}
-                    </span>
-                    <span className={styles.data}>
-                      {diagnostico.dataCriacao}
-                    </span>
-                    {diagnostico.status === "pendente" && (
-                      <span className={styles.statusPendente}>
-                        {t("analysis.pendingDiagnoses")}
-                      </span>
-                    )}
+                {getDiagnosticosFiltrados().map((diagnostico) => (
+                  <div key={diagnostico.id} className={styles.itemDiagnostico}>
+                    <div className={styles.codigo}>{diagnostico.codigo}</div>
+                    <div className={styles.detalhes}>
+                      <h3>
+                        {diagnostico.descricao.split('\n')[0].substring(0, 100)}
+                        {diagnostico.descricao.length > 100 && '...'}
+                      </h3>
+                      <div className={styles.metaInfo}>
+                        <span
+                          className={styles.prioridade}
+                          data-prioridade={diagnostico.prioridade}
+                        >
+                          {diagnostico.prioridade}
+                        </span>
+                        <span className={styles.data}>
+                          {diagnostico.dataCriacao}
+                        </span>
+                        <span className={styles.statusPendente}>
+                          {t("analysis.pendingDiagnoses")}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </section>
       </main>
     </div>
