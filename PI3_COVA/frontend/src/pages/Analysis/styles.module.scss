@@ -375,16 +375,24 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
               border-radius: 20px;
               font-weight: 600;
 
-              &[data-prioridade="alta"] {
-                background-color: rgba(231, 76, 60, 0.1);
+              &[data-prioridade="Vermelho"] {
+                background-color: rgba(240, 29, 6, 0.342);
               }
 
-              &[data-prioridade="média"] {
-                background-color: rgba(243, 156, 18, 0.1);
+              &[data-prioridade="Laranja"] {
+                background-color: rgba(248, 113, 2, 0.342);
               }
 
-              &[data-prioridade="baixa"] {
-                background-color: rgba(39, 174, 96, 0.1);
+              &[data-prioridade="Amarelo"] {
+                background-color: rgba(241, 245, 5, 0.342);
+              }
+
+              &[data-prioridade="Verde"] {
+                background-color: rgba(21, 255, 0, 0.342);
+              }
+
+              &[data-prioridade="Azul"] {
+                background-color: rgba(5, 61, 245, 0.342);
               }
             }
 

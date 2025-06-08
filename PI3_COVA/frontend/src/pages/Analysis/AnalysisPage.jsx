@@ -31,6 +31,7 @@ const AnalysisPage = () => {
         setCarregando(true);
         const diagnosticosReais = await fetchPendingReviews();
         setDiagnosticos(diagnosticosReais);
+        console.log(diagnosticosReais)
       } catch (error) {
         console.error("Erro ao carregar diagnósticos:", error);
       } finally {
@@ -130,7 +131,7 @@ const AnalysisPage = () => {
     }
 
     if (ordemSelecionada === "prioridade") {
-      const ordemPrioridade = { alta: 1, média: 2, baixa: 3 };
+      const ordemPrioridade = { Vermelho: 1, Laranja: 2, Amarelo: 3, Verde: 4, Azul: 5 };
       diagnosticos.sort(
         (a, b) => ordemPrioridade[a.prioridade] - ordemPrioridade[b.prioridade]
       );
@@ -159,7 +160,7 @@ const AnalysisPage = () => {
             <div className={`${styles.card} ${styles.cardGrave}`}>
               <h3>{t("analysis.severeCases")}</h3>
               <p className={styles.cardNumber}>
-                {diagnosticosTransformados.filter(d => d.prioridade === "alta").length}
+                {diagnosticosTransformados.filter(d => d.prioridade === "Vermelho").length}
               </p>
             </div>
             <div
