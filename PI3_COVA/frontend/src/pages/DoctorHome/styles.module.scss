@@ -11,6 +11,11 @@
    &::-webkit-scrollbar {
       display: none;
    }
+
+   @media (max-width: 768px) {
+    height: 80vh;
+    width: 100%;
+   }
 }
 
 .header {

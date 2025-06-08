@@ -9,6 +9,10 @@ import SimpleModal from "../../components/SimpleModal/SimpleModal";
 import AboutModal from "../../components/AboutUsModal/AboutUsModal";
 import styles from "./styles.module.scss";
 import { getAuth, signOut } from "firebase/auth";
+import { 
+  updateDoctorOnlineStatus,
+  fetchUserBasicInfo 
+} from "../../api/firebase"
 
 const SettingsPage = () => {
   const {
@@ -32,16 +36,26 @@ const SettingsPage = () => {
   }, [preferredLanguage, i18n]);
 
   const handleLogout = async () => {
-    try {
-      localStorage.clear();
-      const auth = getAuth();
-      await signOut(auth);
-      console.log("Usuário deslogado com sucesso!");
-      navigate(0);
-    } catch (error) {
-      console.error("Erro ao deslogar:", error.message);
+  try {
+    // Verificar se o usuário é um médico e atualizar doctorOnline para false
+    const auth = getAuth();
+    const user = auth.currentUser;
+    
+    if (user) {
+      const userDoc = await fetchUserBasicInfo(user.uid);
+      if (userDoc && userDoc.role === 'doctor') {
+        await updateDoctorOnlineStatus(user.uid, false);
+      }
     }
-  };
+
+    localStorage.clear();
+    await signOut(auth);
+    console.log("Usuário deslogado com sucesso!");
+    navigate(0);
+  } catch (error) {
+    console.error("Erro ao deslogar:", error.message);
+  }
+};
 
   return (
     <main className={styles.container}>

@@ -8,6 +8,10 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
+import { 
+  updateDoctorOnlineStatus,
+  fetchUserBasicInfo 
+} from "../../../api/firebase";
 import { toast } from "react-toastify";
 
 import { IoEye, IoEyeOff } from "react-icons/io5";
@@ -46,7 +50,13 @@ const LoginPage = () => {
         throw new Error("Autenticação falhou");
       }
 
-      // 3. Feedback para o usuário
+      // 3. Verifica se é médico e atualiza status para online
+      const userDoc = await fetchUserBasicInfo(userCredential.user.uid);
+      if (userDoc && userDoc.role === 'doctor') {
+        await updateDoctorOnlineStatus(userCredential.user.uid, true);
+      }
+
+      // 4. Feedback para o usuário
       toast.success("Login realizado com sucesso!");
       
       // O useEffect vai lidar com o redirecionamento quando o user mudar no contexto

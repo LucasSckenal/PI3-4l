@@ -140,6 +140,24 @@ const fetchDoctorAbout = async (userID) => {
   }
 };
 
+/**
+ * Atualiza o status online do médico no Firestore
+ * @param {string} userID - ID do usuário (médico)
+ * @param {boolean} isOnline - Status online (true/false)
+ */
+const updateDoctorOnlineStatus = async (userID, isOnline) => {
+  try {
+    const userRef = doc(db, "Users", userID);
+    await updateDoc(userRef, {
+      doctorOnline: isOnline
+    });
+    console.log(`✅ Status online do médico atualizado para ${isOnline}`);
+  } catch (error) {
+    console.error("❌ Erro ao atualizar status do médico:", error);
+    throw error;
+  }
+};
+
 export {
   app,
   analytics,
@@ -150,4 +168,5 @@ export {
   saveDoctorAbout,
   fetchUserBasicInfo,
   fetchDoctorAbout,
+  updateDoctorOnlineStatus,
 };
