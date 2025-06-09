@@ -26,6 +26,20 @@
   overflow-y: auto;
   max-height: 90vh;
   position: relative;
+
+  &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 3px;
+    }
 }
 
 .modalHeader {

@@ -1,27 +1,33 @@
 import { useAccount } from '../../contexts/Account/AccountProvider';
 import { useTranslation } from 'react-i18next';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   LineElement,
   PointElement,
+  TimeScale,
   LinearScale,
-  Title,
-  CategoryScale,
   Tooltip,
-  Legend
+  Legend,
+  Title,
+  CategoryScale
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import 'chartjs-adapter-date-fns';
 import styles from './styles.module.scss';
 import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../api/firebase/';
-
+import { fetchPendingReviews } from '../../api/firebase';
+import {
+  collection,
+  getDocs
+} from 'firebase/firestore';
+import { db } from '../../api/firebase';
 ChartJS.register(
+  CategoryScale,
   LineElement,
   PointElement,
+  TimeScale,
   LinearScale,
   Title,
-  CategoryScale,
   Tooltip,
   Legend
 );
@@ -30,242 +36,218 @@ const DoctorHomePage = () => {
   const { userData, loading } = useAccount();
   const { t } = useTranslation();
 
+  // States para casos
   const [stats, setStats] = useState({
     totalCases: 0,
     g43Cases: 0,
     g44Cases: 0,
     criticalCases: 0
   });
+  const [chartData, setChartData] = useState({ datasets: [] });
+  const [loadingCases, setLoadingCases] = useState(true);
+  // States para análises pendentes
+  const [recentAnalyses, setRecentAnalyses] = useState([]);
+  const [loadingAnalyses, setLoadingAnalyses] = useState(true);
 
+  const formatDate = (timestamp) => {
+    if (!timestamp?.toDate) return '--/--/----';
+    const date = timestamp.toDate();
+    return new Intl.DateTimeFormat('pt-BR', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(date);
+  };
+
+  const extractCID = (messages) => {
+    const ia = messages.find(m => m.role === 'assistant')?.content || '';
+    const match = ia.match(/CID-10\s*(G43|G44)/);
+    return match ? match[1] : 'G44';
+  };
+
+  // Carrega casos para stats e gráfico
   useEffect(() => {
-    const fetchCases = async () => {
-      const casesRef = collection(db, 'Cases');
-      console.log(casesRef)
-      const snapshot = await getDocs(casesRef);
+    const loadCases = async () => {
+      setLoadingCases(true);
+      try {
+        const casesRef = collection(db, 'Cases');
+        const snapshot = await getDocs(casesRef);
+        let g43 = 0, g44 = 0, critical = 0;
+        
+        const monthly = Array(12).fill().map(() => ({ G43: 0, G44: 0 }));
+        const monthlyCount = Array.from({ length: 12 }, () => ({ G43: 0, G44: 0 }));
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const cid = data.cid || '';
+          const date = data.createdAt?.toDate();
+          if (date) {
+            const m = date.getMonth();
+            if (cid.startsWith('G43')) monthlyCount[m].G43++;
+            if (cid.startsWith('G44')) monthlyCount[m].G44++;
+          }
+        });
 
-      let g43 = 0, g44 = 0, critical = 0;
+        const labels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+        const chartData = {
+          datasets: [
+            {
+              label: 'G43',
+              data: monthlyCount.map(m => m.G43),
+              borderColor: '#4e79a7',
+              backgroundColor: 'rgba(78,121,167,0.1)',
+              tension: 0.3,
+              borderWidth: 2
+            },
+            {
+              label: 'G44',
+              data: monthlyCount.map(m => m.G44),
+              borderColor: '#f28e2b',
+              backgroundColor: 'rgba(242,142,43,0.1)',
+              tension: 0.3,
+              borderWidth: 2
+            }
+          ]
+        };
 
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const cid = data.cid;
-        const intensidade = data.intensidade;
+        const chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Evolução Mensal de Casos' }
+          },
+          scales: {
+            x: { type: 'category', ticks: { autoSkip: false } },
+            y: { beginAtZero: true }
+          }
+        };
 
-        if (typeof cid === 'string') {
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const cid = data.cid || '';
+          const intensity = (data.intensidade || '').toLowerCase();
+          const priority = (data.priority || "").toLowerCase();
           if (cid.startsWith('G43')) g43++;
           else if (cid.startsWith('G44')) g44++;
-        }
-
-        if (intensidade === 'incapacitante') {
-          critical++;
-        }
-      });
-
-      setStats({
-        totalCases: snapshot.size,
-        g43Cases: g43,
-        g44Cases: g44,
-        criticalCases: critical
-      });
+          if (intensity === 'incapacitante' || priority === "vermelho") critical++;
+          const date = data.createdAt?.toDate();
+          if (date) {
+            const m = date.getMonth();
+            if (cid.startsWith('G43')) monthly[m].G43++;
+            else if (cid.startsWith('G44')) monthly[m].G44++;
+          }
+        });
+        setStats({ totalCases: snapshot.size, g43Cases: g43, g44Cases: g44, criticalCases: critical });
+        // Chart data
+        setChartData({
+          labels,
+          datasets: [
+            {
+              label: 'G43',
+              data: monthlyCount.map(m => m.G43),
+              borderColor: '#4e79a7',
+              backgroundColor: 'rgba(78,121,167,0.1)',
+              tension: 0.3,
+              borderWidth: 2
+            },
+            {
+              label: 'G44',
+              data: monthlyCount.map(m => m.G44),
+              borderColor: '#f28e2b',
+              backgroundColor: 'rgba(242,142,43,0.1)',
+              tension: 0.3,
+              borderWidth: 2
+            }
+          ]
+        });
+      } catch (err) {
+        console.error('Erro loadCases:', err);
+      } finally {
+        setLoadingCases(false);
+      }
     };
-
-    fetchCases();
+    loadCases();
   }, []);
 
-  // Dados mockados para a tabela de casos recentes
-  const mockRecentPatients = [
-    {
-      id: 'ABC123',
-      name: 'João Silva',
-      age: 34,
-      diagnosis: 'G43.0',
-      lastVisit: '10/05/2025'
-    },
-    {
-      id: 'DEF456',
-      name: 'Maria Oliveira',
-      age: 28,
-      diagnosis: 'G44.2',
-      lastVisit: '08/05/2025'
-    },
-    {
-      id: 'GHI789',
-      name: 'Carlos Souza',
-      age: 45,
-      diagnosis: 'G43.1',
-      lastVisit: '05/05/2025'
-    },
-    {
-      id: 'JKL012',
-      name: 'Ana Paula',
-      age: 38,
-      diagnosis: 'G44.8',
-      lastVisit: '01/05/2025'
-    }
-  ];
-
-  const monthlyData = {
-    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    datasets: [
-      {
-        label: 'CID-10 G43 (Enxaqueca)',
-        data: [65, 59, 70, 81, 76, 75, 80, 91, 85, 93, 106, 102],
-        borderColor: '#4e79a7',
-        backgroundColor: 'rgba(78, 121, 167, 0.1)',
-        tension: 0.3,
-        borderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 6
-      },
-      {
-        label: 'CID-10 G44 (Outras cefaleias)',
-        data: [28, 32, 35, 40, 42, 38, 45, 50, 48, 52, 55, 60],
-        borderColor: '#f28e2b',
-        backgroundColor: 'rgba(242, 142, 43, 0.1)',
-        tension: 0.3,
-        borderWidth: 2,
-        pointRadius: 4,
-        pointHoverRadius: 6
+  // Carrega análises pendentes para seção de análises recentes
+  useEffect(() => {
+    const loadAnalyses = async () => {
+      setLoadingAnalyses(true);
+      try {
+        const pendings = await fetchPendingReviews();
+        const recents = pendings.slice(0,4).map(p => ({
+          id: p.id,
+          codigo: extractCID(p.messages),
+          priority: p.priority,
+          date: formatDate(p.timestamp)
+        }));
+        setRecentAnalyses(recents);
+      } catch (err) {
+        console.error('Erro loadAnalyses:', err);
+      } finally {
+        setLoadingAnalyses(false);
       }
-    ]
-  };
+    };
+    loadAnalyses();
+  }, []);
 
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          color: '#e0e0e0',
-          font: {
-            family: "'Reddit Sans Condensed', sans-serif"
-          }
-        }
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        titleColor: '#ffffff',
-        bodyColor: '#e0e0e0',
-        bodyFont: {
-          family: "'Reddit Sans Condensed', sans-serif"
-        }
-      }
+      legend: { position: 'top' },
+      title: { display: true, text: 'Evolução Mensal de Casos' }
     },
     scales: {
-      x: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)'
-        },
-        ticks: {
-          color: '#b0b0b0'
-        }
-      },
-      y: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.1)'
-        },
-        ticks: {
-          color: '#b0b0b0'
-        }
-      }
+      x: { type: 'category', ticks: { autoSkip: false } },
+      y: { beginAtZero: true }
     }
   };
 
-  if (loading) return <div>{t('common.loading')}</div>;
+  if (loading || loadingCases) return <div className={styles.loading}>{t('common.loading')}</div>;
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Bem-vindo, {userData?.name?.split(' ').slice(0, 4).join(' ') ?? t('home.user')}</h1>
-        <p className={styles.subtitle}>Painel de acompanhamento de casos CID-10 G43 e G44</p>
+        <h1>Bem-vindo, {userData?.name?.split(' ').slice(0,4).join(' ')}</h1>
+        <p>Painel de acompanhamento de casos e análises</p>
       </header>
 
       <main className={styles.content}>
+        {/* Estatísticas de Cases */}
         <div className={styles.statsGrid}>
-          <div className={`${styles.statCard} ${styles.primary}`}>
-            <h3>Total de Casos</h3>
-            <p>{stats.totalCases}</p>
-            <small>Registrados no sistema</small>
-          </div>
-          <div className={`${styles.statCard} ${styles.warning}`}>
-            <h3>CID-10 G43</h3>
-            <p>{stats.g43Cases}</p>
-            <small>Casos de enxaqueca</small>
-          </div>
-          <div className={`${styles.statCard} ${styles.info}`}>
-            <h3>CID-10 G44</h3>
-            <p>{stats.g44Cases}</p>
-            <small>Outras síndromes de algias cranianas</small>
-          </div>
-          <div className={`${styles.statCard} ${styles.danger}`}>
-            <h3>Casos Críticos</h3>
-            <p>{stats.criticalCases}</p>
-            <small>Necessitando atenção</small>
-          </div>
+          <div className={`${styles.statCard} ${styles.primary}`}><h3>Total de Casos</h3><p>{stats.totalCases}</p><small>Registrados no sistema</small></div>
+          <div className={`${styles.statCard} ${styles.warning}`}><h3>CID-10 G43</h3><p>{stats.g43Cases}</p><small>Casos de enxaqueca</small></div>
+          <div className={`${styles.statCard} ${styles.info}`}><h3>CID-10 G44</h3><p>{stats.g44Cases}</p><small>Outras síndromes de algias cranianas</small></div>
+          <div className={`${styles.statCard} ${styles.danger}`}><h3>Casos Críticos</h3><p>{stats.criticalCases}</p><small>Necessitando atenção</small></div>
         </div>
 
-        <div className={styles.contentRow}>
-          <section className={styles.recentCases}>
-            <div className={styles.sectionHeader}>
-              <h2>Casos Recentes</h2>
-              <button className={styles.seeAllButton}>Ver todos</button>
-            </div>
-            <div className={styles.tableContainer}>
+      <div className={styles.contentRow}>
+        {/* Análises Recentes */}
+        <section className={styles.recentCases}>
+          <div className={styles.sectionHeader}><h2>Análises Recentes</h2></div>
+          <div className={styles.tableContainer}>
+            {loadingAnalyses ? <p>Carregando...</p> : (
               <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Paciente</th>
-                    <th>Idade</th>
-                    <th>Diagnóstico</th>
-                    <th>Última Consulta</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>ID</th><th>Código</th><th>Prioridade</th><th>Data</th></tr></thead>
                 <tbody>
-                  {mockRecentPatients.map(patient => (
-                    <tr key={patient.id}>
-                      <td>{patient.id}</td>
-                      <td>
-                        <div className={styles.patientInfo}>
-                          <span className={styles.patientName}>{patient.name}</span>
-                        </div>
-                      </td>
-                      <td>{patient.age}</td>
-                      <td>
-                        <span className={`${styles.diagnosisBadge} ${patient.diagnosis.startsWith('G43') ? styles.migraine : styles.other}`}>
-                          {patient.diagnosis}
-                        </span>
-                      </td>
-                      <td>{patient.lastVisit}</td>
-                      <td>
-                        <button className={styles.actionButton}>Visualizar</button>
-                      </td>
-                    </tr>
+                  {recentAnalyses.map(a => (
+                    <tr key={a.id}><td>{a.id.substring(0,6)}...</td><td>{a.codigo}</td><td>{a.priority}</td><td>{a.date}</td></tr>
                   ))}
                 </tbody>
               </table>
-            </div>
-          </section>
+            )}
+          </div>
+        </section>
 
-          <section className={styles.chartsSection}>
-            <h2>Evolução Mensal de Casos</h2>
+        {/* Gráfico de Casos Mensais */}
+        <section className={styles.chartsSection}>
+          <h2>Evolução Mensal de Casos</h2>
             <div className={styles.chartContainer}>
-              <Line data={monthlyData} options={chartOptions} />
-            </div>
-            <div className={styles.chartFooter}>
-              <span className={styles.footerItem}>
-                <span className={styles.indicatorG43}></span>
-                CID-10 G43: Enxaqueca
-              </span>
-              <span className={styles.footerItem}>
-                <span className={styles.indicatorG44}></span>
-                CID-10 G44: Outras cefaleias
-              </span>
-            </div>
-          </section>
+            <Line data={chartData} options={chartOptions} />
+          </div>
+        </section>
         </div>
       </main>
     </div>

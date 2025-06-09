@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FiFilter,
   FiChevronDown,
@@ -25,6 +26,7 @@ const AnalysisPage = () => {
   const [diagnosticos, setDiagnosticos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [filtroDataAtivo, setFiltroDataAtivo] = useState(false);
+  const navigate = useNavigate();
 
   // Buscar diagnósticos reais do Firebase
   useEffect(() => {
@@ -444,7 +446,7 @@ return (
 
           <div className={styles.listaItens}>
                 {getDiagnosticosFiltrados().map((diagnostico) => (
-                  <div key={diagnostico.id} className={styles.itemDiagnostico}>
+                  <div key={diagnostico.id} className={styles.itemDiagnostico} onClick={() => navigate(`/analysis/${diagnostico.id}`)}>
                     <div className={styles.codigo}>{diagnostico.codigo}</div>
                     <div className={styles.detalhes}>
                       <h3>
