@@ -4,6 +4,13 @@ import styles from "./styles.module.scss";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import defaultProfileIcon from "../../public/UserDefault.webp";
 import { useTranslation } from "react-i18next";
+import {
+  IoCalendarOutline,
+  IoWaterOutline,
+  IoBarbellOutline,
+  IoLocationOutline,
+  IoMailOutline,
+} from "react-icons/io5";
 
 const ProfilePage = () => {
   const { userData, loading } = useAccount();
@@ -30,69 +37,54 @@ const ProfilePage = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    const utcDate = new Date(dateString);
-    
-    const localDate = new Date(utcDate.getTime() + 3 * 60 * 60 * 1000); //? Precisa tornar dinâmico com o horário do computador do usuário (atualmente fixo no fuso horário -3 horas)
-
-    return localDate.toLocaleDateString(locale, {
-      day: "2-digit",
-      month: "2-digit",
+    const date = new Date(dateString);
+    return date.toLocaleDateString(locale, {
       year: "numeric",
+      month: "long",
+      day: "2-digit",
     });
   };
 
   return (
-    <div className={styles.profileWrapper}>
-      <div className={styles.header}>
-        <div className={styles.profileHeaderContent}>
-          <div className={styles.profilePicContainer}>
-            <img
-              src={getProfileImageSource()}
-              alt={t("profile.alt")}
-              className={styles.profilePic}
-              onError={(e) => (e.target.src = defaultProfileIcon)}
-            />
-          </div>
-          <div className={styles.userNameSection}>
-            <h2 className={styles.userName}>
-              {userData?.name?.length <= 17
-                ? userData.name
-                : userData?.name?.split(" ").slice(0, 2).join(" ")}
-            </h2>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.infoSection}>
-        <div className={styles.infoItem}>
-          {t("profile.email")}: <span>{userData?.email}</span>
-        </div>
-        <div className={styles.infoItem}>
-          {t("profile.location")}: <span>{userData?.location}</span>
-        </div>
-        <div className={styles.infoItem}>
-          {t("profile.birthDate")}:{" "}
-          <span>{formatDate(userData?.birthDate)}</span>
-        </div>
-        <div className={styles.infoItem}>
-          {t("profile.phone")}: <span>{userData?.phone}</span>
-        </div>
-        <div className={styles.infoItem}>
-          {t("profile.gender.label")}:{" "}
-          <span>
-            {userData?.gender === "male"
-              ? t("profile.gender.male")
-              : userData?.gender === "female"
-              ? t("profile.gender.female")
-              : t("profile.gender.other")}
-          </span>
-        </div>
-      </div>
-
-      <div className={styles.footer}>
+    <div className={styles.profilePage}>
+      <div className={styles.profileHeader}>
+        <img
+          src={getProfileImageSource()}
+          alt="Profile"
+          className={styles.profileImage}
+          onError={(e) => (e.target.src = defaultProfileIcon)}
+        />
+        <h2 className={styles.userName}>
+          {userData?.name || "No Name"}
+        </h2>
+        <p className={styles.userRole}>{t("profile.patient")}</p>
         <button className={styles.editButton} onClick={handleEditProfile}>
           {t("profile.edit")}
         </button>
+      </div>
+
+      <div className={styles.personalInfo}>
+        <h3 className={styles.infoTitle}>Personal Information</h3>
+        <div className={styles.infoItem}>
+          <IoCalendarOutline className={styles.icon} />
+          <span>{formatDate(userData?.birthDate)}</span>
+        </div>
+        <div className={styles.infoItem}>
+          <IoWaterOutline className={styles.icon} />
+          <span>{userData?.bloodType || "O-"}</span>
+        </div>
+        <div className={styles.infoItem}>
+          <IoBarbellOutline className={styles.icon} />
+          <span>{userData?.weight ? `${userData.weight} kg` : "65 kg"}</span>
+        </div>
+        <div className={styles.infoItem}>
+          <IoLocationOutline className={styles.icon} />
+          <span>{userData?.location || "New York, USA"}</span>
+        </div>
+        <div className={styles.infoItem}>
+          <IoMailOutline className={styles.icon} />
+          <span>{userData?.email}</span>
+        </div>
       </div>
 
       {isModalOpen && (

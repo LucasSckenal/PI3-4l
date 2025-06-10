@@ -89,40 +89,7 @@ const DoctorHomePage = () => {
         });
 
         const labels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-        const chartData = {
-          datasets: [
-            {
-              label: 'G43',
-              data: monthlyCount.map(m => m.G43),
-              borderColor: '#4e79a7',
-              backgroundColor: 'rgba(78,121,167,0.1)',
-              tension: 0.3,
-              borderWidth: 2
-            },
-            {
-              label: 'G44',
-              data: monthlyCount.map(m => m.G44),
-              borderColor: '#f28e2b',
-              backgroundColor: 'rgba(242,142,43,0.1)',
-              tension: 0.3,
-              borderWidth: 2
-            }
-          ]
-        };
-
-        const chartOptions = {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'top' },
-            title: { display: true, text: 'Evolução Mensal de Casos' }
-          },
-          scales: {
-            x: { type: 'category', ticks: { autoSkip: false } },
-            y: { beginAtZero: true }
-          }
-        };
-
+        
         snapshot.forEach(doc => {
           const data = doc.data();
           const cid = data.cid || '';

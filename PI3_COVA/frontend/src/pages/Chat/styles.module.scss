@@ -3,9 +3,9 @@
   flex-direction: column;
   padding-top: 5%;
   margin: 0 auto;
-  gap: 50px;
+  gap: 30px;
   width: 90%;
-
+  
   .IaContainer {
     display: flex;
     flex-direction: column;
@@ -26,7 +26,8 @@
       text-align: center;
       color: var(--TextGeneralAlt);
       height: 50px;
-      margin-top: 10px;
+      margin-top: -15px;
+      margin-bottom: 15px;
     }
   }
 

@@ -35,7 +35,6 @@ const AnalysisPage = () => {
         setCarregando(true);
         const diagnosticosReais = await fetchPendingReviews();
         setDiagnosticos(diagnosticosReais);
-        console.log(diagnosticosReais)
       } catch (error) {
         console.error("Erro ao carregar diagnósticos:", error);
       } finally {

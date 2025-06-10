@@ -359,8 +359,11 @@
       gap: var(--Gap2);
 
       .HistoryHeader {
+        width: 90VW;
+        align-self: center;
         flex-direction: row;
         justify-content: space-around;
+        justify-items: center;
         margin-top: -5%;
         margin-bottom: 5px;
         font-size: 16px;
@@ -377,16 +380,20 @@
 
       .InnerHistory {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
         width: 100%;
-        max-width: 1000px;
         margin: -20px auto;
+        justify-content: center;
 
         .box {
           border-bottom: 1.5px solid var(--PreferredColor);
           border-radius: 8px;
           padding: 5px;
           width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          justify-content: space-between;
 
           &:hover {
             background-color: var(--PreferredColor);
