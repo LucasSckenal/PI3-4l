@@ -50,21 +50,26 @@ const DoctorHomePage = () => {
   const [loadingAnalyses, setLoadingAnalyses] = useState(true);
 
   const formatDate = (timestamp) => {
-    if (!timestamp?.toDate) return '--/--/----';
-    const date = timestamp.toDate();
-    return new Intl.DateTimeFormat('pt-BR', {
-      timeZone: 'America/Sao_Paulo',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date);
-  };
+  
+  const date = timestamp?.toDate ? timestamp.toDate() : timestamp;
+
+  if (!(date instanceof Date) || isNaN(date)) return '--/--/----';
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(date);
+};
 
   const extractCID = (messages) => {
     const ia = messages.find(m => m.role === 'assistant')?.content || '';
     const match = ia.match(/CID-10\s*(G43|G44)/);
     return match ? match[1] : 'G44';
   };
+
+  
 
   // Carrega casos para stats e gráfico
   useEffect(() => {
@@ -80,7 +85,7 @@ const DoctorHomePage = () => {
         snapshot.forEach(doc => {
           const data = doc.data();
           const cid = data.cid || '';
-          const date = data.createdAt?.toDate();
+          const date = data.timeStamp?.toDate();
           if (date) {
             const m = date.getMonth();
             if (cid.startsWith('G43')) monthlyCount[m].G43++;
@@ -137,27 +142,38 @@ const DoctorHomePage = () => {
     loadCases();
   }, []);
 
-  // Carrega análises pendentes para seção de análises recentes
-  useEffect(() => {
-    const loadAnalyses = async () => {
-      setLoadingAnalyses(true);
-      try {
-        const pendings = await fetchPendingReviews();
-        const recents = pendings.slice(0,4).map(p => ({
-          id: p.id,
-          codigo: extractCID(p.messages),
-          priority: p.priority,
-          date: formatDate(p.timestamp)
-        }));
-        setRecentAnalyses(recents);
-      } catch (err) {
-        console.error('Erro loadAnalyses:', err);
-      } finally {
-        setLoadingAnalyses(false);
-      }
-    };
-    loadAnalyses();
-  }, []);
+useEffect(() => {
+  const loadAnalyses = async () => {
+    setLoadingAnalyses(true);
+    try {
+      const pendings = await fetchPendingReviews();
+
+      const processed = pendings.map(p => ({
+        ...p,
+        timestamp: p.timestamp?.toDate ? p.timestamp.toDate() : new Date(0) 
+      }));
+
+      const sorted = processed.sort((a, b) => b.timestamp - a.timestamp);
+
+      const recents = sorted.slice(0, 5).map(p => ({
+        id: p.id,
+        codigo: extractCID(p.messages),
+        priority: p.priority,
+        date: formatDate(p.timestamp),
+      }));
+
+      setRecentAnalyses(recents);
+    } catch (err) {
+      console.error("Erro loadAnalyses:", err);
+    } finally {
+      setLoadingAnalyses(false);
+    }
+  };
+
+  loadAnalyses();
+}, []);
+
+
 
   const chartOptions = {
     responsive: true,
@@ -200,7 +216,13 @@ const DoctorHomePage = () => {
                 <thead><tr><th>ID</th><th>Código</th><th>Prioridade</th><th>Data</th></tr></thead>
                 <tbody>
                   {recentAnalyses.map(a => (
-                    <tr key={a.id}><td>{a.id.substring(0,6)}...</td><td>{a.codigo}</td><td>{a.priority}</td><td>{a.date}</td></tr>
+                    <tr key={a.id}><td>{a.id}</td><td><span className={`${styles.code} ${
+                      a.codigo === "G43"
+                        ? styles.g43
+                        : a.codigo === "G44"
+                        ? styles.g44
+                        : ""
+                    }`}>{a.codigo}</span></td><td><span className={styles[a.priority.toLowerCase()]}>{a.priority}</span></td><td>{a.date}</td></tr>
                   ))}
                 </tbody>
               </table>

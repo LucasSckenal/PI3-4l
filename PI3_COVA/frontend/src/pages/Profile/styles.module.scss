@@ -77,3 +77,29 @@
   font-size: 1.3rem;
   color: var(--PreferredColor);
 }
+
+@media (min-width: 1200px) {
+  .profilePage {
+  height: auto;
+  background-color: var(--Bg);
+  color: var(--White);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .profileHeader {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, var(--PreferredColor) 0%, var(--Black) 100%);
+    color: var(--White);
+  }
+}
+
+
+
+}

@@ -215,7 +215,7 @@
   }
   
   .aboutSection {
-    background: var(--DetailsBg);
+    background: var(--DetailsBgLighter);
     padding: 2rem;
     border-radius: var(--BorderRadius);
     margin-bottom: 2.5rem;
@@ -227,7 +227,7 @@
     
     p {
       line-height: 1.8;
-      color: var(--White);
+      color: var(--TextGeneral);
       font-size: 1.05rem;
     }
   }
@@ -284,7 +284,7 @@
     }
     
     .timelineContent {
-      background: var(--DetailsBg);
+      background: var(--DetailsBgLighter);
       padding: 1.5rem;
       border-radius: var(--BorderRadius);
       box-shadow: var(--BoxShadow);
@@ -295,7 +295,7 @@
       
       h4 {
         margin: 0 0 0.3rem 0;
-        color: var(--White);
+        color: var(--TextGeneral);
         font-size: 1.1rem;
         font-weight: bold;
         border-left: 4px solid var(--PreferredColor);
@@ -304,15 +304,15 @@
       
       .institution, .period {
         margin: 0 0 0.3rem 0;
-        color: var(--White);
+        color: var(--TextGeneral);
         font-weight: bold;
-        border-bottom: 1px solid var(--White);
+        border-bottom: 1px solid var(--TextGeneral);
         padding: 8px;
       }
       
       .description {
         margin: 0.8rem 0 0 0;
-        color: var(--White);
+        color: var(--TextGeneral);
         font-size: 0.95rem;
         text-align: justify;
         line-height: 1.6;
@@ -323,17 +323,17 @@
 
 // Procedures List
 .proceduresList {
-  background: var(--DetailsBg);
+  background: var(--DetailsBgLighter);
   padding: 1.5rem;
   border-radius: var(--BorderRadius);
   box-shadow: var(--BoxShadow);
   list-style: none;
   margin-bottom: 10px;
-  color: var(--White);
+  color: var(--TextGeneral);
   
   li {
     padding: 0.8rem 0;
-    border-bottom: 1px solid var(--White);
+    border-bottom: 1px solid var(--TextGeneral);
     display: flex;
     align-items: center;
     
@@ -357,7 +357,7 @@
 
 // Contact Section
 .contactInfo {
-  background: var(--DetailsBg);
+  background: var(--DetailsBgLighter);
   padding: 1.5rem;
   border-radius: var(--BorderRadius);
   box-shadow: var(--BoxShadow);
@@ -365,7 +365,7 @@
   .contactItem {
     display: flex;
     padding: 1rem 0;
-    border-bottom: 1px solid var(--White);
+    border-bottom: 1px solid var(--TextGeneral);
     
     &:last-child {
       border-bottom: none;
@@ -386,11 +386,11 @@
     p {
       margin: 0 0 0.2rem 0;
       font-size: 0.9rem;
-      color: var(--White);
+      color: var(--TextGeneral);
     }
     
     a {
-      color: var(--White);
+      color: var(--TextGeneral);
       font-weight: 500;
       text-decoration: none;
       font-size: 1.05rem;
@@ -461,7 +461,7 @@
   }
 
   .experienceForm {
-    background: var(--DetailsBg);
+    background: var(--DetailsBgLighter);
     padding: 1.5rem;
     border-radius: var(--BorderRadius);
     margin-bottom: 1.5rem;
@@ -474,7 +474,7 @@
     label {
       display: block;
       margin-bottom: 0.5rem;
-      color: var(--White);
+      color: var(--TextGeneral);
       font-size: 0.9rem;
     }
 
@@ -484,7 +484,7 @@
       border: 1px solid var(--White);
       border-radius: var(--BorderRadius);
       background: rgba(255, 255, 255, 0.1);
-      color: var(--White);
+      color: var(--TextGeneral);
       font-size: 1rem;
 
       &:focus {

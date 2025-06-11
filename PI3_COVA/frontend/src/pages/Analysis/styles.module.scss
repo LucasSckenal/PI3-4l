@@ -37,7 +37,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     flex: 1;
     min-width: 200px;
     max-width: calc(33.333% - #{$espacamento-padrao});
-    background-color: var(--UiBg);
+    background-color: var(--UiBgLighter);
     border-radius: $borda-arredondada;
     padding: $espacamento-padrao;
     box-shadow: $sombra-card;
@@ -54,17 +54,23 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     h3 {
-      color: var(--White);
+      color: var(--TextGeneral);
       font-size: 1rem;
       margin: 0 0 $espacamento-padrao 0;
       font-weight: 500;
     }
 
     .cardNumber {
-      color: var(--White);
+      color: var(--TextGeneral);
       font-size: 2rem;
       font-weight: 600;
       margin: 0;
+    }
+  }
+  .cardPending{
+    border-top: 4px solid var(--Yellow) !important;
+    .cardNumber {
+      color: var(--Yellow);
     }
   }
 
@@ -225,7 +231,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 
 /* Mobile Calendar */
 .calendarioMobile {
-  background-color: var(--UiBg);
+  background-color: var(--UiBgLighter);
   border-radius: $borda-arredondada;
   padding: $espacamento-padrao;
   box-shadow: $sombra-box;
@@ -338,12 +344,13 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         border-left: 4px solid var(--PreferredColor);
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        background-color: var(--UiBgLighter);
+        background-color: var(--DetailsBgLighter);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
         &:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+          cursor: pointer;
         }
 
         .codigo {
@@ -428,7 +435,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
           padding: 0.75rem 1rem;
           font-size: 1.05rem;
           border: 1px solid var(--BorderColor);
-          background-color: var(--UiBg);
+          background-color: var(--DetailsBgLighter);
           transition: all 0.3s ease;
 
           &:hover {
@@ -572,7 +579,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 
 
     .itemDiagnostico {
-      background-color: var(--UiBg);
+      background-color: var(--UiBgLighter);
       border-radius: $borda-arredondada;
       padding: $espacamento-padrao;
       display: flex;
@@ -603,7 +610,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 
         h3 {
           margin: 0 0 4px 0;
-          color: var(--White);
+          color: var(--TextGeneral);
           font-size: 1rem;
           font-weight: 500;
         }
@@ -612,7 +619,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
           display: flex;
           gap: $espacamento-padrao;
           font-size: 0.85rem;
-          color: var(--White);
+          color: var(--Text);
           flex-wrap: wrap;
           align-items: center;
 
@@ -634,7 +641,7 @@ $sombra-card: 0 4px 6px rgba(0, 0, 0, 0.1);
           }
 
           .data {
-            color: var(--White);
+            color: var(--TextGeneral);
 
             &::before {
               content: "•";

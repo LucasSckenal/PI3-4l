@@ -331,7 +331,7 @@ const DoctorProfilePage = () => {
           onMouseLeave={() => setIsAboutHover(false)}
           style={{ position: "relative" }}
         >
-          <h3 className={styles.sectionTitle} style={{ color: "#ffffff" }}>
+          <h3 className={styles.sectionTitle}>
             <i className={`fas fa-user-md ${styles.icon}`}></i> {t("profile.about")}
           </h3>
 

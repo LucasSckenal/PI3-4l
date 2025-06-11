@@ -28,7 +28,7 @@
     margin-bottom: var(--Gap);
   }
   
-  .subtitle {
+  p {
     color: var(--TextGeneralAlt);
     font-size: 1.1rem;
     font-weight: 400;
@@ -46,7 +46,7 @@
   margin-bottom: var(--Gap3);
 
   .statCard {
-    background-color: var(--UiBg);
+    background-color: var(--UiBgLighter);
     border-radius: var(--BorderRadius);
     padding: var(--Gap2);
     //box-shadow: var(--BoxShadow);
@@ -61,7 +61,7 @@
     h3 {
       margin: 0 0 var(--Gap) 0;
       font-size: 1.1rem;
-      color: var(--White);
+      color: var(--TextGeneral);
       font-weight: 500;
     }
 
@@ -69,12 +69,12 @@
       margin: 0;
       font-size: 2.2rem;
       font-weight: 700;
-      color: var(--WhiteAlt);
+      color: var(--TextGeneral);
       line-height: 1;
     }
 
     small {
-      color: var(--White);
+      color: var(--TextGeneral);
       font-size: 0.9rem;
       font-weight: 300;
       display: block;
@@ -86,7 +86,7 @@
     }
 
     &.warning {
-      border-left-color: var(--Yellow);
+      border-left-color: #4e79a7;
     }
 
     &.info {
@@ -106,7 +106,7 @@
 }
 
 .recentCases {
-  background-color: var(--DetailsBg);
+  background-color: var(--DetailsBgLighter);
   border-radius: var(--BorderRadius);
   padding: var(--Gap2);
   box-shadow: var(--BoxShadow);
@@ -118,7 +118,7 @@
     margin-bottom: var(--Gap2);
 
     h2 {
-      color: var(--WhiteAlt);
+      color: var(--TextGeneral);
       font-size: 1.4rem;
       font-weight: 600;
       margin: 0;
@@ -136,7 +136,7 @@
         background-color: var(--PreferredColor);
         border: 1px solid var(--White);
         box-shadow: var(--BoxShadow2);
-        color: var(--WhiteReverse);
+        color: var(--White);
       }
     }
   }
@@ -152,21 +152,19 @@
     th, td {
       padding: var(--Gap2) var(--Gap);
       text-align: left;
-      border-bottom: 1px solid var(--InputCheckBox);
+      border-bottom: 1px solid var(--TextGeneral);
       white-space: nowrap;
+      color: var(--TextGeneral)
     }
 
     th {
-      color: var(--White);
+      color: var(--TextGeneral);
       font-weight: 500;
       font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    tr:hover {
-      background-color: rgba(var(--PreferredColor), 0.05);
-    }
   }
 
   .patientInfo {
@@ -175,7 +173,7 @@
     
     .patientName {
       font-weight: 500;
-      color: var(--WhiteAlt);
+      color: var(--White);
     }
   }
 
@@ -199,7 +197,7 @@
 
   .actionButton {
     background-color: var(--PreferredColor);
-    color: var(--WhiteReverse);
+    color: var(--White);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: var(--BorderRadius);
@@ -230,7 +228,7 @@
 
   .actionButton {
     width: 100%;
-    background-color: var(--UiBg);
+    background-color: var(--UiBgLighter);
     color: var(--White);
     border: none;
     padding: var(--Gap2);
@@ -286,14 +284,14 @@
   }
 }
 .chartsSection {
-  background-color: var(--DetailsBg);
+  background-color: var(--DetailsBgLighter);
   border-radius: var(--BorderRadius);
   padding: var(--Gap2);
   box-shadow: var(--BoxShadow);
   height: fit-content;
 
   h2 {
-    color: var(--WhiteAlt);
+    color: var(--TextGeneral);
     font-size: 1.4rem;
     font-weight: 600;
     margin: 0 0 var(--Gap2) 0;
@@ -301,7 +299,7 @@
 }
 
 .chartContainer {
-  height: 300px;
+  height: 400px;
   width: 100%;
   position: relative;
 }
@@ -335,6 +333,42 @@
   height: 12px;
   border-radius: 2px;
   background-color: #f28e2b;
+}
+
+.g43, .g44, .verde, .vermelho, .azul, .amarelo, .laranja{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  max-width: 70px;
+  height: 35px;
+}
+
+.g43{
+  background-color: rgba(78, 121, 167, 0.342);
+}
+.g44{
+  background-color: rgba(242, 142, 43, 0.342);
+}
+
+.vermelho{
+ background-color: rgba(240, 29, 6, 0.342);
+}
+
+.laranja {
+  background-color: rgba(248, 113, 2, 0.342);
+}
+
+.amarelo {
+ background-color: rgba(241, 245, 5, 0.342);
+}
+
+.verde {
+ background-color: rgba(21, 255, 0, 0.342);
+}
+
+.azul {
+ background-color: rgba(5, 61, 245, 0.342);
 }
 
 /* Ajuste para responsividade */

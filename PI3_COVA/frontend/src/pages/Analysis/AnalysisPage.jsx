@@ -181,7 +181,7 @@ return (
         {/* Cards de resumo */}
         {!isMobile && (
           <section className={styles.cardsSection}>
-            <div className={styles.card}>
+            <div className={`${styles.card} ${styles.cardPending}`}>
               <h3>{t("analysis.pendingDiagnoses")}</h3>
               <p className={styles.cardNumber}>
                 {diagnosticosTransformados.length}

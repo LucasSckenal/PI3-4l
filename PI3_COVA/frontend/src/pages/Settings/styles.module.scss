@@ -17,7 +17,7 @@
 }
 
 .card {
-  background-color: var(--UiBg, #f9f9f9);
+  background-color: var(--UiBgLighter, #f9f9f9);
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
@@ -34,6 +34,7 @@
     font-size: 1rem;
     align-items: center;
     gap: var(--Gap);
+    color: var(--TextGeneral);
   }
 }
 
@@ -87,7 +88,7 @@
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: 1px solid var(--PreferredColor);
-  color: var(--White);
+  color: var(--TextGeneral);
   font-size: 1rem;
   cursor: not-allowed;
   background: none;
