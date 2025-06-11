@@ -130,6 +130,7 @@
       font-weight: 500;
       padding: var(--Gap) var(--Gap2);
       border: 1px solid var(--PreferredColor);
+      border-radius: var(--BorderRadius);
       transition: all 0.3s ease;
 
       &:hover {
@@ -332,7 +333,7 @@
   width: 12px;
   height: 12px;
   border-radius: 2px;
-  background-color: #f28e2b;
+  background-color: #be7226;
 }
 
 .g43, .g44, .verde, .vermelho, .azul, .amarelo, .laranja{

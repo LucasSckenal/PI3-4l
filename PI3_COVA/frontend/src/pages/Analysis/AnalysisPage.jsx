@@ -446,7 +446,7 @@ return (
           <div className={styles.listaItens}>
                 {getDiagnosticosFiltrados().map((diagnostico) => (
                   <div key={diagnostico.id} className={styles.itemDiagnostico} onClick={() => navigate(`/analysis/${diagnostico.id}`)}>
-                    <div className={styles.codigo}>{diagnostico.codigo}</div>
+                    <div className={styles.codigo} codigo-nome={diagnostico.codigo}>{diagnostico.codigo}</div>
                     <div className={styles.detalhes}>
                       <h3>
                         {diagnostico.descricao.split('\n')[0].substring(0, 100)}

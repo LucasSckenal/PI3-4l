@@ -21,6 +21,7 @@ import {
   getDocs
 } from 'firebase/firestore';
 import { db } from '../../api/firebase';
+import { Link } from 'react-router-dom';
 ChartJS.register(
   CategoryScale,
   LineElement,
@@ -84,22 +85,33 @@ const DoctorHomePage = () => {
         const monthlyCount = Array.from({ length: 12 }, () => ({ G43: 0, G44: 0 }));
         snapshot.forEach(doc => {
           const data = doc.data();
-          const cid = data.cid || '';
-          const date = data.timeStamp?.toDate();
-          if (date) {
+
+          // 1. Pega o campo correto (no seu JSON é "CID", não "cid")
+          const cid = data.CID || '';            
+
+          // 2. Converte a string ISO em Date
+          let date;
+          if (data.Timestamp instanceof Date) {
+            date = data.Timestamp;
+          } else {
+            date = new Date(data.Timestamp);
+          }
+
+          if (date instanceof Date && !isNaN(date)) {
             const m = date.getMonth();
             if (cid.startsWith('G43')) monthlyCount[m].G43++;
             if (cid.startsWith('G44')) monthlyCount[m].G44++;
           }
         });
 
+
         const labels = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
         
         snapshot.forEach(doc => {
           const data = doc.data();
-          const cid = data.cid || '';
+          const cid = data.CID || data.cid;
           const intensity = (data.intensidade || '').toLowerCase();
-          const priority = (data.priority || "").toLowerCase();
+          const priority = (data.Priority || "").toLowerCase();
           if (cid.startsWith('G43')) g43++;
           else if (cid.startsWith('G44')) g44++;
           if (intensity === 'incapacitante' || priority === "vermelho") critical++;
@@ -126,7 +138,7 @@ const DoctorHomePage = () => {
             {
               label: 'G44',
               data: monthlyCount.map(m => m.G44),
-              borderColor: '#f28e2b',
+              borderColor: '#c77320',
               backgroundColor: 'rgba(242,142,43,0.1)',
               tension: 0.3,
               borderWidth: 2
@@ -209,26 +221,63 @@ useEffect(() => {
       <div className={styles.contentRow}>
         {/* Análises Recentes */}
         <section className={styles.recentCases}>
-          <div className={styles.sectionHeader}><h2>Análises Recentes</h2></div>
-          <div className={styles.tableContainer}>
-            {loadingAnalyses ? <p>Carregando...</p> : (
-              <table>
-                <thead><tr><th>ID</th><th>Código</th><th>Prioridade</th><th>Data</th></tr></thead>
-                <tbody>
-                  {recentAnalyses.map(a => (
-                    <tr key={a.id}><td>{a.id}</td><td><span className={`${styles.code} ${
-                      a.codigo === "G43"
-                        ? styles.g43
-                        : a.codigo === "G44"
-                        ? styles.g44
-                        : ""
-                    }`}>{a.codigo}</span></td><td><span className={styles[a.priority.toLowerCase()]}>{a.priority}</span></td><td>{a.date}</td></tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        </section>
+      <div className={styles.sectionHeader}>
+        <h2>Análises Recentes</h2>
+        <Link to="/analysis" className={styles.seeAllButton}>
+          Ver todos
+        </Link>
+      </div>
+      <div className={styles.tableContainer}>
+        {loadingAnalyses ? (
+          <p>Carregando...</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Código</th>
+                <th>Prioridade</th>
+                <th>Data</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentAnalyses.map(a => (
+                <tr key={a.id}>
+                  <td>{a.id}</td>
+                  <td>
+                    <span
+                      className={`${styles.code} ${
+                        a.codigo === 'G43'
+                          ? styles.g43
+                          : a.codigo === 'G44'
+                          ? styles.g44
+                          : ''
+                      }`}>
+                      {a.codigo}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={styles[a.priority.toLowerCase()]}> 
+                      {a.priority}
+                    </span>
+                  </td>
+                  <td>{a.date}</td>
+                  <td>
+                    <Link
+                      to={`/analysis/${a.id}`}
+                      className={styles.actionButton}
+                    >
+                      Ver
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </section>
 
         {/* Gráfico de Casos Mensais */}
         <section className={styles.chartsSection}>
