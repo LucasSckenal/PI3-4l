@@ -22,7 +22,8 @@
     "welcome": "Bienvenido",
     "welcomeBack": "Bienvenido de nuevo",
     "user": "Usuario",
-    "startDiagnosis": "INICIAR DIAGNÓSTICO",
+    "startDiagnosis": "INICIAR DIAGNÓSTICO ➤",
+    "startDiagnosisTitle": "Descubre la Causa de tus Síntomas en Minutos",
     "newDiagnosis": "INICIAR NUEVO DIAGNÓSTICO",
     "recentHistory": "Historial reciente:",
     "viewAll": "Ver todo",
@@ -32,7 +33,14 @@
     "diagnoses": "Diagnósticos",
     "frequentSymptoms": "Síntomas frecuentes",
     "needHelp": "¿Necesita ayuda?",
-    "learnMore": "Aprender más"
+    "genericSymptom": "Síntoma genérico",
+    "learnMore": "Aprender más",
+    "totalConsultations": "Total de consultas",
+    "commonIllnesses": "Enfermedades comunes",  
+    "tutorialTitle": "Tutorial de inicio rápido",
+    "tutorialDesc": "Aprenda a usar la aplicación en minutos",
+    "consultationSummary": "Resumen de la consulta",
+    "new": "Nuevo"
   },
   "symptoms": {
     "tonturaLeve": "mareo leve",
@@ -116,6 +124,7 @@
     "endDate": "Fecha de fin",
     "institution": "Institución",
     "period": "Período",
+    "personalInformation": "Información personal",
     "description": "Descripción",
     "update": "Actualizar",
     "emailLocked": "Correo electrónico bloqueado",
@@ -135,6 +144,7 @@
       "other": "Otro"
     },
     "birthDateNote": "La fecha de nacimiento solo se puede establecer una vez.",
+    "bloodType": "Tipo de sangre",
     "password": "Nueva contraseña (opcional)",
     "save": "Guardar",
     "saving": "Guardando...",

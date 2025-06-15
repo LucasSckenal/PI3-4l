@@ -71,22 +71,30 @@ const AccountProvider = ({ children }) => {
         const unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
-            
+
             const photoSource =
               isValidPhoto(data.photo) ? data.photo :
               isValidPhoto(user.photoURL) ? user.photoURL : "";
 
+            const userInfo = {
+              uid: user.uid,
+              name: data.name || user.displayName || "",
+              email: data.email || user.email || "",
+              photo: photoSource,
+              birthDate: data.birthDate || "",
+              gender: data.gender || "",
+              phone: data.phone || "",
+              location: data.location || "",
+            };
+
+            // Adiciona campos exclusivos do "user"
+            if ((data.role || "User").toLowerCase() === "user") {
+              userInfo.weight = data.weight || "";
+              userInfo.bloodType = data.bloodType || "";
+            }
+
             setAccountData({
-              userData: {
-                uid: user.uid,
-                name: data.name || user.displayName || "",
-                email: data.email || user.email || "",
-                photo: photoSource,
-                birthDate: data.birthDate || "",
-                gender: data.gender || "",
-                phone: data.phone || "",
-                location: data.location || "",
-              },
+              userData: userInfo,
               userId: user.uid,
               role: data.role || "User",
               loading: false

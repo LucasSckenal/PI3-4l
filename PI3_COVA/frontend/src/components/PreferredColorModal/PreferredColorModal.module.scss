@@ -4,105 +4,120 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  backdrop-filter: blur(5px); /* Added blur for a modern touch */
 }
 
 .Modal {
-  background: var(--Bg);
-  border: 1px solid var(--PreferredColor);
-  padding: 24px;
-  border-radius: 12px;
+  background: var(--Bg, #ffffff); /* Fallback for Bg */
+  border: none; /* Removed border for a cleaner look */
+  padding: 30px; /* Increased padding */
+  border-radius: 10px; /* Slightly adjusted border-radius */
   width: 90%;
-  max-width: 600px;
+  max-width: 500px; /* Slightly reduced max-width */
   position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15); /* Softer, more subtle shadow */
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
 }
 
 .CloseButton {
   position: absolute;
-  top: 12px;
-  right: 16px;
+  top: 15px;
+  right: 18px;
   background: transparent;
   border: none;
-  font-size: 24px;
+  font-size: 28px; /* Slightly larger for better tap target */
   cursor: pointer;
-  color: var(--PreferredColor);
+  color: var(--TextGeneral, #333333); /* Use TextGeneral for close button for consistency */
+  transition: color 0.2s ease-in-out;
+  &:hover {
+    color: var(--PreferredColor, #7f41e2);
+  }
 }
 
-.Modal h2,
-h3 {
-  margin-bottom: 24px;
-  font-size: 20px;
+.Modal h2 {
+  margin-bottom: 30px; /* Increased margin for better spacing */
+  font-size: 22px; /* Slightly larger heading */
   font-weight: 600;
-  color: var(--TextGeneral);
+  color: var(--TextGeneral, #333333);
 }
 
 .ModalContent {
   display: flex;
-  flex-direction: row;
+  flex-direction: column; /* Changed to column for better stacking on smaller screens */
   justify-content: center;
-  align-items: flex-start;
-  gap: 24px;
+  align-items: center; /* Center items for a cleaner look */
+  gap: 20px; /* Adjusted gap */
   width: 100%;
 }
 
 .ColorOptions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px; /* Adjusted gap */
   align-items: center;
-  flex: 1;
+  width: 100%;
 }
 
 .ColorList {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(55px, 1fr)); /* Responsive grid */
+  gap: 10px; /* Reduced gap */
   justify-items: center;
   width: 100%;
+  max-width: 350px; /* Constrain width of color list */
 }
 
 .ColorOption {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  border: 1px solid var(--DetailsBgReverse);
+  width: 55px; /* Slightly smaller */
+  height: 55px; /* Slightly smaller */
+  border-radius: 50%; /* Circular color options for a modern look */
+  border: 2px solid transparent; /* Transparent border by default */
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 
   &:hover {
-    transform: scale(1.1);
-    border-color: var(--PreferredColor);
+    transform: scale(1.08); /* Subtle scale on hover */
+    border-color: var(--DetailsBgReverse, #cccccc); /* Light border on hover */
   }
 }
 
 .SelectedColor {
-  outline: 3px solid var(--TextGeneral);
-  transform: scale(1.1);
-  box-shadow: 0 0 8px var(--PreferredColor);
+  border-color: var(--PreferredColor, #7f41e2); /* Preferred color border */
+  outline: 3px solid var(--TextGeneral, #333333); /* Stronger outline for selection */
+  transform: scale(1.08); /* Consistent scale with hover */
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2); /* Softer shadow for selected */
 }
 
 .SaveButton {
-  padding: 12px 20px;
+  padding: 12px 30px; /* More padding for a bolder button */
   background-color: var(--PreferredColor, #7f41e2);
-  color: var(--TextGeneral);
+  color: #ffffff; /* White text for contrast */
   border: none;
-  border-radius: 6px;
+  border-radius: 8px; /* Slightly more rounded corners */
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 24px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
+  font-size: 17px; /* Slightly larger font */
+  font-weight: 500;
+  margin-top: 30px; /* Increased margin-top */
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Initial subtle shadow */
 
-.SaveButton:hover {
-  background-color: var(--PreferredColor, #7f41e2);
-  transform: scale(1.05);
+  &:hover {
+    background-color: var(--PreferredColor, #7f41e2); /* Keep same background color */
+    transform: translateY(-2px); /* Lift effect on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
+  }
+
+  &:active {
+    transform: translateY(0); /* Press down effect */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
 }

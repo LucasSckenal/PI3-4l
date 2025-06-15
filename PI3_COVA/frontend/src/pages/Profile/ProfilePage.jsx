@@ -10,6 +10,7 @@ import {
   IoBarbellOutline,
   IoLocationOutline,
   IoMailOutline,
+  IoMaleFemaleOutline, 
 } from "react-icons/io5";
 
 const ProfilePage = () => {
@@ -57,14 +58,13 @@ const ProfilePage = () => {
         <h2 className={styles.userName}>
           {userData?.name || "No Name"}
         </h2>
-        <p className={styles.userRole}>{t("profile.patient")}</p>
         <button className={styles.editButton} onClick={handleEditProfile}>
           {t("profile.edit")}
         </button>
       </div>
 
       <div className={styles.personalInfo}>
-        <h3 className={styles.infoTitle}>Personal Information</h3>
+        <h3 className={styles.infoTitle}>{t('profile.personalInformation')}</h3>
         <div className={styles.infoItem}>
           <IoCalendarOutline className={styles.icon} />
           <span>{formatDate(userData?.birthDate)}</span>
@@ -72,6 +72,10 @@ const ProfilePage = () => {
         <div className={styles.infoItem}>
           <IoWaterOutline className={styles.icon} />
           <span>{userData?.bloodType || "O-"}</span>
+        </div>
+        <div className={styles.infoItem}>
+          <IoMaleFemaleOutline className={styles.icon} />
+          <span>{userData?.gender || t("profile.genderUnknown")}</span>
         </div>
         <div className={styles.infoItem}>
           <IoBarbellOutline className={styles.icon} />

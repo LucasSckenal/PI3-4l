@@ -21,7 +21,8 @@
     "welcome": "Welcome",
     "welcomeBack": "Welcome back",
     "user": "User",
-    "startDiagnosis": "START DIAGNOSIS",
+    "startDiagnosis": "START DIAGNOSIS ➤",
+    "startDiagnosisTitle": "Find Out the Cause of Your Symptoms in Minutes",
     "newDiagnosis": "START NEW DIAGNOSIS",
     "recentHistory": "Recent history:",
     "viewAll": "View all",
@@ -31,7 +32,14 @@
     "diagnoses": "Diagnoses",
     "frequentSymptoms": "Frequent symptoms",
     "needHelp": "Need help?",
-    "learnMore": "Learn more"
+    "genericSymptom": "Generic symptom",
+    "learnMore": "Learn more",
+    "totalConsultations": "Total consultations:",
+    "commonIllnesses": "Common illnesses",
+    "tutorialTitle": "Tutorial",
+    "tutorialDesc": "Learn how to use our platform.",
+    "consultationSummary": "Consultation summary",
+    "new": "New"
   },
   "symptoms": {
     "tonturaLeve": "Mild dizziness",
@@ -115,6 +123,7 @@
     "endDate": "End date",
     "institution": "Institution",
     "period": "Period",
+    "personalInformation": "Personal Information",
     "description": "Description",
     "update": "Update",
     "save": "Save",
@@ -135,6 +144,7 @@
       "other": "Other"
     },
     "birthDateNote": "Birthdate can only be set once.",
+    "bloodType": "Blood type",
     "password": "New password (optional)",
     "save": "Save",
     "saving": "Saving...",

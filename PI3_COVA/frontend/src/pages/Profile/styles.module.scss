@@ -13,6 +13,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
+  width: 100%; 
 }
 
 .profileImage {
@@ -27,12 +28,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin-top: 1rem;
-}
-
-.userRole {
-  color: #94a3b8;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
+  color: var(--TextGeneral);
 }
 
 .editButton {
@@ -44,22 +40,22 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s ease;
+  border: 1px solid var(-TextGeneral);
 
   &:hover {
-    background-color: #334155;
+    background-color: var(--UiBg);
   }
 }
 
 .personalInfo {
   width: 100%;
-  margin-top: 1rem;
 }
 
 .infoTitle {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: #f1f5f9;
+  color: var(--TextGeneral);
 }
 
 .infoItem {
@@ -78,28 +74,90 @@
   color: var(--PreferredColor);
 }
 
-@media (min-width: 1200px) {
+/* Desktop styles */
+@media (min-width: 768px) { // Changed breakpoint for tablets and desktops
   .profilePage {
-  height: auto;
-  background-color: var(--Bg);
-  color: var(--White);
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    height: auto; // Allow content to dictate height
+    padding: 3rem; // More padding for desktop
+    flex-direction: row; // Arrange header and info side-by-side
+    align-items: flex-start; // Align items to the top
+    gap: 3rem; // Space between sections
+    max-width: 1200px; // Max width for content
+    margin: 0 auto; // Center the content
+    background-color: transparent; // Remove background from profilePage itself, let children handle it
+  }
 
   .profileHeader {
+    flex: 1; // Take up available space
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--PreferredColor) 0%, var(--Black) 150%);
+    border-radius: 15px; // Slightly more rounded corners
+    color: var(--White);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); // Add some shadow
     display: flex;
-    width: 100%;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2rem;
-    padding: 3rem;
-    background: linear-gradient(135deg, var(--PreferredColor) 0%, var(--Black) 100%);
-    color: var(--White);
+    justify-content: center; // Center content vertically
+    height: fit-content; // Adjust height to content
+    margin-bottom: 0; // Remove bottom margin when side by side
+  }
+
+  .profileImage {
+    width: 150px; // Larger image
+    height: 150px;
+    border: 5px solid var(--DetailsBg); // Thicker, slightly transparent white border
+  }
+
+  .userName {
+    font-size: 2rem; // Larger name
+    margin-top: 1.5rem;
+  }
+
+  .userRole {
+    font-size: 1.1rem; // Slightly larger role text
+  }
+
+  .editButton {
+    padding: 0.8rem 2rem; // Larger button
+    font-size: 1rem;
+  }
+
+  .personalInfo {
+    flex: 2; // Take more space than the header
+    background-color: var(--UiBgLighter); // Background for the info section
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); // Shadow for info section
+  }
+
+  .infoTitle {
+    font-size: 1.5rem; // Larger info title
+    text-align: center; // Center the title
+    margin-bottom: 1.5rem;
+  }
+
+  .infoItem {
+    padding: 1rem 1.5rem; // Larger padding for info items
+    font-size: 1rem; // Slightly larger text
+    margin-bottom: 1rem; // More space between items
+    background-color: var(--DetailsBg);
+  }
+
+  .icon {
+    font-size: 1.5rem; // Larger icons
   }
 }
 
+@media (min-width: 1200px) {
+  .profilePage {
+    display: flex;
+    padding: 4rem; // Even more padding for very large screens
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+  }
 
-
+  .profileHeader {
+    padding: 3rem; // More padding for the header
+  }
 }

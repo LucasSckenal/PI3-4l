@@ -22,7 +22,8 @@
     "welcome": "Bem-vindo",
     "welcomeBack": "Bem-vindo de volta",
     "user": "Usuário",
-    "startDiagnosis": "COMEÇAR DIAGNÓSTICO",
+    "startDiagnosis": "COMEÇAR DIAGNÓSTICO ➤",
+    "startDiagnosisTitle": "Descubra a Causa dos Seus Sintomas em Minutos",
     "newDiagnosis": "COMEÇAR NOVO DIAGNÓSTICO",
     "recentHistory": "Histórico recente:",
     "viewAll": "Ver todos",
@@ -32,7 +33,14 @@
     "diagnoses": "Diagnósticos",
     "frequentSymptoms": "Sintomas Frequentes",
     "needHelp": "Precisa de ajuda?",
-    "learnMore": "Saiba mais"
+    "genericSymptom": "Sintoma genérico",
+    "learnMore": "Saiba mais",
+    "totalConsultations": "Consultas Realizadas",
+    "commonIllnesses": "Condições Comuns",
+    "tutorialTitle": "Tutorial",
+    "tutorialDesc": "Aprenda como usar o app",
+    "consultationSummary": "Resumo da Consulta",
+    "new": "Novo"
   },
   
    "symptoms": {
@@ -117,6 +125,7 @@
     "endDate": "Data final",
     "institution": "Instituição",
     "period": "Período",
+    "personalInformation": "Informações Pessoais",
     "description": "Descrição",
     "update": "Atualizar",
     "emailLocked": "E-mail bloqueado",
@@ -136,6 +145,7 @@
       "other": "Outro"
     },
     "birthDateNote": "A data de nascimento só pode ser definida uma vez.",
+    "bloodType": "Tipo sanguíneo",
     "password": "Nova senha (opcional)",
     "save": "Salvar",
     "saving": "Salvando...",

@@ -12,10 +12,16 @@ import {
 import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
 import styles from "./styles.module.scss";
-import { IoArrowForwardSharp } from "react-icons/io5";
+import { BiBrain } from "react-icons/bi";
+import { FaGrinBeamSweat,  FaMedkit, FaPlay} from "react-icons/fa";
+import { MdVisibilityOff } from "react-icons/md";
+import { BsBrightnessAltLow } from "react-icons/bs";
 import SymptomsCarousel from "../../components/SymptomsCarousel/SymptomsCarousel";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import { useTranslation } from "react-i18next";
+import defaultProfileIcon from "../../public/UserDefault.webp";
+import tutorialPreview from "../../public/tutorial-preview.png";
+
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -92,6 +98,22 @@ const HomePage = () => {
     return () => unsubscribe();
   }, []);
 
+  const getProfileImageSource = () => {
+      if (!userData.photo) return defaultProfileIcon;
+      if (
+        userData.photo.startsWith("http") ||
+        userData.photo.startsWith("data:image")
+      )
+        return userData.photo;
+      return defaultProfileIcon;
+    };
+
+  const iconMap = [
+    { keywords: ["dor", "cabeça", "cefaleia", "enxaqueca"], icon: <BiBrain />, title: "Dor de cabeça" },
+    { keywords: ["enjoo", "náusea", "vomito"], icon: <FaGrinBeamSweat />, title: "Enjoo" },
+    { keywords: ["visão", "embaçada", "turva"], icon: <MdVisibilityOff />, title: "Visão embaçada" },
+    { keywords: ["luz", "claridade", "fotofobia"], icon: <BsBrightnessAltLow />, title: "Sensibilidade à luz" },
+  ];
   const mapSymptomToKey = (symptom) => {
     switch (symptom.toLowerCase()) {
       case "tontura leve":
@@ -119,56 +141,113 @@ const HomePage = () => {
     }
   };
 
+  
+
   if (loading) return <div>{t("common.loading")}</div>;
 
   if (isMobile) {
     return (
       <div className={styles.MainContainer}>
+        <div className={styles.bg}>
         <div className={styles.GreetingText}>
-          <p>{t("home.welcome")}</p>
-          <h2>
-            {userData?.name?.split(" ").slice(0, 2).join(" ") ?? t("home.user")}
-          </h2>
+          <img
+                    src={getProfileImageSource()}
+                    alt="Profile"
+                    className={styles.profileImage}
+                    onError={(e) => (e.target.src = defaultProfileIcon)}
+                    onClick={() => navigate("/profile")}
+                  />
+                  <div className={styles.textGreetings}>
+                   <p>{t("home.welcome")}</p>
+              <h2>
+                {userData?.name?.split(" ").slice(0, 2).join(" ") ?? t("home.user")}
+              </h2>
+            </div>
+          </div>
+           <div className={styles.DiagnosisInvitation}>
+              <h2>{t("home.startDiagnosisTitle")}</h2>
+              <button>{t("home.startDiagnosis")}</button>
+            </div>
         </div>
 
         <div className={styles.InnerContainer}>
-          <div className={styles.HeroBanner} onClick={() => navigate("/chat")}>
-            <button
-              className={styles.chatButton}
-              onClick={() => navigate("/chat")}
-            >
-              {t("home.startDiagnosis")} <IoArrowForwardSharp size={30} />
-            </button>
-          </div>
-
-          <SymptomsCarousel symptoms={symptoms} />
+          <div className={styles.History}>
+        <div className={styles.HistoryHeader}>
+          <p>{t("home.recentHistory")}</p>
+          <button onClick={() => navigate("/history")}>
+            {t("home.viewAll")} ({chatCount})
+          </button>
         </div>
-
-        <div className={styles.History}>
-          <div className={styles.HistoryHeader}>
-            <p>{t("home.recentHistory")}</p>
-            <button
-              className={styles.ViewMoreButton}
-              onClick={() => navigate("/history")}
-            >
-              {t("home.viewAll")}
-            </button>
-          </div>
-          <div className={styles.InnerHistory}>
+        <div className={styles.GridHistorico}>
             {history.length > 0 ? (
-              history.map((item, index) => (
-                <div
-                  key={item.id}
-                  className={styles.box}
-                  onClick={() => navigate(`/chat/${item.id}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {index + 1}. {item.title}
-                </div>
-              ))
+              history.map((item, index) => {
+                const lower = item.title.toLowerCase();
+
+                const iconEntry =
+                  iconMap.find((entry) =>
+                    entry.keywords.some((kw) => lower.includes(kw))
+                  ) || {
+                    icon: < FaMedkit  />,
+                    title: t("home.genericSymptom"),
+                  };
+
+                return (
+                  <div
+                    key={item.id}
+                    className={styles.box}
+                    onClick={() => navigate(`/chat/${item.id}`)}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <span style={{ fontSize: "1.5rem" }}>{iconEntry.icon}</span>
+                      <strong>{iconEntry.title}</strong>
+                    </div>
+
+                    <p style={{ margin: "0.25rem 0 0.25rem 2rem" }}>
+                      {item.title || t("home.noTitle")}
+                    </p>
+
+                    <small style={{ color: "#888", marginLeft: "2rem" }}>
+                      {item.createdAt}
+                    </small>
+                  </div>
+                );
+              })
             ) : (
               <div className={styles.box}>{t("home.noHistory")}</div>
             )}
+            </div>
+          </div>
+          <div className={styles.StatsMobileWrapper}>
+            <h2>{t("home.consultationSummary")}</h2>
+            <div className={styles.MobileCard}>
+              <h3>{t("home.totalConsultations")}</h3>
+              <p>{chatCount}</p>
+            </div>
+
+            <div className={styles.CommonIllnesses}>
+              <h3>{t("home.commonIllnesses")}</h3>
+              <div className={styles.IllnessTags}>
+                {symptoms.slice(0, 5).map((s, i) => {
+                  const key = mapSymptomToKey(s);
+                  return (
+                    <span key={i} className={styles.Tag}>
+                      {key ? t(`symptoms.${key}`) : s}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={styles.TutorialCard} onClick={() => navigate("/tutorial")}>
+              <div>
+                <strong>{t("home.tutorialTitle")}</strong>
+                <p>{t("home.tutorialDesc")}</p>
+              </div>
+               <div className={styles.TutorialImageWrapper}>
+                <img src={tutorialPreview} alt="Tutorial" />
+                <FaPlay className={styles.PlayIcon} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

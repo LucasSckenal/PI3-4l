@@ -208,13 +208,13 @@ const ChatPage = () => {
         onMicClick={handleMicClick}
         onSendClick={handleSend}
       />
-
+       {isMobile && (
       <div className={styles.quickMessagesWrapper}>
         <span className={styles.quickLabel}>
           {t("chat.quickMessagesLabel")}
         </span>
         <QuickMessagesCarousel onSendMessage={handleQuickMessage} />
-      </div>
+      </div>)}
     </main>
   );
 };
