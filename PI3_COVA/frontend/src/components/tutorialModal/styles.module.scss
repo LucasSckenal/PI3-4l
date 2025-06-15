@@ -1,0 +1,57 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 1rem;
+  overflow: auto;
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--UiBgLighter);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .modal {
+    padding: 0.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .close {
+    font-size: 1.25rem;
+  }
+}

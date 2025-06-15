@@ -6,7 +6,7 @@ import {
   setDoc,
   addDoc,
   serverTimestamp,
-  onSnapshot,
+  onSnapshot, getDoc, updateDoc
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../../api/firebase";
@@ -17,6 +17,7 @@ import Ia from "../../public/IaChat.gif";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import  TutorialModal  from "../../components/tutorialModal/tutorialModal";
 
 const ChatPage = () => {
   const { chatId } = useParams();
@@ -28,7 +29,8 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
   const hasWarnedAboutSpeechRecognition = useRef(false);
-  // eslint-disable-next-line no-unused-vars
+  const [showTutorialModal, setShowTutorialModal] = useState(false);
+  const [canCloseModal, setCanCloseModal] = useState(false);
   const { isMobile } = useScreenResize();
   const { t } = useTranslation();
   const userId = getAuth().currentUser?.uid;
@@ -173,6 +175,56 @@ const ChatPage = () => {
     ]);
   };
 
+  useEffect(() => {
+  const checkTutorialStatus = async () => {
+    if (!userId) return;
+
+    const userRef = doc(db, "Users", userId);
+    try {
+      const snapshot = await getDoc(userRef);
+      const data = snapshot.data();
+
+      if (!data?.tutorialWatched) {
+        setShowTutorialModal(true);
+        setCanCloseModal(false);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar tutorialWatched:", error);
+    }
+  };
+
+  checkTutorialStatus();
+  }, [userId]);
+
+  useEffect(() => {
+    const handleTutorialEnd = async () => {
+      setCanCloseModal(true);
+
+      if (!userId) return;
+
+      const userRef = doc(db, "Users", userId);
+      try {
+        await updateDoc(userRef, { tutorialWatched: true });
+      } catch (error) {
+        console.error("Erro ao salvar tutorialWatched:", error);
+      }
+    };
+
+    window.addEventListener("tutorialEnded", handleTutorialEnd);
+    return () => window.removeEventListener("tutorialEnded", handleTutorialEnd);
+  }, [userId]);
+
+
+  useEffect(() => {
+  const handleTutorialEnd = () => {
+    setCanCloseModal(true);
+  };
+
+  window.addEventListener("tutorialEnded", handleTutorialEnd);
+  return () => window.removeEventListener("tutorialEnded", handleTutorialEnd);
+  }, []);
+
+
   return (
     <main className={styles.ChatContainer}>
       <div className={styles.IaContainer}>
@@ -215,6 +267,11 @@ const ChatPage = () => {
         </span>
         <QuickMessagesCarousel onSendMessage={handleQuickMessage} />
       </div>)}
+      <TutorialModal
+        isOpen={showTutorialModal}
+        onClose={() => setShowTutorialModal(false)}
+        canClose={canCloseModal}
+      />
     </main>
   );
 };

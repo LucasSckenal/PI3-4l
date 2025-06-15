@@ -21,6 +21,7 @@ import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResiz
 import { useTranslation } from "react-i18next";
 import defaultProfileIcon from "../../public/UserDefault.webp";
 import tutorialPreview from "../../public/tutorial-preview.png";
+import TutorialModal from "../../components/tutorialModal/tutorialModal";
 
 
 const HomePage = () => {
@@ -29,6 +30,8 @@ const HomePage = () => {
   const [history, setHistory] = useState([]);
   const [symptoms, setSymptoms] = useState([]);
   const [chatCount, setChatCount] = useState(0);
+  const [showTutorialModal, setShowTutorialModal] = useState(false);
+
   const { isMobile } = useScreenResize();
   const { t } = useTranslation();
 
@@ -155,7 +158,7 @@ const HomePage = () => {
                     alt="Profile"
                     className={styles.profileImage}
                     onError={(e) => (e.target.src = defaultProfileIcon)}
-                    onClick={() => navigate("/profile")}
+                    onClick={() => setShowTutorialModal(true)}
                   />
                   <div className={styles.textGreetings}>
                    <p>{t("home.welcome")}</p>
@@ -238,7 +241,7 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div className={styles.TutorialCard} onClick={() => navigate("/tutorial")}>
+            <div className={styles.TutorialCard} onClick={() => setShowTutorialModal(true)}>
               <div>
                 <strong>{t("home.tutorialTitle")}</strong>
                 <p>{t("home.tutorialDesc")}</p>
@@ -250,6 +253,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
+        <TutorialModal isOpen={showTutorialModal} onClose={() => setShowTutorialModal(false)} canClose={true}/>
       </div>
     );
   }
@@ -292,7 +296,7 @@ const HomePage = () => {
             <h3>{t("home.needHelp")}</h3>
             <button
               className={styles.HelpButton}
-              onClick={() => navigate("/tutorial")}
+              onClick={() => setShowTutorialModal(true)}
             >
               {t("home.learnMore")}
             </button>
@@ -327,6 +331,7 @@ const HomePage = () => {
           )}
         </div>
       </div>
+      <TutorialModal isOpen={showTutorialModal} onClose={() => setShowTutorialModal(false)} canClose={true}/>
     </div>
   );
 };
