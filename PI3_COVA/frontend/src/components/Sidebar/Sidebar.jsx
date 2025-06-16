@@ -7,11 +7,8 @@ import {
   IoTimeOutline,
   IoSettingsOutline,
   IoMenu,
-  IoClipboardOutline,
 } from "react-icons/io5";
-
 import { LuFilePenLine } from "react-icons/lu";
-
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
@@ -24,6 +21,7 @@ const Sidebar = () => {
   if (!user) return null;
 
   const role = user.role;
+  const userId = user.uid; 
 
   const commonItems = [
     {
@@ -44,7 +42,7 @@ const Sidebar = () => {
     {
       icon: <IoPersonOutline />,
       label: t("sidebar.profile"),
-      path: "/profile",
+      path: `/profile`, 
     },
   ];
 
@@ -57,14 +55,13 @@ const Sidebar = () => {
     {
       icon: <IoPersonOutline />,
       label: t("sidebar.doctorProfile"),
-      path: "/doctor/profile",
+      path: `/profile/${userId}`,
     },
     {
       icon: <LuFilePenLine />,
       label: t("sidebar.consultationAnalysis"),
       path: "/analysis",
     },
-    
   ];
 
   const menuItems =
@@ -73,14 +70,9 @@ const Sidebar = () => {
       : [...doctorItems, ...commonItems];
 
   return (
-    <div
-      className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}
-    >
+    <div className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
       <div className={styles.topSection}>
-        <button
-          className={styles.menuButton}
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <button className={styles.menuButton} onClick={() => setIsOpen(!isOpen)}>
           <IoMenu />
         </button>
       </div>

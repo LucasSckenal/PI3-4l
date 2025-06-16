@@ -23,6 +23,8 @@ const FooterBar = () => {
   if (!user) return null;
 
   const role = user.role;
+  const userId = user.uid; 
+
 
   const navItems = useMemo(() => {
     if (!role) {
@@ -35,7 +37,7 @@ const FooterBar = () => {
     if (role === "doctor") {
       return [
         { icon: <LuFilePenLine />, path: "/analysis" },
-        { icon: <IoPerson />, path: "/doctor/profile" },
+        { icon: <IoPerson />, path: `/profile/${userId}` },
         { icon: <IoHome />, path: "/doctor/home" },
         { icon: <IoSettingsSharp />, path: "/settings" },
       ];

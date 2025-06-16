@@ -7,6 +7,7 @@ import { FaRegEdit, FaSave, FaTimes } from "react-icons/fa";
 import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";
 import styles from "./styles.module.scss";
 import DoctorProfileEditModal from "../../components/DoctorEditModal/DoctorEditModal";
+import { useParams } from "react-router-dom";
 
 import {
   saveUserBasicInfo,
@@ -14,9 +15,11 @@ import {
   fetchUserBasicInfo,
   fetchDoctorAbout,
 } from "../../api/firebase"; 
+
 const DoctorProfilePage = () => {
   const { userData, loading } = useAccount();
   const { t } = useTranslation();
+  const { id } = useParams();
 
   // ─── Estados para os dados básicos do Usuário ─────────────────────────────
   const [name, setName] = useState("");
@@ -28,7 +31,6 @@ const DoctorProfilePage = () => {
   const [cidSpecialties, setCidSpecialties] = useState([]);
   const [professionalId, setProfessionalId] = useState("");
   const [photo, setPhoto] = useState("");
-
 
   // ─── Estados para “Sobre o Médico” ────────────────────────────────────────
   const [title, setTitle] = useState("");
@@ -46,8 +48,9 @@ const DoctorProfilePage = () => {
   // ─── Armazena temporariamente o texto editado até salvar ─────────────────
   const [draftAbout, setDraftAbout] = useState("");
 
-  // ─── userID com base no UID do usuário autenticado ─────────────────────────
-  const userID = userData?.uid;
+  // ─── userID com base no UID do usuário ─────────────────────────
+  const userID = id;
+  const isOwner = userData?.uid === id;
 
   // ─── Função para obter a URL da imagem (se houver) ────────────────────────
   const getProfileImageSource = () => {
@@ -135,34 +138,34 @@ const DoctorProfilePage = () => {
 
   // 1) Atualiza campos básicos em Users/{userID}
   const persistBasicInfo = async (
-  novoName,
-  novoLocation,
-  novoPhone,
-  novoEmail,
-  novoCountry,
-  novoSpecialization,
-  novoCidSpecialties,
-  novoProfessionalId,
-  novoPhoto
-) => {
-  if (!userID) return;
-  const basicData = {
-    name: novoName,
-    location: novoLocation,
-    phone: novoPhone,
-    email: novoEmail,
-    country: novoCountry,
-    specialization: novoSpecialization,
-    cidSpecialties: novoCidSpecialties,
-    professionalId: novoProfessionalId,
-    photo: novoPhoto,
+    novoName,
+    novoLocation,
+    novoPhone,
+    novoEmail,
+    novoCountry,
+    novoSpecialization,
+    novoCidSpecialties,
+    novoProfessionalId,
+    novoPhoto
+  ) => {
+    if (!userID) return;
+    const basicData = {
+      name: novoName,
+      location: novoLocation,
+      phone: novoPhone,
+      email: novoEmail,
+      country: novoCountry,
+      specialization: novoSpecialization,
+      cidSpecialties: novoCidSpecialties,
+      professionalId: novoProfessionalId,
+      photo: novoPhoto,
+    };
+    try {
+      await saveUserBasicInfo(userID, basicData);
+    } catch (err) {
+      console.error("Erro ao persistir basic info:", err);
+    }
   };
-  try {
-    await saveUserBasicInfo(userID, basicData);
-  } catch (err) {
-    console.error("Erro ao persistir basic info:", err);
-  }
-};
 
   // 2) Atualiza TODO o “About” (incluindo aboutText) em Users/{userID}/About/Info
   const persistDoctorAbout = async (
@@ -191,7 +194,7 @@ const DoctorProfilePage = () => {
     }
   };
 
-  // ─── Handlers de ExperienceSection (sem alteração) ────────────────────────
+  // ─── Handlers de ExperienceSection (com verificação de proprietário) ─────
   const handleAddExperience = (newExperience) => {
     const updated = [...experiences, newExperience];
     setExperiences(updated);
@@ -239,17 +242,17 @@ const DoctorProfilePage = () => {
   const handleSaveAllDoctorInfo = () => {
     // 1) Persistir campos básicos
     persistBasicInfo(
-  name,
-  location,
-  phone,
-  email,
-  country,
-  specialization,
-  cidSpecialties,
-  professionalId,
-  photo
-);
-    // 2) Persistir TODO o “About” (title, specialties, hospital, crm, aboutText, procedures, experiences)
+      name,
+      location,
+      phone,
+      email,
+      country,
+      specialization,
+      cidSpecialties,
+      professionalId,
+      photo
+    );
+    // 2) Persistir TODO o “About”
     persistDoctorAbout(title, specialties, hospital, crm, aboutText, procedures, experiences);
     // 3) Fechar modal
     setIsModalOpen(false);
@@ -261,7 +264,7 @@ const DoctorProfilePage = () => {
 
   return (
     <div className={styles.neurologistProfile}>
-      {isModalOpen && (
+      {isModalOpen && isOwner && (
         <DoctorProfileEditModal
           name={name}
           setName={setName}
@@ -271,7 +274,6 @@ const DoctorProfilePage = () => {
           setPhone={setPhone}
           email={email}
           setEmail={setEmail}
-          setCrm={setCrm}
           country={country}
           setCountry={setCountry}
           specialization={specialization}
@@ -289,15 +291,20 @@ const DoctorProfilePage = () => {
       {/* ─── HEADER ──────────────────────────────────────────────────────────────── */}
       <header className={styles.profileHeader}>
         <div className={styles.profileImage}>
-          <img
-            src={getProfileImageSource()}
+         <img
+            src={photo || defaultProfileIcon} 
             alt={t("profile.alt")}
             className={styles.avatar}
-            onError={(e) => (e.target.src = defaultProfileIcon)}
+            onError={(e) => {
+              e.target.src = defaultProfileIcon; 
+              e.target.onerror = null; 
+            }}
           />
-          <button className={styles.editButton} onClick={handleEditProfile}>
-            {t("profile.edit")}
-          </button>
+          {isOwner && (
+            <button className={styles.editButton} onClick={handleEditProfile}>
+              {t("profile.edit")}
+            </button>
+          )}
         </div>
 
         <div className={styles.headerInfo}>
@@ -336,7 +343,7 @@ const DoctorProfilePage = () => {
           </h3>
 
           {/* ─── BOTÃO DE EDIÇÃO QUE APARECE AO PASSAR O MOUSE ─────────────────────── */}
-          {isAboutHover && !isEditingAbout && (
+          {isOwner && isAboutHover && !isEditingAbout && (
             <button
               className={styles.editAboutButton}
               onClick={() => {
@@ -359,7 +366,7 @@ const DoctorProfilePage = () => {
           )}
 
           {/* ─── SE ESTÁ EDITANDO, MOSTRAMOS UMA TEXTAREA E BOTÕES “Salvar”/“Cancelar” ─ */}
-          {isEditingAbout ? (
+          {isOwner && isEditingAbout ? (
             <div className={styles.editAboutContainer}>
               <textarea
                 className={styles.editAboutTextarea}
@@ -367,33 +374,20 @@ const DoctorProfilePage = () => {
                 onChange={(e) => setDraftAbout(e.target.value)}
                 rows={4}
               />
-
               <div className={styles.editAboutActions}>
                 <button
                   className={styles.saveAboutButton}
                   onClick={() => {
-                    // Salva no Firestore
-                    const novoAbout = draftAbout.trim();
-                    setAboutText(novoAbout);
-                    persistDoctorAbout(
-                      title,
-                      specialties,
-                      hospital,
-                      crm,
-                      novoAbout,
-                      procedures,
-                      experiences
-                    );
+                    setAboutText(draftAbout.trim());
+                    persistDoctorAbout(title, specialties, hospital, crm, draftAbout.trim(), procedures, experiences);
                     setIsEditingAbout(false);
                   }}
                 >
                   <FaSave /> {t("profile.save")}
                 </button>
-
                 <button
                   className={styles.cancelAboutButton}
                   onClick={() => {
-                    // Cancela a edição, sem persistir
                     setDraftAbout(aboutText);
                     setIsEditingAbout(false);
                   }}
@@ -403,7 +397,6 @@ const DoctorProfilePage = () => {
               </div>
             </div>
           ) : (
-            // ─── SE NÃO ESTÁ EDITANDO, MOSTRA O PARÁGRAFO NORMAL ───────────────────
             <p className={styles.aboutText}>{aboutText}</p>
           )}
         </section>
@@ -416,12 +409,13 @@ const DoctorProfilePage = () => {
               onAdd={handleAddExperience}
               onEdit={handleEditExperience}
               onDelete={handleDeleteExperience}
+              isEditable={isOwner} // Passamos isOwner para controlar a edição
             />
           </div>
 
           {/* ─── Coluna Direita: PROCEDIMENTOS E CONTATO ───────────────────────────── */}
           <div className={styles.columnRight}>
-            {/* ─── PROCEDURES (pode ignorar por ora) ──────────────────────────────── */}
+            {/* ─── PROCEDURES ──────────────────────────────── */}
             <section className={styles.proceduresSection}>
               <h3 className={styles.sectionTitle}>
                 <i className={`fas fa-procedures ${styles.icon}`}></i>{" "}
@@ -472,8 +466,6 @@ const DoctorProfilePage = () => {
           </div>
         </div>
       </main>
-
-     
     </div>
   );
 };

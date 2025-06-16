@@ -121,11 +121,11 @@ const AppRoutes = () => {
         }
         />
         <Route
-          path="doctor/profile"
+          path="/profile/:id"
           element={
-            <RoleRoute allowedRoles={["doctor"]}>
+            <PrivateRoute>
               <DoctorProfilePage />
-            </RoleRoute>
+            </PrivateRoute>
           }
         />
         <Route

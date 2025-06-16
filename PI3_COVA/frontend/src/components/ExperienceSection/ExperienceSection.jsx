@@ -1,10 +1,9 @@
-// ExperienceSection.jsx
 import { useState, useRef, useEffect } from "react";
 import { FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 
-const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
+const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete, isEditable }) => {
   const { t } = useTranslation();
   const formRef = useRef(null);
 
@@ -144,20 +143,22 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
             <div className={styles.timelineContent}>
               <div className={styles.experienceHeader}>
                 <h4>{item.position}</h4>
-                <div className={styles.experienceActions}>
-                  <button
-                    className={styles.editButton}
-                    onClick={() => handleEditClick(index)}
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => onDelete(index)}
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
+                {isEditable && (
+                  <div className={styles.experienceActions}>
+                    <button
+                      className={styles.editButton}
+                      onClick={() => handleEditClick(index)}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => onDelete(index)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                )}
               </div>
               <p className={styles.institution}>{item.institution}</p>
               <p className={styles.period}>{item.period}</p>
@@ -167,7 +168,7 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
         ))}
       </div>
 
-      {isAdding && (
+      {isEditable && isAdding && (
         <form
           ref={formRef}
           onSubmit={handleSubmit}
@@ -221,7 +222,6 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
                 maxLength={7}
                 disabled={formData.isCurrent}
                 className={formData.isCurrent ? styles.disabledInput : ""}
-                required
               />
             </div>
           </div>
@@ -245,7 +245,6 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              required
             />
           </div>
 
@@ -266,7 +265,7 @@ const ExperienceSection = ({ experiences, onAdd, onEdit, onDelete }) => {
         </form>
       )}
 
-      {!isAdding && (
+      {isEditable && !isAdding && (
         <div className={styles.addButtonContainer}>
           <button className={styles.addButton} onClick={() => setIsAdding(true)}>
             <FaPlus /> {t("profile.add")}
