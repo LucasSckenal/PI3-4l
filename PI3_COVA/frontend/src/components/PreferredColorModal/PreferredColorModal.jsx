@@ -7,7 +7,7 @@ const colorList = [
   "#60ba1c", // Green
   "#c97c55", // Brown/Orange
   "#7f41e2", // Purple (original default)
-  "#F05D5E", // Red
+  "#a1a1a1", // Gray
   "#1ABC9C", // Turquoise
   "#bf9c0d", // Gold/Yellow
   "#db60a4", // Pink

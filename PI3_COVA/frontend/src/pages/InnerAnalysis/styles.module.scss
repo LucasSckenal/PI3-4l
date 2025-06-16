@@ -1,0 +1,263 @@
+.container {
+  max-height: 100vh;
+  background: var(--Bg);
+  color: var(--TextGeneral);
+  font-family: 'Reddit Sans Condensed', sans-serif;
+  padding: var(--Gap3);
+  overflow: scroll;
+
+  @media (max-width: 1023px) {
+    max-height: 80vh;
+    padding: var(--Gap2);
+  }
+}
+
+.header {
+  text-align: center;
+  color: var(--TextGeneral);
+  margin-bottom: var(--Gap3);
+  border-bottom: 2px solid var(--PreferredColor);
+  padding-bottom: var(--Gap);
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+.card {
+  border-radius: var(--BorderRadius);
+  box-shadow: var(--BoxShadow);
+  padding: var(--Gap3);
+  height: auto;
+  max-width: 90%;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: var(--Gap2);
+  }
+}
+
+.section {
+  margin-bottom: var(--Gap3);
+  padding-bottom: var(--Gap2);
+  border-bottom: 1px solid var(--DetailsBgLighter);
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--TextGeneral);
+  margin-top: 0;
+  margin-bottom: var(--Gap2);
+  display: flex;
+  align-items: center;
+  gap: var(--Gap);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.patientInfo {
+  background: var(--Aside);
+  padding: var(--Gap2);
+  border-radius: var(--BorderRadius);
+  border-left: 4px solid var(--PreferredColor);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--Gap2);
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.infoRow {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--TextGeneral);
+  letter-spacing: 0.5px;
+  margin-bottom: var(--Gap);
+}
+
+.infoValue {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--TextGeneral);
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+}
+
+.editableField {
+  margin-top: var(--Gap2);
+
+  label {
+    display: block;
+    margin-bottom: var(--Gap);
+    font-weight: 600;
+    color: var(--TextGeneral);
+    font-size: 1.05rem;
+  }
+}
+
+.inputField,
+.textareaField {
+  width: 100%;
+  padding: var(--Gap2);
+  background: var(--InputCheckBox);
+  border: 1px solid var(--DetailsBgLighter);
+  border-radius: var(--BorderRadius);
+  font-size: 1rem;
+  color: var(--TextGeneral);
+  transition: var(--Transition);
+
+  &:focus {
+    outline: none;
+    border-color: var(--PreferredColor);
+    box-shadow: 0 0 0 3px rgba(127, 65, 226, 0.2);
+  }
+}
+
+.selectField {
+  width: 100%;
+  padding: var(--Gap2);
+  background: var(--InputCheckBox);
+  border: 2px solid var(--DetailsBgLighter);
+  border-radius: var(--BorderRadius);
+  font-size: 1rem;
+  color: var(--TextGeneral);
+  transition: var(--Transition);
+
+  &:hover {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(127, 65, 226, 0.2);
+  }
+}
+
+.textareaField {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.flexContainer {
+  display: flex;
+  gap: var(--Gap3);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--Gap2);
+  }
+}
+
+.sectionHalf {
+  flex: 1;
+}
+
+// Estilos para cores de gravidade
+.vermelho { border-color: var(--Decline); }
+.laranja { border-color: var(--Orange); }
+.amarelo { border-color: var(--Yellow); }
+.verde { border-color: var(--Confirmation); }
+.azul { border-color: var(--BlueLight); }
+
+.selectField {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 3rem;
+}
+
+.accuracyDisplay {
+  margin-top: var(--Gap2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%; // Isso garantirá que ocupe toda a altura disponível
+}
+
+.accuracyMeter {
+  height: 8px;
+  background: var(--DetailsBg);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--Gap);
+  width: 100%; // Garante que a barra ocupe toda a largura
+}
+
+.accuracyFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease, background-color 0.5s ease; /* Adiciona transição para a cor */
+}
+
+.accuracyValue {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--TextGeneral);
+  text-align: center;
+  margin-top: var(--Gap); // Adiciona um pequeno espaçamento entre a barra e o valor
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--Gap3);
+  gap: var(--Gap2);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.submitButton {
+  background: var(--PreferredColor);
+  color: var(--White);
+  border: none;
+  padding: var(--Gap2) var(--Gap3);
+  border-radius: var(--BorderRadius);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--Transition);
+  box-shadow: var(--BoxShadow);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--BoxShadow2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.cancelButton {
+  background: transparent;
+  color: var(--TextGeneral);
+  border: 1px solid var(--DetailsBgLighter);
+  padding: var(--Gap2) var(--Gap3);
+  border-radius: var(--BorderRadius);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--Transition);
+
+  &:hover {
+    background: var(--DetailsBgLighter);
+    color: var(--TextGeneral);
+  }
+}

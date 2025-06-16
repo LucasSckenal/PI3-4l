@@ -16,7 +16,18 @@
   },
 
   "common": {
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "id": "ID",
+    "age": "Edad",
+    "gender": "Género",
+    "description": "Descripción",
+    "date": "Fecha",
+    "male": "Masculino",
+    "female": "Femenino",
+    "notAvailable": "N/A",
+    "cancel": "Cancelar",
+    "years": "años",
+    "asIn": "como en"
   },
   "home": {
     "welcome": "Bienvenido",
@@ -223,6 +234,38 @@
     "days": [
     "Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"
     ]
+  },
+"analysisPage": {
+    "error": {
+      "noIdProvided": "ID de análisis no proporcionado.",
+      "notFound": "Análisis no encontrado.",
+      "loadingData": "Error al cargar los datos del análisis."
+    },
+    "reportPrefix": "Informe de Triaje – Síndromes de cefalalgia",
+    "medicalAnalysisReview": "Revisión de Análisis Médico",
+    "patientDetails": "Detalles del Paciente",
+    "diagnosis": "Diagnóstico",
+    "cidGroup": "Grupo CIE-10",
+    "migraine": "Migraña",
+    "otherHeadacheSyndromes": "Otros síndromes de cefalea",
+    "diseaseName": "Nombre de la Enfermedad",
+    "recommendations": "Recomendaciones",
+    "patientGuidelines": "Orientaciones para el paciente",
+    "severity": "Gravedad",
+    "priorityLevel": "Nivel de prioridad",
+    "severityOptions": {
+      "red": "Rojo (Emergencia)",
+      "orange": "Naranja (Urgente)",
+      "yellow": "Amarillo (Poco Urgente)",
+      "green": "Verde (No Urgente)",
+      "blue": "Azul (Sin Urgencia)"
+    },
+    "accuracy": "Precisión",
+    "sendUpdateToPatient": "Enviar Actualización al Paciente",
+    "alert": {
+      "updateSent": "¡Informe actualizado enviado al paciente!",
+      "updateError": "Error al enviar actualización. Inténtalo de nuevo."
+    }
   }
 }
 

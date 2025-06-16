@@ -158,7 +158,7 @@ const HomePage = () => {
                     alt="Profile"
                     className={styles.profileImage}
                     onError={(e) => (e.target.src = defaultProfileIcon)}
-                    onClick={() => setShowTutorialModal(true)}
+                    onClick={() => navigate("/profile")}
                   />
                   <div className={styles.textGreetings}>
                    <p>{t("home.welcome")}</p>
@@ -169,7 +169,7 @@ const HomePage = () => {
           </div>
            <div className={styles.DiagnosisInvitation}>
               <h2>{t("home.startDiagnosisTitle")}</h2>
-              <button>{t("home.startDiagnosis")}</button>
+              <button onClick={() => navigate("/chat")}>{t("home.startDiagnosis")}</button>
             </div>
         </div>
 

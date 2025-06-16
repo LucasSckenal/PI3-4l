@@ -14,6 +14,7 @@ import LoginPage from "../pages/Auth/Login/LoginPage";
 import RegisterPage from "../pages/Auth/Register/RegisterPage";
 
 import AnalysisPage from "../pages/Analysis/AnalysisPage.jsx";
+import InnerAnalysisPage from "../pages/InnerAnalysis/InnerAnalysisPage.jsx";
 import DoctorProfilePage from "../pages/DoctorProfile/DoctorProfilePage.jsx";
 import DoctorHomePage from "../pages/DoctorHome/DoctorHomePage.jsx"
 
@@ -39,99 +40,104 @@ const AppRoutes = () => {
       />
 
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
+      {/* InnerChatPage com layout separado */}
+      <Route
+        path="/chat/:chatId"
+        element={
+          <PrivateRoute>
+            <RoleRoute allowedRoles={["user"]}>
+              <InnerChatPage />
+            </RoleRoute>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Layout compartilhado com MainPage */}
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <MainPage />
+          </PrivateRoute>
+        }
+      >
         <Route
-          path="/"
+          index
+          element={
+            <RoleRoute allowedRoles={["user"]}>
+              <HomePage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="chat"
+          element={
+            <RoleRoute allowedRoles={["user"]}>
+              <ChatPage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="history"
+          element={
+            <RoleRoute allowedRoles={["user"]}>
+              <HistoryPage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <RoleRoute allowedRoles={["user"]}>
+              <ProfilePage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="doctor/home"
+          element={
+            <RoleRoute allowedRoles={["doctor"]}>
+              <DoctorHomePage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="analysis"
+          element={
+            <RoleRoute allowedRoles={["doctor"]}>
+              <AnalysisPage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="/analysis/:analysisId"
+        element={
+          <RoleRoute allowedRoles={["doctor"]}>
+            <InnerAnalysisPage />
+          </RoleRoute>
+        }
+        />
+        <Route
+          path="doctor/profile"
+          element={
+            <RoleRoute allowedRoles={["doctor"]}>
+              <DoctorProfilePage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="settings"
           element={
             <PrivateRoute>
-              <MainPage />
+              <SettingsPage />
             </PrivateRoute>
           }
-        >
-          <Route
-            index
-            element={
-              <RoleRoute allowedRoles={["user"]}>
-                <HomePage />
-              </RoleRoute>
-            }
-          />
-
-          <Route
-            path="chat"
-            element={
-              <RoleRoute allowedRoles={["user"]}>
-                <ChatPage />
-              </RoleRoute>
-            }
-          />
-          
-
-          <Route
-            path="history"
-            element={
-              <RoleRoute allowedRoles={["user"]}>
-                <HistoryPage />
-              </RoleRoute>
-            }
-          />
-
-          <Route
-            path="profile"
-            element={
-              <RoleRoute allowedRoles={["user"]}>
-                <ProfilePage />
-              </RoleRoute>
-            }
-          />
-
-          <Route
-            path="/doctor/home"
-            element={
-              <RoleRoute allowedRoles={["doctor"]}>
-                <DoctorHomePage />
-              </RoleRoute>
-            }
-          />
-
-          <Route
-            path="analysis"
-            element={
-              <RoleRoute allowedRoles={["doctor"]}>
-                <AnalysisPage />
-              </RoleRoute>
-            }
-          />
-
-          <Route
-            path="doctor/profile"
-            element={
-              <RoleRoute allowedRoles={["doctor"]}>
-                <DoctorProfilePage />
-              </RoleRoute>
-            }
-          />
-
-          <Route
-            path="settings"
-            element={
-              <PrivateRoute>
-                <SettingsPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="chat/:chatId"
-            element={
-              <RoleRoute allowedRoles={["user"]}>
-                <InnerChatPage />
-              </RoleRoute>
-            }
-          />
-        </Route>
-      </Routes>
+        />
+      </Route>
+    </Routes>
     </>
   );
 };

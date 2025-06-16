@@ -5,7 +5,7 @@ const app = express();
 
 // Configurar CORS APENAS para o frontend na porta 5173
 app.use(cors({ origin: 'http://localhost:5173' }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // Rota para Streaming
 app.post('/api/stream', async (req, res) => {

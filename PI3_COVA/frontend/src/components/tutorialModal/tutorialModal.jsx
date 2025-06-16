@@ -1,7 +1,13 @@
+import tutorial from "../../public/tutorial.mp4";
+import tutorialMobile from "../../public/tutorialMobile.mp4";
+import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider"
+
 import styles from "./styles.module.scss";
 import { useEffect } from "react";
 
 export default function TutorialModal({ isOpen, onClose, canClose }) {
+  const { isMobile } = useScreenResize();
+  
   useEffect(() => {
     if (isOpen) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
@@ -32,7 +38,7 @@ export default function TutorialModal({ isOpen, onClose, canClose }) {
           </button>
         )}
         <video controls className={styles.video} onEnded={handleVideoEnd}>
-          <source src="/videos/tutorial.mp4" type="video/mp4" />
+          <source src={isMobile ? tutorialMobile : tutorial} type="video/mp4" />
           Seu navegador não suporta vídeo HTML5.
         </video>
       </div>

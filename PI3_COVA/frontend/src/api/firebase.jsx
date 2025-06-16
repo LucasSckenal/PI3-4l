@@ -275,5 +275,8 @@ export {
   fetchDoctorAbout,
   updateDoctorOnlineStatus,
   addToPendingReviews,
-  addDoctorDiagnosis
+  addDoctorDiagnosis,
+  getDoc,
+  setDoc,
+  doc
 };

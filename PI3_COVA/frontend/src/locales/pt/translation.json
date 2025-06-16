@@ -16,7 +16,18 @@
   },
 
   "common": {
-    "loading": "Carregando..."
+    "loading": "Carregando...",
+    "id": "ID",
+    "age": "Idade",
+    "gender": "Sexo",
+    "description": "Descrição",
+    "date": "Data",
+    "male": "Masculino",
+    "female": "Feminino",
+    "notAvailable": "N/A",
+    "cancel": "Cancelar",
+    "years": "anos",
+    "asIn": "como"
   },
   "home": {
     "welcome": "Bem-vindo",
@@ -227,5 +238,37 @@
     "days": [
     "Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"
     ]
+  },
+  "analysisPage": {
+    "error": {
+      "noIdProvided": "ID da análise não fornecido.",
+      "notFound": "Análise não encontrada.",
+      "loadingData": "Erro ao carregar dados da análise."
+    },
+    "reportPrefix": "Relatório de Triagem – Síndromes de algias cefálicas",
+    "medicalAnalysisReview": "Revisão de Análise Médica",
+    "patientDetails": "Detalhes do Paciente",
+    "diagnosis": "Diagnóstico",
+    "cidGroup": "Grupo CID-10",
+    "migraine": "Enxaqueca",
+    "otherHeadacheSyndromes": "Outras síndromes de algias cefálicas",
+    "diseaseName": "Nome da Doença",
+    "recommendations": "Recomendações",
+    "patientGuidelines": "Orientações ao paciente",
+    "severity": "Gravidade",
+    "priorityLevel": "Nível de prioridade",
+    "severityOptions": {
+      "red": "Vermelho (Emergência)",
+      "orange": "Laranja (Urgente)",
+      "yellow": "Amarelo (Pouco Urgente)",
+      "green": "Verde (Não Urgente)",
+      "blue": "Azul (Sem Urgência)"
+    },
+    "accuracy": "Precisão",
+    "sendUpdateToPatient": "Enviar Atualização ao Paciente",
+    "alert": {
+      "updateSent": "Relatório atualizado enviado ao paciente!",
+      "updateError": "Erro ao enviar atualização. Tente novamente."
+    }
   }
 }

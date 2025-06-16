@@ -15,7 +15,18 @@
     "aboutUs": "About us"
   },
   "common": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "id": "ID",
+    "age": "Age",
+    "gender": "Gender",
+    "description": "Description",
+    "date": "Date",
+    "male": "Male",
+    "female": "Female",
+    "notAvailable": "N/A",
+    "cancel": "Cancel",
+    "years": "years",
+    "asIn": "as in"
   },
   "home": {
     "welcome": "Welcome",
@@ -222,5 +233,37 @@
     "days": [
     "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
     ]
+  },
+  "analysisPage": {
+    "error": {
+      "noIdProvided": "Analysis ID not provided.",
+      "notFound": "Analysis not found.",
+      "loadingData": "Error loading analysis data."
+    },
+    "reportPrefix": "Triage Report – Cephalicgia Syndromes",
+    "medicalAnalysisReview": "Medical Analysis Review",
+    "patientDetails": "Patient Details",
+    "diagnosis": "Diagnosis",
+    "cidGroup": "CID-10 Group",
+    "migraine": "Migraine",
+    "otherHeadacheSyndromes": "Other Headache Syndromes",
+    "diseaseName": "Disease Name",
+    "recommendations": "Recommendations",
+    "patientGuidelines": "Patient Guidelines",
+    "severity": "Severity",
+    "priorityLevel": "Priority Level",
+    "severityOptions": {
+      "red": "Red (Emergency)",
+      "orange": "Orange (Urgent)",
+      "yellow": "Yellow (Less Urgent)",
+      "green": "Green (Non-Urgent)",
+      "blue": "Blue (No Urgency)"
+    },
+    "accuracy": "Accuracy",
+    "sendUpdateToPatient": "Send Update to Patient",
+    "alert": {
+      "updateSent": "Updated report sent to patient!",
+      "updateError": "Error sending update. Please try again."
+    }
   }
 }
