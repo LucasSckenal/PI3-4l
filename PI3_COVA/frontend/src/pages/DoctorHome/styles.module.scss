@@ -155,6 +155,7 @@
       text-align: left;
       border-bottom: 1px solid var(--TextGeneral);
       white-space: nowrap;
+      text-overflow: ellipsis;
       color: var(--TextGeneral)
     }
 

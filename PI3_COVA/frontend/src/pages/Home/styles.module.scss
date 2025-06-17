@@ -1,10 +1,12 @@
 .MainContainer {
   width: 100%;
+  height: 100vh;
   padding: 2rem 4rem;
   color: var(--TextGeneralAlt);
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  overflow: scroll;
 
   .GreetingText {
     display: flex;
@@ -26,7 +28,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    height: 200px;
+    min-height: 200px;
     width: 100%;
     border-radius: 16px;
     padding: 1.5rem;
@@ -149,7 +151,7 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.2s ease;
 
       &:hover {
         transform: scale(1.1);
@@ -157,7 +159,15 @@
     }
   }
 
+  .ContentWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
   .History {
+    flex: 1.5;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -175,6 +185,7 @@
       .ViewMoreButton {
         color: var(--PreferredColor);
         border: none;
+        background: none;
         cursor: pointer;
         font-weight: 600;
         
@@ -185,70 +196,143 @@
     }
 
     .InnerHistory {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(1, 2fr));
-      gap: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
 
       .box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: large;
+        height: 106px;
         padding: 1rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--PreferredColor);
+        background: var(--UiBgLighter);
         border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s ease;
+        color: var(--TextGeneral);
 
         &:hover {
           background-color: var(--PreferredColor);
           transform: scale(1.02);
-          color: var(--TextGeneral);
+          color: var(--White);
         }
       }
     }
   }
 
-  .StatsSection {
+  // --- SEÇÃO DE ANÁLISE ATUALIZADA ---
+  .Analysis {
+    flex: 1.5; // Ajustado para dar mais espaço
     display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 1rem;
 
-    .StatBox {
-      flex: 1;
-      min-width: 280px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--PreferredColor);
-      border-radius: 12px;
-      padding: 1.5rem;
+    .AnalysisTitle {
+      font-size: 1.5rem; // Título maior
+      font-weight: 600;
+      color: var(--TextGeneral);
+      margin: 0;
+      padding-left: 0.5rem;
+    }
+    
+    .AnalysisCard {
+      background-color: var(--UiBgLighter); // Fundo igual ao da pág. de perfil
+      padding: 2rem; // Mais preenchimento
+      border-radius: 15px; // Cantos mais arredondados
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); // Sombra para profundidade
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      transition: all 0.3s ease;
+      gap: 1.5rem; // Mais espaço interno
+      height: 100%;
 
-      h4 {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-      }
-
-      .number {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 1.5rem;
-        color: var(--PreferredColor);
-      }
-
-      button {
-        background: none;
-        border: 1px solid var(--PreferredColor);
-        color: var(--PreferredColor);
-        padding: 0.5rem 1rem;
+      .ProfileSection {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
         border-radius: 8px;
-        font-size: 0.9rem;
         cursor: pointer;
+        background: var(--PreferredColor);
+        transition: all 0.2s ease;
 
         &:hover {
-          background-color: var(--PreferredColor);
-          color: var(--TextGeneral);
+          transform: scale(1.02);
+        }
+
+        img {
+          width: 80px; // Imagem maior
+          height: 80px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 4px solid var(--DetailsBg);
+        }
+
+        .ProfileText {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.3rem;
+          color: var(--White);
+
+          strong {
+            font-size: 1.3rem;
+            font-weight: 600;
+          }
+
+          button {
+            background: none;
+            border: none;
+            color: var(--White);
+            padding: 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+
+      .ReportSection {
+        border-top: 1px solid var(--DetailsBg);
+        padding-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; // Mais espaço entre os itens do relatório
+        padding-left: 1rem;
+
+        p {
+          font-size: 0.95rem; // Fonte maior
+          color: var(--TextSecondary);
+          line-height: 1.6;
+          margin: 0;
+          strong {
+            color: var(--TextGeneral);
+            font-weight: 600;
+          }
+        }
+      }
+      
+      .ViewCompleteButton {
+        margin-top: auto;
+        align-self: flex-start;
+        padding: 0.8rem 2rem; // Botão maior
+        margin-left: 1rem;
+        background-color: var(--PreferredColor);
+        color: white;
+        font-weight: 500;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+
+        &:hover {
+          transform: scale(1.05);
         }
       }
     }
@@ -313,8 +397,8 @@
         text-align: center;
         font-weight: bolder;
         align-items: center;
-        padding: 0.5rem;
-        margin-bottom: 20px;
+        padding: 1rem;
+        margin-bottom: 10px;
       }
     } 
   }
@@ -481,6 +565,128 @@
     border-radius: 999px;
   }
   }
+
 }
+  .Analysis {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 95%;
+
+  .AnalysisTitle {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--TextSecondary);
+    padding-left: 0.5rem;
+  }
+  
+  .AnalysisCard {
+    background-color: var(--UiBgLighter);
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--DetailsBg);
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; // Espaçamento interno reduzido
+    height: 100%;
+
+    .ProfileSection {
+      height: 100px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 1rem; // Espaçamento entre foto e texto ajustado
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--DetailsBg);
+      cursor: pointer;
+
+      img {
+        width: 60px; // Tamanho da imagem reduzido
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--PreferredColor);
+        flex-shrink: 0; // Impede que a imagem encolha
+      }
+
+      .ProfileText {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+        min-width: 0; // Necessário para o text-overflow funcionar em um container flex
+
+        strong {
+          color: var(--TextGeneral);
+          font-size: 1.1rem; // Fonte ajustada
+          font-weight: 600;
+          width: 100%; // Garante que o elemento ocupe o espaço disponível
+          
+          // --- Ajustes para nomes longos ---
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        button {
+          background: none;
+          border: none;
+          color: var(--PreferredColor);
+          padding: 0;
+          cursor: pointer;
+          font-size: 0.9rem;
+          font-weight: 500;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .ReportSection {
+      border-top: none;
+      padding: 0 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      p {
+        font-size: 0.9rem;
+        color: var(--TextSecondary);
+        line-height: 1.6;
+        margin: 0;
+        strong {
+          color: var(--TextGeneral);
+          font-weight: 600;
+        }
+      }
+    }
+    
+    .ViewCompleteButton {
+      margin-top: auto;
+      align-self: flex-start;
+      padding: 0.8rem 2rem;
+      margin-left: 0.5rem;
+      // --- Estilo padronizado com outros botões ---
+      background-color: var(--PreferredColor);
+      color: white;
+      font-weight: 500;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: scale(1.05); // Efeito de hover padrão
+      }
+    }
   }
 }
+}
+
+}
+
+

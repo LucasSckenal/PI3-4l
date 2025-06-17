@@ -50,7 +50,11 @@
     "tutorialTitle": "Tutorial",
     "tutorialDesc": "Learn how to use our platform.",
     "consultationSummary": "Consultation summary",
-    "new": "New"
+    "new": "New",
+    "viewProfile": "View profile",
+    "doctorTitle": "Doctor",
+    "viewComplete": "View complete",
+    "doctorRevision": "Doctor's Revision"
   },
   "symptoms": {
     "tonturaLeve": "Mild dizziness",

@@ -144,8 +144,6 @@ const HomePage = () => {
     }
   };
 
-  
-
   if (loading) return <div>{t("common.loading")}</div>;
 
   if (isMobile) {
@@ -174,6 +172,28 @@ const HomePage = () => {
         </div>
 
         <div className={styles.InnerContainer}>
+          
+          {/* Seção de Análises para Mobile */}
+          <div className={styles.Analysis}>
+            <p className={styles.AnalysisTitle}>{t("home.doctorRevision")}:</p>
+            <div className={styles.AnalysisCard}>
+              <div className={styles.ProfileSection} onClick={() => navigate('/profile')}>
+                <img src={getProfileImageSource()} alt="Profile" />
+                <div className={styles.ProfileText}>
+                  <p className={styles.doctorTitle}>{t("home.doctorTitle")}</p>
+                  <strong>{userData?.name ?? "Luan Vitor Casali Dallabrida"}</strong>
+                  <button>{t("home.viewProfile")}</button>
+                </div>
+              </div>
+              <div className={styles.ReportSection}>
+                <p><strong>Nível de Triagem</strong> - Crítica Z-Score</p>
+                <p>Nome da Doença/Fonte Comum ou Influente, dependendo dos sintomas/idiomas</p>
+                <p>Recomendações: Focar em X e Y para tratar a doença, evitar contato direto com pessoas doentes, usar máscara facial em áreas públicas.</p>
+                <p><strong>Gravidade da Doença:</strong> X/10, Baixo risco de complicação</p>
+              </div>
+              <button className={styles.ViewCompleteButton}>Ver completo</button>
+            </div>
+          </div>
           <div className={styles.History}>
         <div className={styles.HistoryHeader}>
           <p>{t("home.recentHistory")}</p>
@@ -183,7 +203,7 @@ const HomePage = () => {
         </div>
         <div className={styles.GridHistorico}>
             {history.length > 0 ? (
-              history.map((item, index) => {
+              history.map((item) => {
                 const lower = item.title.toLowerCase();
 
                 const iconEntry =
@@ -220,6 +240,7 @@ const HomePage = () => {
             )}
             </div>
           </div>
+          
           <div className={styles.StatsMobileWrapper}>
             <h2>{t("home.consultationSummary")}</h2>
             <div className={styles.MobileCard}>
@@ -304,33 +325,58 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className={styles.History}>
-        <div className={styles.HistoryHeader}>
-          <p>{t("home.recentHistory")}</p>
-          <button
-            className={styles.ViewMoreButton}
-            onClick={() => navigate("/history")}
-          >
-            {t("home.viewAll")}
-          </button>
+      {/* Wrapper para Histórico e Análises */}
+      <div className={styles.ContentWrapper}>
+        <div className={styles.History}>
+          <div className={styles.HistoryHeader}>
+            <p>{t("home.recentHistory")}</p>
+            <button
+              className={styles.ViewMoreButton}
+              onClick={() => navigate("/history")}
+            >
+              {t("home.viewAll")}
+            </button>
+          </div>
+          <div className={styles.InnerHistory}>
+            {history.length > 0 ? (
+              history.map((item, index) => (
+                <div
+                  key={item.id}
+                  className={styles.box}
+                  onClick={() => navigate(`/chat/${item.id}`)}
+                >
+                  {index + 1}. {item.title || t("home.noTitle")}
+                </div>
+              ))
+            ) : (
+              <div className={styles.box}>{t("home.noHistory")}</div>
+            )}
+          </div>
         </div>
 
-        <div className={styles.InnerHistory}>
-          {history.length > 0 ? (
-            history.map((item, index) => (
-              <div
-                key={item.id}
-                className={styles.box}
-                onClick={() => navigate(`/chat/${item.id}`)}
-              >
-                {index + 1}. {item.title || t("home.noTitle")}
+        {/* Seção de Análises para Desktop */}
+        <div className={styles.Analysis}>
+          <p className={styles.AnalysisTitle}>{t("home.doctorRevision")}:</p>
+          <div className={styles.AnalysisCard}>
+            <div className={styles.ProfileSection} onClick={() => navigate('/profile')}>
+              <img src={getProfileImageSource()} alt="Profile" />
+              <div className={styles.ProfileText}>
+                <p className={styles.doctorTitle}>{t("home.doctorTitle")}</p>
+                <strong>{userData?.name ?? "Luan Vitor Casali Dallabrida"}</strong>
+                <button>{t("home.viewProfile")}</button>
               </div>
-            ))
-          ) : (
-            <div className={styles.box}>{t("home.noHistory")}</div>
-          )}
+            </div>
+            <div className={styles.ReportSection}>
+              <p><strong>Nível de Triagem</strong> - Crítica Z-Score</p>
+              <p>Nome da Doença/Fonte Comum ou Influente, dependendo dos sintomas/idiomas</p>
+              <p>Recomendações: Focar em X e Y para tratar a doença, evitar contato direto com pessoas doentes, usar máscara facial em áreas públicas.</p>
+              <p><strong>Gravidade da Doença:</strong> X/10, Baixo risco de complicação</p>
+            </div>
+            <button className={styles.ViewCompleteButton}>Ver completo</button>
+          </div>
         </div>
       </div>
+
       <TutorialModal isOpen={showTutorialModal} onClose={() => setShowTutorialModal(false)} canClose={true}/>
     </div>
   );

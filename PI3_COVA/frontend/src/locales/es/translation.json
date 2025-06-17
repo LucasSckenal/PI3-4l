@@ -51,7 +51,11 @@
     "tutorialTitle": "Tutorial de inicio rápido",
     "tutorialDesc": "Aprenda a usar la aplicación en minutos",
     "consultationSummary": "Resumen de la consulta",
-    "new": "Nuevo"
+    "new": "Nuevo",
+    "viewProfile": "Ver perfil",
+    "doctorTitle": "Doctor",
+    "viewComplete": "Ver completo",
+    "doctorRevision": "revisión médica"
   },
   "symptoms": {
     "tonturaLeve": "mareo leve",

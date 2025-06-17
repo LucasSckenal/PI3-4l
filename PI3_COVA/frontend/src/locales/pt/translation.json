@@ -51,7 +51,11 @@
     "tutorialTitle": "Tutorial",
     "tutorialDesc": "Aprenda como usar o app",
     "consultationSummary": "Resumo da Consulta",
-    "new": "Novo"
+    "new": "Novo",
+    "viewProfile": "Ver perfil",
+    "doctorTitle": "Doutor(a)",
+    "viewComplete": "Ver completo",
+    "doctorRevision": "Revisão Médica"
   },
   
    "symptoms": {
