@@ -54,6 +54,11 @@
     "viewProfile": "View profile",
     "doctorTitle": "Doctor",
     "viewComplete": "View complete",
+    "triageLevel": "ICD",
+    "recommendations": "Recommendations",
+    "diseaseSeverity": "Severity",
+    "generatedOn": "Generated on",
+    "noAnalysis": "No Analysis",
     "doctorRevision": "Doctor's Revision"
   },
   "symptoms": {
@@ -84,6 +89,7 @@
     "intro": "Hello! I’m your medical assistant. Tell me your symptoms via voice or text and I’ll generate a report to speed up your care.",
     "quickMessagesLabel": "Quick Messages",
     "inputPlaceholder": "Describe your problem here",
+    "defaultTitle": "No title",
     "personalizedMessages": {
       "base": "I am {{pronoun}} and I am {{age}} years old",
       "pronouns": {

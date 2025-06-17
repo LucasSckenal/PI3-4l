@@ -20,15 +20,17 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <AccountProvider>
         <ThemeProvider>
-          <NotificationProvider>
+         
             <ScreenResizeProvider>
               <BrowserRouter>
+                <NotificationProvider>
                 <IaProvider>
                   <AppRoutes />
                 </IaProvider>
+                </NotificationProvider>
               </BrowserRouter>
             </ScreenResizeProvider>
-          </NotificationProvider>
+          
         </ThemeProvider>
       </AccountProvider>
     </AuthProvider>

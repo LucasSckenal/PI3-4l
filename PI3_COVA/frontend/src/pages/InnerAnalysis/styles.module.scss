@@ -4,7 +4,7 @@
   color: var(--TextGeneral);
   font-family: 'Reddit Sans Condensed', sans-serif;
   padding: var(--Gap3);
-  overflow: scroll;
+  overflow-y: scroll;
 
   @media (max-width: 1023px) {
     max-height: 80vh;

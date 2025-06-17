@@ -55,6 +55,11 @@
     "viewProfile": "Ver perfil",
     "doctorTitle": "Doutor(a)",
     "viewComplete": "Ver completo",
+    "triageLevel": "Cid",
+    "recommendations": "Recomendações",
+    "diseaseSeverity": "Gravidade",
+    "generatedOn": "Gerada em",
+    "noAnalysis": "Sem Análise",
     "doctorRevision": "Revisão Médica"
   },
   
@@ -86,6 +91,7 @@
     "intro": "Olá! Sou sua assistente médica. Me conte seus sintomas com uma mensagem de voz ou texto e vou gerar um relatório para agilizar seu atendimento.",
     "quickMessagesLabel": "Mensagens rápidas",
     "inputPlaceholder": "Escreva seu problema aqui",
+    "defaultTitle": "Sem título",
     "personalizedMessages": {
       "base": "Sou {{pronoun}} de {{age}} anos",
       "pronouns": {

@@ -11,6 +11,7 @@ import {
   fetchUserBasicInfo,
 } from '../../api/firebase';
 import { deleteDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const InnerAnalysisPage = () => {
   const { analysisId } = useParams();
@@ -37,6 +38,7 @@ const InnerAnalysisPage = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userMessage, setUserMessage] = useState("");
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -93,30 +95,14 @@ const InnerAnalysisPage = () => {
               }
 
               setPatientDetailsFromUserDoc({
-                age: age,
-                gender: userBasicInfo.gender === 'male' ? 'Masculino' : userBasicInfo.gender === 'female' ? 'Feminino' : 'N/A',
-                birthDate: birthDate,
-                symptoms: (() => {
-                  const userMessage = data.messages.find(msg => msg.role === 'user');
-                  if (userMessage && userMessage.content) {
-                    const content = userMessage.content;
-                    const symptomsMatch = content.match(/sinto distúrbios visuais, como (.*)\./i) ||
-                      content.match(/Estou com (.*)\./i) ||
-                      content.match(/sinto (.*), como (.*)\./i) ||
-                      content.match(/tenho (.*)\./i) ||
-                      content.match(/estou (.*)\./i) ||
-                      content.match(/fico (.*)\./i) ||
-                      content.match(/sinto (.*)\./i);
-                    if (symptomsMatch && symptomsMatch[2]) {
-                      return `${symptomsMatch[1]}, como ${symptomsMatch[2]}`.trim();
-                    } else if (symptomsMatch && symptomsMatch[1]) {
-                      return symptomsMatch[1].trim();
-                    } else {
-                      return userMessage.content;
-                    }
-                  }
-                  return "N/A";
-                })()
+                  age: age,
+                  gender: userBasicInfo.gender === 'male' ? 'Masculino' : userBasicInfo.gender === 'female' ? 'Feminino' : 'N/A',
+                  birthDate: birthDate,
+                  symptoms: (() => {
+                      const userMsg = data.messages.find(msg => msg.role === 'user');
+                      setUserMessage(userMsg?.content || "N/A"); // Armazena a mensagem no estado
+                      return userMsg?.content || "N/A";
+                  })()
               });
             }
           }
@@ -141,6 +127,7 @@ const InnerAnalysisPage = () => {
 
   const handleSubmit = async () => {
     const finalDiagnosisText = `Relatório de Triagem – Síndromes de algias cefálicas (grupo CID-10 ${reviewData.cidGroup}) - Nome da Doença: ${reviewData.diseaseName} - Recomendações: ${reviewData.recommendations} - Gravidade da Doença: ${reviewData.priority} - Precisão do Diagnóstico: ${reviewData.accuracy}%`;
+    const doctorId = getAuth().currentUser?.uid;
 
     const finalData = {
       diagnosisText: finalDiagnosisText,
@@ -152,6 +139,8 @@ const InnerAnalysisPage = () => {
       status: "finalizado",
       visualizada: false,
       deliveredAt: new Date(),
+      doctorId,
+      userMessage,
     };
 
     try {

@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 import defaultProfileIcon from "../../public/UserDefault.webp";
 import tutorialPreview from "../../public/tutorial-preview.png";
 import TutorialModal from "../../components/tutorialModal/tutorialModal";
+import {fetchUserBasicInfo } from "../../api/firebase";
 
 
 const HomePage = () => {
@@ -32,6 +33,7 @@ const HomePage = () => {
   const [chatCount, setChatCount] = useState(0);
   const [showTutorialModal, setShowTutorialModal] = useState(false);
   const [latestAnalysis, setLatestAnalysis] = useState(null);
+  const [doctorInfo, setDoctorInfo] = useState(null);
 
 
   const { isMobile } = useScreenResize();
@@ -113,37 +115,48 @@ const HomePage = () => {
       return defaultProfileIcon;
     };
 
-     useEffect(() => {
+  useEffect(() => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
 
     const q = query(
       collection(db, "Users", userId, "AnalysisResults"),
-      orderBy("createdAt", "desc"),
+      orderBy("deliveredAt", "desc"),
       limit(1)
     );
 
-    const unsub = onSnapshot(q, (snapshot) => {
-        if (!snapshot.empty) {
-          const doc = snapshot.docs[0];
-          const data = doc.data();
-          setLatestAnalysis({
-            id: doc.id,
-            triagemLevel: data.cidGroup || t("home.unknown"),
-            diseaseName: data.diseaseName || t("home.unknown"),
-            recommendations: data.recommendations || t("home.noRecommendations"),
-            severity: data.priority || t("home.unknown"),
-            createdAt: data.createdAt?.toDate().toLocaleDateString("pt-BR") || 
-                      t("home.unknownDate")
-          });
-          console.log(setLatestAnalysis)
-        } else {
-          setLatestAnalysis(null);
-        }
-      });
+    const unsub = onSnapshot(q, async (snapshot) => {
+      if (!snapshot.empty) {
+        const docSnap = snapshot.docs[0];
+        const data = docSnap.data();
 
-      return unsub;
-    }, [t]);
+        setLatestAnalysis({
+          id: docSnap.id,
+          triagemLevel: data.cidGroup || t("home.unknown"),
+          diseaseName: data.diseaseName || t("home.unknown"),
+          recommendations: data.recommendations || t("home.noRecommendations"),
+          severity: data.priority || t("home.unknown"),
+          createdAt:
+            data.deliveredAt?.toDate().toLocaleDateString("pt-BR") ||
+            t("home.unknownDate"),
+        });
+
+        if (data.doctorId) {
+          const info = await fetchUserBasicInfo(data.doctorId);
+          setDoctorInfo(info);
+        } else {
+          setDoctorInfo(null);
+        }
+      } else {
+        setLatestAnalysis(null);
+        setDoctorInfo(null);
+      }
+    }, (error) => {
+      console.error("Erro ao buscar AnalysisResults:", error);
+    });
+    return () => unsub();
+  }, [t]);
+
 
   const iconMap = [
     { keywords: ["dor", "cabeça", "cefaleia", "enxaqueca"], icon: <BiBrain />, title: "Dor de cabeça" },
@@ -209,16 +222,28 @@ const HomePage = () => {
           
           {/* Seção de Análises para Mobile */}
           <div className={styles.Analysis}>
-            <p className={styles.AnalysisTitle}>{t("home.doctorRevision")}:</p>
-            <div className={styles.AnalysisCard}>
-              <div className={styles.ProfileSection} onClick={() => navigate('/profile')}>
-                <img src={getProfileImageSource()} alt="Profile" />
-                <div className={styles.ProfileText}>
-                  <p className={styles.doctorTitle}>{t("home.doctorTitle")}</p>
-                  <strong>{userData?.name ?? "Luan Vitor Casali Dallabrida"}</strong>
-                  <button>{t("home.viewProfile")}</button>
-                </div>
+          <p className={styles.AnalysisTitle}>{t("home.doctorRevision")}:</p>
+          <div className={styles.AnalysisCard}>
+            <div
+              className={styles.ProfileSection}
+              onClick={() =>
+                doctorInfo && navigate(`/profile/${doctorInfo.uid}`)
+              }
+            >
+              <img
+                
+                  src={doctorInfo?.photo || defaultProfileIcon}
+                
+                alt="Foto do médico"
+              />
+              <div className={styles.ProfileText}>
+                <p className={styles.doctorTitle}>{t("home.doctorTitle")}</p>
+                <strong>
+                  {doctorInfo?.name ?? t("home.unknownDoctor")}
+                </strong>
+                <button>{t("home.viewProfile")}</button>
               </div>
+            </div>
               <div className={styles.ReportSection}>
                 {latestAnalysis ? (
                   <>
@@ -397,21 +422,26 @@ const HomePage = () => {
         <div className={styles.Analysis}>
           <p className={styles.AnalysisTitle}>{t("home.doctorRevision")}:</p>
           <div className={styles.AnalysisCard}>
-            <div className={styles.ProfileSection} onClick={() => navigate('/profile')}>
-              <img src={getProfileImageSource()} alt="Profile" />
+            <div className={styles.ProfileSection} onClick={() =>
+                doctorInfo && navigate(`/profile/${doctorInfo.uid}`)}>
+              <img src={doctorInfo?.photo || defaultProfileIcon} alt="Profile" />
               <div className={styles.ProfileText}>
                 <p className={styles.doctorTitle}>{t("home.doctorTitle")}</p>
-                <strong>{userData?.name ?? "Luan Vitor Casali Dallabrida"}</strong>
+                <strong>{doctorInfo?.name ?? t("home.unknownDoctor")}</strong>
                 <button>{t("home.viewProfile")}</button>
               </div>
             </div>
-            <div className={styles.ReportSection}>
-              <p><strong>Nível de Triagem</strong> - Crítica Z-Score</p>
-              <p>Nome da Doença/Fonte Comum ou Influente, dependendo dos sintomas/idiomas</p>
-              <p>Recomendações: Focar em X e Y para tratar a doença, evitar contato direto com pessoas doentes, usar máscara facial em áreas públicas.</p>
-              <p><strong>Gravidade da Doença:</strong> X/10, Baixo risco de complicação</p>
-            </div>
-            <button className={styles.ViewCompleteButton}>Ver completo</button>
+            {latestAnalysis ? (
+            <><div className={styles.ReportSection}>
+                <p><strong>{t("home.triageLevel")}</strong> - {latestAnalysis.triagemLevel}</p>
+                <p>{latestAnalysis.diseaseName}</p>
+                <p>{t("home.recommendations")}: {latestAnalysis.recommendations}</p>
+                <p><strong>{t("home.diseaseSeverity")}:</strong> {latestAnalysis.severity}</p>
+                <small>{t("home.generatedOn")}: {latestAnalysis.createdAt}</small>
+              </div><button className={styles.ViewCompleteButton} onClick={() => navigate(`/AnalysisResults/${latestAnalysis.id}`)}>Ver completo</button></>
+            ) : (
+                  <p>{t("home.noAnalysis")}</p>
+                )}
           </div>
         </div>
       </div>

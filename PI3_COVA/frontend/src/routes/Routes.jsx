@@ -20,6 +20,7 @@ import DoctorHomePage from "../pages/DoctorHome/DoctorHomePage.jsx"
 
 import RoleRoute from "./roleRoutes";
 import PrivateRoute from "./PrivateRoutes";
+import AnalysisResultPage from "../pages/AnalysisResult/AnalysisResultPage.jsx";
 
 const AppRoutes = () => {
   const { isDarkMode } = useContext(ThemeContext);
@@ -64,6 +65,16 @@ const AppRoutes = () => {
           </PrivateRoute>
         }
       >
+      <Route
+        path="analysisresults/:chatId"
+        element={
+          <PrivateRoute>
+            <RoleRoute allowedRoles={["user"]}>
+              <AnalysisResultPage />
+            </RoleRoute>
+          </PrivateRoute>
+        }
+      />
         <Route
           index
           element={

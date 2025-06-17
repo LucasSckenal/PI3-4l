@@ -1,0 +1,52 @@
+.container {
+  background: var(--Bg);
+  color: var(--TextGeneral);
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+  text-shadow: var(--BoxShadow);
+  color: var(--TextGeneral);
+}
+
+.section {
+  width: 100%;
+  max-width: 600px;
+  background: var(--UiBgLighter);
+  border: 1px solid var(--PreferredColor);
+  border-radius: 1rem;
+  box-shadow: var(--BoxShadow);
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--PreferredColor);
+    padding-bottom: 0.5rem;
+    color: var(--PreferredColor);
+  }
+}
+
+.message {
+  font-size: 1rem;
+  line-height: 1.6;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--TextGeneral);
+}

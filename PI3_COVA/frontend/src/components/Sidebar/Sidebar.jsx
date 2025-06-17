@@ -12,11 +12,15 @@ import { LuFilePenLine } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
+import { useNotification } from "../../contexts/NotifyProvider/NotifyProvider";
+
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { hasNewAnalysis } = useNotification();
+
 
   if (!user) return null;
 
@@ -80,7 +84,12 @@ const Sidebar = () => {
         {menuItems.map((item, index) => (
           <li key={index}>
             <Link to={item.path} className={styles.menuItem}>
-              {item.icon}
+              <div className={styles.iconContainer}>
+                <span className={styles.icon}>{item.icon}</span>
+                {item.path === "/" && hasNewAnalysis && (
+                  <span className={styles.notificationDot}></span>
+                )}
+              </div>
               {isOpen && <span className={styles.label}>{item.label}</span>}
             </Link>
           </li>
