@@ -31,6 +31,8 @@ const HomePage = () => {
   const [symptoms, setSymptoms] = useState([]);
   const [chatCount, setChatCount] = useState(0);
   const [showTutorialModal, setShowTutorialModal] = useState(false);
+  const [latestAnalysis, setLatestAnalysis] = useState(null);
+
 
   const { isMobile } = useScreenResize();
   const { t } = useTranslation();
@@ -111,6 +113,38 @@ const HomePage = () => {
       return defaultProfileIcon;
     };
 
+     useEffect(() => {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
+
+    const q = query(
+      collection(db, "Users", userId, "AnalysisResults"),
+      orderBy("createdAt", "desc"),
+      limit(1)
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const doc = snapshot.docs[0];
+          const data = doc.data();
+          setLatestAnalysis({
+            id: doc.id,
+            triagemLevel: data.cidGroup || t("home.unknown"),
+            diseaseName: data.diseaseName || t("home.unknown"),
+            recommendations: data.recommendations || t("home.noRecommendations"),
+            severity: data.priority || t("home.unknown"),
+            createdAt: data.createdAt?.toDate().toLocaleDateString("pt-BR") || 
+                      t("home.unknownDate")
+          });
+          console.log(setLatestAnalysis)
+        } else {
+          setLatestAnalysis(null);
+        }
+      });
+
+      return unsub;
+    }, [t]);
+
   const iconMap = [
     { keywords: ["dor", "cabeça", "cefaleia", "enxaqueca"], icon: <BiBrain />, title: "Dor de cabeça" },
     { keywords: ["enjoo", "náusea", "vomito"], icon: <FaGrinBeamSweat />, title: "Enjoo" },
@@ -186,21 +220,26 @@ const HomePage = () => {
                 </div>
               </div>
               <div className={styles.ReportSection}>
-                <p><strong>Nível de Triagem</strong> - Crítica Z-Score</p>
-                <p>Nome da Doença/Fonte Comum ou Influente, dependendo dos sintomas/idiomas</p>
-                <p>Recomendações: Focar em X e Y para tratar a doença, evitar contato direto com pessoas doentes, usar máscara facial em áreas públicas.</p>
-                <p><strong>Gravidade da Doença:</strong> X/10, Baixo risco de complicação</p>
+                {latestAnalysis ? (
+                  <>
+                    <p><strong>{t("home.triageLevel")}</strong> - {latestAnalysis.triagemLevel}</p>
+                    <p>{latestAnalysis.diseaseName}</p>
+                    <p>{t("home.recommendations")}: {latestAnalysis.recommendations}</p>
+                    <p><strong>{t("home.diseaseSeverity")}:</strong> {latestAnalysis.severity}</p>
+                    <small>{t("home.generatedOn")}: {latestAnalysis.createdAt}</small>
+                  </>
+                ) : (
+                  <p>{t("home.noAnalysis")}</p>
+                )}
               </div>
-              <button className={styles.ViewCompleteButton}>Ver completo</button>
+              <button 
+                className={styles.ViewCompleteButton}
+                onClick={() => latestAnalysis && navigate(`/analysis/${latestAnalysis.id}`)}
+              >
+                {t("home.viewComplete")}
+              </button>
             </div>
-          </div>
-          <div className={styles.History}>
-        <div className={styles.HistoryHeader}>
-          <p>{t("home.recentHistory")}</p>
-          <button onClick={() => navigate("/history")}>
-            {t("home.viewAll")} ({chatCount})
-          </button>
-        </div>
+        
         <div className={styles.GridHistorico}>
             {history.length > 0 ? (
               history.map((item) => {

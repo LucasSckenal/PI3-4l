@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  overflow: scroll;
+  overflow-y: scroll;
 
   .GreetingText {
     display: flex;
@@ -222,15 +222,15 @@
     }
   }
 
-  // --- SEÇÃO DE ANÁLISE ATUALIZADA ---
+  // --- SEÇÃO DE ANÁLISE ---
   .Analysis {
-    flex: 1.5; // Ajustado para dar mais espaço
+    flex: 1.5;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 
     .AnalysisTitle {
-      font-size: 1.5rem; // Título maior
+      font-size: 1.5rem; 
       font-weight: 600;
       color: var(--TextGeneral);
       margin: 0;
@@ -238,13 +238,13 @@
     }
     
     .AnalysisCard {
-      background-color: var(--UiBgLighter); // Fundo igual ao da pág. de perfil
-      padding: 2rem; // Mais preenchimento
-      border-radius: 15px; // Cantos mais arredondados
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); // Sombra para profundidade
+      background-color: var(--UiBgLighter); 
+      padding: 2rem; 
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
       display: flex;
       flex-direction: column;
-      gap: 1.5rem; // Mais espaço interno
+      gap: 1.5rem; 
       height: 100%;
 
       .ProfileSection {
@@ -263,7 +263,7 @@
         }
 
         img {
-          width: 80px; // Imagem maior
+          width: 80px; 
           height: 80px;
           border-radius: 50%;
           object-fit: cover;

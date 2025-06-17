@@ -3,8 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from './styles.module.scss';
 import { FaUser, FaNotesMedical, FaClipboardList, FaExclamationTriangle, FaBullseye } from 'react-icons/fa';
-// Importe as funções necessárias diretamente do seu arquivo firebase.jsx
-import { db, doc, getDoc, updatePendingReview, fetchUserBasicInfo } from '../../api/firebase'; // Adicionado fetchUserBasicInfo
+import {
+  db,
+  doc,
+  getDoc,
+  setDoc,
+  fetchUserBasicInfo,
+} from '../../api/firebase';
+import { deleteDoc } from 'firebase/firestore';
 
 const InnerAnalysisPage = () => {
   const { analysisId } = useParams();
@@ -23,10 +29,10 @@ const InnerAnalysisPage = () => {
     priority: "",
     status: ""
   });
-  const [patientDetailsFromUserDoc, setPatientDetailsFromUserDoc] = useState({ // Novo estado para dados do User/{userID}
+  const [patientDetailsFromUserDoc, setPatientDetailsFromUserDoc] = useState({
     age: "N/A",
     gender: "N/A",
-    symptoms: "N/A", // Sintomas ainda podem vir da mensagem do chat ou de um campo de sintomas no user doc
+    symptoms: "N/A",
     birthDate: null,
   });
   const [loading, setLoading] = useState(true);
@@ -56,7 +62,6 @@ const InnerAnalysisPage = () => {
             status: data.status
           });
 
-          // Extrair informações do relatório da última mensagem do assistente
           const assistantMessage = data.messages.find(msg => msg.role === 'assistant');
           if (assistantMessage && assistantMessage.content) {
             const content = assistantMessage.content;
@@ -75,11 +80,8 @@ const InnerAnalysisPage = () => {
             });
           }
 
-          // ***************************************************************
-          // NOVA BUSCA: Obter detalhes do paciente do documento Users/{userId}
-          // ***************************************************************
           if (data.userId) {
-            const userBasicInfo = await fetchUserBasicInfo(data.userId); //
+            const userBasicInfo = await fetchUserBasicInfo(data.userId);
             if (userBasicInfo) {
               const birthDate = userBasicInfo.birthDate ? new Date(userBasicInfo.birthDate) : null;
               let age = "N/A";
@@ -92,30 +94,28 @@ const InnerAnalysisPage = () => {
 
               setPatientDetailsFromUserDoc({
                 age: age,
-                gender: userBasicInfo.gender === 'male' ? 'Masculino' : userBasicInfo.gender === 'female' ? 'Feminino' : 'N/A', //
-                birthDate: birthDate, //
-                // Os sintomas, como estão na mensagem do chat, ainda serão extraídos de lá.
-                // Se você tiver um campo de sintomas no user doc, buscaria aqui.
-                symptoms: (() => { // Função anônima para extrair sintomas da mensagem inicial do usuário
-                    const userMessage = data.messages.find(msg => msg.role === 'user');
-                    if (userMessage && userMessage.content) {
-                        const content = userMessage.content;
-                        const symptomsMatch = content.match(/sinto distúrbios visuais, como (.*)\./i) ||
-                                           content.match(/Estou com (.*)\./i) ||
-                                           content.match(/sinto (.*), como (.*)\./i) ||
-                                           content.match(/tenho (.*)\./i) ||
-                                           content.match(/estou (.*)\./i) ||
-                                           content.match(/fico (.*)\./i) ||
-                                           content.match(/sinto (.*)\./i);
-                        if (symptomsMatch && symptomsMatch[2]) {
-                            return `${symptomsMatch[1]}, como ${symptomsMatch[2]}`.trim();
-                        } else if (symptomsMatch && symptomsMatch[1]) {
-                            return symptomsMatch[1].trim();
-                        } else {
-                            return userMessage.content;
-                        }
+                gender: userBasicInfo.gender === 'male' ? 'Masculino' : userBasicInfo.gender === 'female' ? 'Feminino' : 'N/A',
+                birthDate: birthDate,
+                symptoms: (() => {
+                  const userMessage = data.messages.find(msg => msg.role === 'user');
+                  if (userMessage && userMessage.content) {
+                    const content = userMessage.content;
+                    const symptomsMatch = content.match(/sinto distúrbios visuais, como (.*)\./i) ||
+                      content.match(/Estou com (.*)\./i) ||
+                      content.match(/sinto (.*), como (.*)\./i) ||
+                      content.match(/tenho (.*)\./i) ||
+                      content.match(/estou (.*)\./i) ||
+                      content.match(/fico (.*)\./i) ||
+                      content.match(/sinto (.*)\./i);
+                    if (symptomsMatch && symptomsMatch[2]) {
+                      return `${symptomsMatch[1]}, como ${symptomsMatch[2]}`.trim();
+                    } else if (symptomsMatch && symptomsMatch[1]) {
+                      return symptomsMatch[1].trim();
+                    } else {
+                      return userMessage.content;
                     }
-                    return "N/A";
+                  }
+                  return "N/A";
                 })()
               });
             }
@@ -125,7 +125,7 @@ const InnerAnalysisPage = () => {
           setError("Análise não encontrada.");
         }
       } catch (err) {
-        console.error("Erro ao buscar detalhes da revisão ou do usuário:", err);
+        console.error("Erro ao buscar dados:", err);
         setError("Erro ao carregar dados da análise.");
       } finally {
         setLoading(false);
@@ -140,15 +140,28 @@ const InnerAnalysisPage = () => {
   };
 
   const handleSubmit = async () => {
-    // Construir o diagnóstico atualizado com base nos dados do reviewData
-    const updatedDiagnosis = `Relatório de Triagem – Síndromes de algias cefálicas (grupo CID-10 ${reviewData.cidGroup}) - Nome da Doença: ${reviewData.diseaseName} - Recomendações: ${reviewData.recommendations} - Gravidade da Doença: ${reviewData.severity} - Precisão do Diagnóstico: ${reviewData.accuracy}%`;
+    const finalDiagnosisText = `Relatório de Triagem – Síndromes de algias cefálicas (grupo CID-10 ${reviewData.cidGroup}) - Nome da Doença: ${reviewData.diseaseName} - Recomendações: ${reviewData.recommendations} - Gravidade da Doença: ${reviewData.priority} - Precisão do Diagnóstico: ${reviewData.accuracy}%`;
+
+    const finalData = {
+      diagnosisText: finalDiagnosisText,
+      cidGroup: reviewData.cidGroup,
+      diseaseName: reviewData.diseaseName,
+      recommendations: reviewData.recommendations,
+      priority: reviewData.priority,
+      accuracy: reviewData.accuracy,
+      status: "finalizado",
+      visualizada: false,
+      deliveredAt: new Date(),
+    };
 
     try {
-      await updatePendingReview(analysisId, updatedDiagnosis);
-      alert('Relatório atualizado enviado ao paciente!');
-      console.log('Dados enviados e revisão atualizada:', reviewData);
+      const ref = doc(db, "Users", patientInfo.userId, "AnalysisResults", analysisId);
+      console.log("Caminho Firestore:", ref.path);
+      await setDoc(ref, finalData);
+      await deleteDoc(doc(db, "Pendings", analysisId));
+      alert('Relatório enviado ao paciente!');
     } catch (error) {
-      console.error("Erro ao enviar atualização:", error);
+      console.error("Erro ao enviar:", error);
       alert('Erro ao enviar atualização. Tente novamente.');
     }
   };
@@ -165,13 +178,8 @@ const InnerAnalysisPage = () => {
     return `rgb(${r},${g},${b})`;
   };
 
-  if (loading) {
-    return <div className={styles.container}><p>Carregando análise...</p></div>;
-  }
-
-  if (error) {
-    return <div className={styles.container}><p className={styles.errorText}>{error}</p></div>;
-  }
+  if (loading) return <div className={styles.container}><p>Carregando análise...</p></div>;
+  if (error) return <div className={styles.container}><p className={styles.errorText}>{error}</p></div>;
 
   return (
     <div className={styles.container}>

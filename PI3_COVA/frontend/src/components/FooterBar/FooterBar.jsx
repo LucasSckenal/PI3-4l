@@ -12,12 +12,14 @@ import { LuFilePenLine } from "react-icons/lu";
 
 import { useAuth } from "../../contexts/AuthProvider/AuthProvider";
 import { useAccount } from "../../contexts/Account/AccountProvider";
+import { useNotification } from "../../contexts/NotifyProvider/NotifyProvider";
 import styles from "./styles.module.scss";
 
 const FooterBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userData } = useAccount();
+  const { hasNewAnalysis } = useNotification();
   const { user } = useAuth();
 
   if (!user) return null;
@@ -84,10 +86,15 @@ const FooterBar = () => {
             className={index === activeIndex ? styles.selected : ""}
             onClick={() => handleSelect(item.path)}
           >
-            {item.icon}
-            {item.path === "/profile" && isProfileIncomplete && (
-              <span className={styles.notificationDot}></span>
-            )}
+            <div style={{ position: "relative" }}>
+              {item.icon}
+              {item.path === "/profile" && isProfileIncomplete && (
+                <span className={styles.notificationDot}></span>
+              )}
+              {item.path === "/" && hasNewAnalysis && (
+                <span className={styles.notificationDot}></span>
+              )}
+            </div>
           </li>
         ))}
       </ul>

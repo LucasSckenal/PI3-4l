@@ -11,6 +11,7 @@ import AppRoutes from "./routes/Routes";
 import { AuthProvider } from "./contexts/AuthProvider/AuthProvider";
 import AccountProvider from "./contexts/Account/AccountProvider";
 import { IaProvider } from "./contexts/IaProvider/IaProvider";
+import { NotificationProvider } from "./contexts/NotifyProvider/NotifyProvider";
 import ScreenResizeProvider from "./contexts/ScreenResizeProvider/ScreenResizeProvider";
 import "./i18n";
 
@@ -19,13 +20,15 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <AccountProvider>
         <ThemeProvider>
-          <ScreenResizeProvider>
-            <BrowserRouter>
-              <IaProvider>
-                <AppRoutes />
-              </IaProvider>
-            </BrowserRouter>
-          </ScreenResizeProvider>
+          <NotificationProvider>
+            <ScreenResizeProvider>
+              <BrowserRouter>
+                <IaProvider>
+                  <AppRoutes />
+                </IaProvider>
+              </BrowserRouter>
+            </ScreenResizeProvider>
+          </NotificationProvider>
         </ThemeProvider>
       </AccountProvider>
     </AuthProvider>

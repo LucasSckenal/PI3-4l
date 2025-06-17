@@ -76,13 +76,14 @@
 
   .notificationDot {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 0;
+    right: 0;
     width: 10px;
     height: 10px;
     background-color: var(--PreferredColor);
     border-radius: 50%;
     z-index: 3;
+    border: 1px solid var(--TextGeneral);
 
     animation: pulse 1.5s infinite;
   }

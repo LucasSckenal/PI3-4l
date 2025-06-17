@@ -76,16 +76,15 @@ const LoginPage = () => {
 
       const role = user.role ?? "user";
 
-      await saveUserBasicInfo({
+      // Fix: Pass parameters correctly
+      await saveUserBasicInfo(user.uid, {
         email: user.email,
         name: user.displayName,
         photo: user.photoURL,
-        uid: user.uid,
         role,
       });
 
       toast.success("Login com Google bem-sucedido!");
-      // O useEffect vai lidar com o redirecionamento quando o user mudar no contexto
     } catch (error) {
       console.error("Erro no login com Google:", error);
       toast.error("Erro ao entrar com Google: " + error.message);
