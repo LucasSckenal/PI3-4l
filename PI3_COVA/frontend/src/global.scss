@@ -35,6 +35,7 @@
   --Confirmation: #3CC27F;
   --Decline: #FA3E3E;
   --PreferredColor: #7f41e2;
+  --PreferredColorDarkened: color-mix(in srgb, var(--PreferredColor), black 20%);
   --UiBg: #494949;
   --UiBg2: #a8a8a8;
   --UiBgLighter: #C8C8C8;
@@ -48,6 +49,8 @@
   --Gray900: #212529;
   --Danger: #fa3e3e;
   --Orange: #df6604;
+
+  
 
 
   // Utilidades

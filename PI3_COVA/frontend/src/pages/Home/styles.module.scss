@@ -212,7 +212,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
         color: var(--TextGeneral);
-        border: 1px solid var(--PreferredColor);
+        border: 1px solid var();
 
         &:hover {
           background-color: var(--PreferredColor);
@@ -303,11 +303,11 @@
         padding-top: 1rem;
         display: flex;
         flex-direction: column;
-        gap: 1rem; // Mais espaço entre os itens do relatório
+        gap: 1rem;
         padding-left: 1rem;
 
         p {
-          font-size: 0.95rem; // Fonte maior
+          font-size: 0.95rem;
           color: var(--TextSecondary);
           line-height: 1.6;
           margin: 0;
@@ -321,7 +321,7 @@
       .ViewCompleteButton {
         margin-top: auto;
         align-self: flex-start;
-        padding: 0.8rem 2rem; // Botão maior
+        padding: 0.8rem 2rem;
         margin-left: 1rem;
         background-color: var(--PreferredColor);
         color: white;
@@ -620,7 +620,7 @@
         min-width: 0; // Necessário para o text-overflow funcionar em um container flex
 
         strong {
-          color: var(--TextGeneral);
+          color: var(--White);
           font-size: 1.1rem; // Fonte ajustada
           font-weight: 600;
           width: 100%; // Garante que o elemento ocupe o espaço disponível

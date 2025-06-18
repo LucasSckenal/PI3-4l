@@ -22,6 +22,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 import { Link } from 'react-router-dom';
+import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 ChartJS.register(
   CategoryScale,
   LineElement,
@@ -35,6 +36,7 @@ ChartJS.register(
 
 const DoctorHomePage = () => {
   const { userData, loading } = useAccount();
+  const { isMobile } = useScreenResize();
   const { t } = useTranslation();
 
   // States para casos
@@ -201,6 +203,107 @@ useEffect(() => {
   };
 
   if (loading || loadingCases) return <div className={styles.loading}>{t('common.loading')}</div>;
+
+  if (isMobile) {
+      return (
+  <div className={styles.container}>
+    <header className={styles.header}>
+      <h1>Bem‑vindo, {userData?.name?.split(' ').slice(0,4).join(' ')}</h1>
+      <p>Painel de acompanhamento de casos e análises</p>
+    </header>
+
+    <main className={styles.content}>
+      {/* Estatísticas de Cases: grid 2x2 */}
+      <div className={styles.statsGrid}>
+        <div className={`${styles.statCard} ${styles.primary}`}>
+          <h3>Total de Casos</h3>
+          <p>{stats.totalCases}</p>
+          <small>Registrados no sistema</small>
+        </div>
+        <div className={`${styles.statCard} ${styles.warning}`}>
+          <h3>Casos G43</h3>
+          <p>{stats.g43Cases}</p>
+          <small>Enxaqueca</small>
+        </div>
+        <div className={`${styles.statCard} ${styles.info}`}>
+          <h3>Casos G44</h3>
+          <p>{stats.g44Cases}</p>
+          <small>Algias cranianas</small>
+        </div>
+        <div className={`${styles.statCard} ${styles.danger}`}>
+          <h3>Casos Críticos</h3>
+          <p>{stats.criticalCases}</p>
+          <small>Necessitam atenção</small>
+        </div>
+      </div>
+
+      {/* Análises Recentes: cada célula como link */}
+      <section className={styles.recentCases}>
+        <div className={styles.sectionHeader}>
+          <h2>Análises Recentes</h2>
+          <Link to="/analysis" className={styles.seeAllButton}>
+            Ver todos
+          </Link>
+        </div>
+        <div className={styles.tableContainer}>
+          {loadingAnalyses ? (
+            <p>Carregando...</p>
+          ) : (
+            <table style={{ width: '100%', tableLayout: 'fixed' }}>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Prioridade</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentAnalyses.map(a => (
+                  <tr key={a.id} style={{ cursor: 'pointer' }}>
+                    <td>
+                      <Link
+                        to={`/analysis/${a.id}`}
+                        style={{ display: 'block', width: '100%', height: '100%', textDecoration: 'none', color: 'inherit' }}
+                      >
+                        {a.codigo}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        to={`/analysis/${a.id}`}
+                        style={{ display: 'block', width: '100%', height: '100%', textDecoration: 'none', color: 'inherit' }}
+                      >
+                        {a.priority}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        to={`/analysis/${a.id}`}
+                        style={{ display: 'block', width: '100%', height: '100%', textDecoration: 'none', color: 'inherit' }}
+                      >
+                        {a.date}
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      {/* Gráfico de Casos Mensais: responsivo */}
+      <section className={styles.chartsSection}>
+        <h2>Evolução Mensal de Casos</h2>
+        <div className={styles.chartContainer} style={{ width: '100%', height: '300px' }}>
+          <Line data={chartData} options={chartOptions} />
+        </div>
+      </section>
+    </main>
+  </div>
+);
+
+  }
 
   return (
     <div className={styles.container}>

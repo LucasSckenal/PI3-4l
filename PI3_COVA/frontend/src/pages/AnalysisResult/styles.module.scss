@@ -1,52 +1,170 @@
+// src/pages/AnalysisResult/styles.module.scss
+
 .container {
-  background: var(--Bg);
-  color: var(--TextGeneral);
-  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  letter-spacing: 0.5px;
-  text-shadow: var(--BoxShadow);
   color: var(--TextGeneral);
-}
-
-.section {
-  width: 100%;
-  max-width: 600px;
-  background: var(--UiBgLighter);
-  border: 1px solid var(--PreferredColor);
-  border-radius: 1rem;
-  box-shadow: var(--BoxShadow);
-  padding: 1.5rem 2rem;
-  margin-bottom: 2rem;
-  
-  h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--PreferredColor);
-    padding-bottom: 0.5rem;
-    color: var(--PreferredColor);
+  @media (max-width: 1023px) {
+    max-height: 80vh;
+    overflow-y: scroll;
   }
 }
 
-.message {
-  font-size: 1rem;
-  line-height: 1.6;
-  word-wrap: break-word;
-  white-space: pre-wrap;
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--TextGeneral);
 }
 
-.loading {
-  flex: 1;
+.title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--TextGeneralAlt);
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  gap: 0.8rem;
+}
+
+.titleIcon {
+  font-size: 1.8rem;
+}
+
+.metaContainer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--UiBgLighter);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
   color: var(--TextGeneral);
+  border: 1px solid #e2e8f0;
+}
+
+.metaIcon {
+  color: var(--TextGeneral);
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.cardHeader {
+  padding: 1.2rem 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.cardIcon {
+  font-size: 1.4rem;
+}
+
+.cardContent {
+  padding: 1.8rem;
+  background: var(--UiBgLighter);
+  min-height: 250px;
+  text-align: justify;
+}
+
+.message {
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.userCard .cardHeader {
+  background: linear-gradient(135deg, var(--PreferredColor) 0%, var(--PreferredColorDarkened) 100%);
+  color: white;
+}
+
+.diagnosisCard .cardHeader {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+}
+
+.summaryCard {
+  background: var(--UiBgLighter);
+  border-radius: 12px;
+  padding: 2rem;
+  border-left: 4px solid #e53e3e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.summaryTitle {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--TextGeneral);
+}
+
+.summaryContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryLabel {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+}
+
+.summaryValue {
+  font-weight: 600;
+  color: var(--PreferredColor);
+  font-size: 1.1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .header {
+    margin-bottom: 2rem;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+  }
 }

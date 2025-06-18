@@ -259,7 +259,7 @@ const HomePage = () => {
               </div>
               <button 
                 className={styles.ViewCompleteButton}
-                onClick={() => latestAnalysis && navigate(`/analysis/${latestAnalysis.id}`)}
+                onClick={() => navigate(`/AnalysisResults/${latestAnalysis.id}`)}
               >
                 {t("home.viewComplete")}
               </button>

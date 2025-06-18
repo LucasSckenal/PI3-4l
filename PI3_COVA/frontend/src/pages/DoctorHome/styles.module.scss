@@ -2,7 +2,8 @@
   width: 100%;
   padding: var(--Gap3) var(--Gap3) var(--Gap2);
   font-family: "Reddit Sans Condensed", sans-serif;
-  overflow: scroll;
+  overflow-y: auto; // Alterado de 'scroll' para 'auto' para melhor comportamento
+  overflow-x: hidden; // Garante que o container principal não tenha scroll horizontal
 
    @media screen and (min-width: 1028px) {
       height: 100%;
@@ -45,11 +46,18 @@
   gap: var(--Gap2);
   margin-bottom: var(--Gap3);
 
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
   .statCard {
     background-color: var(--UiBgLighter);
     border-radius: var(--BorderRadius);
     padding: var(--Gap2);
-    //box-shadow: var(--BoxShadow);
     border-left: 4px solid var(--PreferredColor);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -103,6 +111,10 @@
   display: grid;
   grid-template-columns: 1fr 0.4fr;
   gap: var(--Gap3);
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .recentCases {
@@ -143,12 +155,14 @@
   }
 
   .tableContainer {
-    overflow-x: auto;
+    overflow-x: auto; // Adicionado para permitir scroll horizontal na tabela
+    -webkit-overflow-scrolling: touch; // Melhorar o scroll em dispositivos iOS
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 600px; // Adicionado um min-width para evitar que a tabela fique muito espremida
 
     th, td {
       padding: var(--Gap2) var(--Gap);
@@ -237,7 +251,6 @@
     border-radius: var(--BorderRadius);
     font-weight: 500;
     transition: all 0.3s ease;
-    //box-shadow: var(--BoxShadow);
     display: flex;
     align-items: center;
     border: 1px solid var(--PreferredColor);
@@ -255,24 +268,10 @@
 }
 
 // Responsividade
-@media (max-width: 1200px) {
-  .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .contentRow {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 768px) {
   .container {
     max-width: 100%;
     padding: var(--Gap2) var(--Gap);
-  }
-
-  .statsGrid {
-    grid-template-columns: 1fr;
   }
 
   .header {
@@ -285,6 +284,7 @@
     }
   }
 }
+
 .chartsSection {
   background-color: var(--DetailsBgLighter);
   border-radius: var(--BorderRadius);
@@ -304,6 +304,14 @@
   height: 400px;
   width: 100%;
   position: relative;
+
+  @media (max-width: 1200px) {
+    height: 300px; // Ajuste a altura para telas menores
+  }
+  
+  @media (max-width: 768px) {
+    height: 250px; // Ajuste ainda mais para telas de celular
+  }
 }
 
 .chartFooter {
@@ -311,6 +319,12 @@
   justify-content: center;
   gap: var(--Gap3);
   margin-top: var(--Gap2);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--Gap);
+    align-items: center;
+  }
 }
 
 .footerItem {
@@ -371,27 +385,4 @@
 
 .azul {
  background-color: rgba(5, 61, 245, 0.342);
-}
-
-/* Ajuste para responsividade */
-@media (max-width: 1200px) {
-  .contentRow {
-    grid-template-columns: 1fr;
-  }
-  
-  .chartsSection {
-    height: auto;
-  }
-  
-  .chartContainer {
-    height: 250px;
-  }
-}
-
-@media (max-width: 768px) {
-  .chartFooter {
-    flex-direction: column;
-    gap: var(--Gap);
-    align-items: center;
-  }
 }
