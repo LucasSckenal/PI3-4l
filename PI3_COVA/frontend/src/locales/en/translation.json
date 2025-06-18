@@ -59,7 +59,8 @@
     "diseaseSeverity": "Severity",
     "generatedOn": "Generated on",
     "noAnalysis": "No Analysis",
-    "doctorRevision": "Doctor's Revision"
+    "doctorRevision": "Doctor's Revision",
+    "unknownDoctor": "Unknown doctor"
   },
   "symptoms": {
     "tonturaLeve": "Mild dizziness",

@@ -60,7 +60,8 @@
     "diseaseSeverity": "Gravidade",
     "generatedOn": "Gerada em",
     "noAnalysis": "Sem Análise",
-    "doctorRevision": "Revisão Médica"
+    "doctorRevision": "Revisão Médica",
+    "unknownDoctor": "Médico(a) desconhecido(a)"
   },
   
    "symptoms": {

@@ -37,7 +37,7 @@ export default function TutorialModal({ isOpen, onClose, canClose }) {
             ×
           </button>
         )}
-        <video controls className={styles.video} onEnded={handleVideoEnd}>
+        <video controls autoplay className={styles.video} onEnded={handleVideoEnd}>
           <source src={isMobile ? tutorialMobile : tutorial} type="video/mp4" />
           Seu navegador não suporta vídeo HTML5.
         </video>

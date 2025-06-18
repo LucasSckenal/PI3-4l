@@ -224,6 +224,8 @@ const HomePage = () => {
           <div className={styles.Analysis}>
           <p className={styles.AnalysisTitle}>{t("home.doctorRevision")}:</p>
           <div className={styles.AnalysisCard}>
+            {latestAnalysis ? (
+             <>
             <div
               className={styles.ProfileSection}
               onClick={() =>
@@ -263,6 +265,10 @@ const HomePage = () => {
               >
                 {t("home.viewComplete")}
               </button>
+              </>
+            ) : (
+              <p>{t("home.noAnalysis")}</p>
+            )}
             </div>
         
         <div className={styles.GridHistorico}>
@@ -422,6 +428,8 @@ const HomePage = () => {
         <div className={styles.Analysis}>
           <p className={styles.AnalysisTitle}>{t("home.doctorRevision")}:</p>
           <div className={styles.AnalysisCard}>
+            {latestAnalysis ? (
+            <>
             <div className={styles.ProfileSection} onClick={() =>
                 doctorInfo && navigate(`/profile/${doctorInfo.uid}`)}>
               <img src={doctorInfo?.photo || defaultProfileIcon} alt="Profile" />
@@ -442,7 +450,12 @@ const HomePage = () => {
             ) : (
                   <p>{t("home.noAnalysis")}</p>
                 )}
+                </>
+          ) : (
+            <p>{t("home.noAnalysis")}</p>
+          )}
           </div>
+          
         </div>
       </div>
 

@@ -60,7 +60,8 @@
     "diseaseSeverity": "Gravedad",
     "generatedOn": "Generado en",
     "noAnalysis": "Sin Análisis",
-    "doctorRevision": "revisión médica"
+    "doctorRevision": "revisión médica",
+    "unknownDoctor": "Médico desconocido"
   },
   "symptoms": {
     "tonturaLeve": "mareo leve",

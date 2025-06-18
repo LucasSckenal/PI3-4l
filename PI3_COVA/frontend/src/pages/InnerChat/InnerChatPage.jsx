@@ -208,7 +208,6 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
       const snapshot = await getDocs(casesRef);
       const loadedCases = snapshot.docs.map((doc) => doc.data());
       setCasesData(loadedCases);
-      console.log(loadedCases)
       setIsCasesLoaded(true);
     };
     loadCases();
@@ -386,7 +385,6 @@ AI:
 
 
     try {
-      console.log(fullPrompt);
       const response = await fetch("http://localhost:5000/api/stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, saveUserBasicInfo } from "../../../api/firebase";
+import {
+  auth,
+  saveUserBasicInfo,
+  updateDoctorOnlineStatus,
+  fetchUserBasicInfo,
+} from "../../../api/firebase";
 import { useAuth } from "../../../contexts/AuthProvider/AuthProvider";
 import { useScreenResize } from "../../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
-import { 
-  updateDoctorOnlineStatus,
-  fetchUserBasicInfo 
-} from "../../../api/firebase";
 import { toast } from "react-toastify";
 
 import { IoEye, IoEyeOff } from "react-icons/io5";
@@ -25,11 +30,13 @@ import styles from "./styles.module.scss";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [isVisible, setIsVisible] = useState(false);
+  const { isMobile } = useScreenResize();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { isMobile } = useScreenResize();
 
   // Redireciona se já estiver autenticado
   useEffect(() => {
@@ -41,25 +48,32 @@ const LoginPage = () => {
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
-      // 1. Faz login no Firebase
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
-      // 2. Verificação imediata
+      // Define persistência de acordo com rememberMe
+      await setPersistence(
+        auth,
+        rememberMe ? browserLocalPersistence : browserSessionPersistence
+      );
+
+      // Login com email e senha
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       if (!userCredential?.user) {
         throw new Error("Autenticação falhou");
       }
 
-      // 3. Verifica se é médico e atualiza status para online
+      // Se for médico, marca online
       const userDoc = await fetchUserBasicInfo(userCredential.user.uid);
-      if (userDoc && userDoc.role === 'doctor') {
+      if (userDoc?.role === "doctor") {
         await updateDoctorOnlineStatus(userCredential.user.uid, true);
       }
 
-      // 4. Feedback para o usuário
       toast.success("Login realizado com sucesso!");
-      
-      // O useEffect vai lidar com o redirecionamento quando o user mudar no contexto
+      // redirecionamento será feito pelo useEffect de user
     } catch (error) {
       toast.error("Erro ao fazer login: " + error.message);
     } finally {
@@ -72,24 +86,36 @@ const LoginPage = () => {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      const userFb = result.user;
+      const role = userFb.role ?? "user";
 
-      const role = user.role ?? "user";
-
-      // Fix: Pass parameters correctly
-      await saveUserBasicInfo(user.uid, {
-        email: user.email,
-        name: user.displayName,
-        photo: user.photoURL,
+      await saveUserBasicInfo(userFb.uid, {
+        email: userFb.email,
+        name: userFb.displayName,
+        photo: userFb.photoURL,
         role,
       });
 
       toast.success("Login com Google bem-sucedido!");
+      // redirecionamento idem
     } catch (error) {
       console.error("Erro no login com Google:", error);
       toast.error("Erro ao entrar com Google: " + error.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast.warn("Por favor, insira seu email para redefinir a senha.");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Email de redefinição de senha enviado!");
+    } catch (error) {
+      toast.error("Erro ao enviar o email: " + error.message);
     }
   };
 
@@ -111,15 +137,31 @@ const LoginPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <span onClick={() => setIsVisible(!isVisible)} className={styles.icon}>
+        <span
+          onClick={() => setIsVisible(!isVisible)}
+          className={styles.icon}
+        >
           {isVisible ? <IoEyeOff /> : <IoEye />}
         </span>
       </div>
 
       <div className={styles.bottomLogin}>
-        <input type="checkbox" name="RememberMe" id="RememberMe" />
-        <label htmlFor="RememberMe">Manter conectado</label>
-        <p className={styles.navigateBtn}>Esqueci a senha</p>
+        <label htmlFor="RememberMe">
+          <input
+            type="checkbox"
+            id="RememberMe"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          Manter conectado
+        </label>
+        <p
+          className={styles.navigateBtn}
+          onClick={handleForgotPassword}
+          style={{ cursor: "pointer" }}
+        >
+          Esqueci a senha
+        </p>
       </div>
     </>
   );
@@ -136,34 +178,35 @@ const LoginPage = () => {
 
       <div className={styles.redirect}>
         <p>Usuário novo?</p>
-        <p className={styles.navigateBtn} onClick={() => navigate("/register")}>
+        <p
+          className={styles.navigateBtn}
+          onClick={() => navigate("/register")}
+        >
           Registrar-se
         </p>
       </div>
 
       <div className={styles.bottomPage}>
         <span>──── ou ────</span>
-        <button className={styles.google} onClick={handleGoogleLogin} disabled={isLoading}>
+        <button
+          className={styles.google}
+          onClick={handleGoogleLogin}
+          disabled={isLoading}
+        >
           <img src={GoogleIcon} alt="Login com Google" />
         </button>
       </div>
     </>
   );
 
-  if (isMobile) {
-    return (
-      <div className={styles.loginContainer}>
-        <img src={LoginPageImg} alt="" className={styles.bgImg} />
-        <h1 className={styles.title}>Bem-vindo de volta!</h1>
-        {renderInputs()}
-        {renderButtons()}
-      </div>
-    );
-  }
-
+  // JSX final
   return (
     <div className={styles.loginContainer}>
-      <img src={LoginPageImgWeb} alt="" className={styles.bgImg} />
+      <img
+        src={isMobile ? LoginPageImg : LoginPageImgWeb}
+        alt=""
+        className={styles.bgImg}
+      />
       <h1 className={styles.title}>Bem-vindo de volta!</h1>
       {renderInputs()}
       {renderButtons()}

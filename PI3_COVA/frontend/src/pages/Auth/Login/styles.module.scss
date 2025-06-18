@@ -94,6 +94,11 @@
     }
   }
 
+  label {
+    display: flex;
+    justify-content: center;
+  }
+
   input[type="checkbox"] {
     width: 20px;
     height: 20px;
@@ -103,6 +108,8 @@
     -webkit-appearance: none;
     cursor: pointer;
     position: relative;
+    padding: 0.6rem;
+    margin-right: 5px;
   }
 
   input[type="checkbox"]:checked {
