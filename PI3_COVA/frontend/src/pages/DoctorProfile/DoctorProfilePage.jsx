@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { useAccount } from "../../contexts/Account/AccountProvider";
 import defaultProfileIcon from "../../public/UserDefault.webp";
 import { useTranslation } from "react-i18next";
-import { FaRegEdit, FaSave, FaTimes } from "react-icons/fa";
+import { FaRegEdit, FaSave, FaTimes, FaCalendarAlt, FaVirus, FaExclamationTriangle, FaCommentDots, FaStethoscope } from "react-icons/fa";
 import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";
 import styles from "./styles.module.scss";
 import DoctorProfileEditModal from "../../components/DoctorEditModal/DoctorEditModal";
 import { useParams } from "react-router-dom";
+
 
 import {
   saveUserBasicInfo,
@@ -40,6 +41,7 @@ const DoctorProfilePage = () => {
   const [aboutText, setAboutText] = useState("");
   const [procedures, setProcedures] = useState([]);
   const [experiences, setExperiences] = useState([]);
+  const [lastAnalysis, setLastAnalysis] = useState(null);
 
   // ─── Estado para controlar se o usuário está editando o campo “Sobre” ─────
   const [isEditingAbout, setIsEditingAbout] = useState(false);
@@ -52,16 +54,6 @@ const DoctorProfilePage = () => {
   const userID = id;
   const isOwner = userData?.uid === id;
 
-  // ─── Função para obter a URL da imagem (se houver) ────────────────────────
-  const getProfileImageSource = () => {
-    if (!userData.photo) return defaultProfileIcon;
-    if (
-      userData.photo.startsWith("http") ||
-      userData.photo.startsWith("data:image")
-    )
-      return userData.photo;
-    return defaultProfileIcon;
-  };
 
   // ─── Carregar dados do Firestore assim que o userID estiver disponível ─────
   useEffect(() => {
@@ -81,6 +73,7 @@ const DoctorProfilePage = () => {
           setCidSpecialties(basic.cidSpecialties || []);
           setProfessionalId(basic.professionalId || "");
           setPhoto(basic.photo || "");
+          setLastAnalysis(basic.lastAnalysis);
         } else {
           // fallback se não houver documento
           setName(userData.name || "");
@@ -92,6 +85,7 @@ const DoctorProfilePage = () => {
           setCidSpecialties(userData.cidSpecialties || []);
           setProfessionalId(userData.professionalId || "");
           setPhoto(userData.photo || "")
+          setLastAnalysis(basic.lastAnalysis || "");
         }
       } catch (error) {
         console.error("Erro ao carregar basic info:", error);
@@ -416,19 +410,47 @@ const DoctorProfilePage = () => {
           {/* ─── Coluna Direita: PROCEDIMENTOS E CONTATO ───────────────────────────── */}
           <div className={styles.columnRight}>
             {/* ─── PROCEDURES ──────────────────────────────── */}
-            <section className={styles.proceduresSection}>
+            <section className={styles.analysisSection}>
               <h3 className={styles.sectionTitle}>
-                <i className={`fas fa-procedures ${styles.icon}`}></i>{" "}
-                {t("profile.procedures")}
+                {t("profile.analysis")}
               </h3>
-              <ul className={styles.proceduresList}>
-                {procedures.map((procedure, index) => (
-                  <li key={index}>
-                    <i className={`fas fa-check-circle ${styles.icon}`}></i>{" "}
-                    {procedure}
-                  </li>
-                ))}
-              </ul>
+              
+              {lastAnalysis ? (
+                <div className={styles.analysisTable}>
+                  <div className={styles.tableHeader}>
+                    <span>{t("profile.date")}</span>
+                    <span>{t("profile.disease")}</span>
+                    <span>{t("profile.severity")}</span>
+                    <span>{t("profile.symptoms")}</span>
+                  </div>
+                  
+                <div className={styles.tableRow}>
+                <span>
+                  <FaCalendarAlt className={styles.mobileOnly}/>
+                  {new Date(lastAnalysis.date?.seconds * 1000).toLocaleDateString('pt-BR')}
+                </span>
+                <span>
+                  <FaVirus className={styles.mobileOnly} />
+                  {lastAnalysis.diseaseName}
+                </span>
+                <span>
+                  <FaExclamationTriangle className={styles.mobileOnly} />
+                  <span className={`${styles.severityBadge} ${styles[lastAnalysis.priority.toLowerCase()]}`}>
+                    {lastAnalysis.priority}
+                  </span>
+                </span>
+                <span className={styles.symptomsContainer}>
+                  <FaCommentDots className={styles.mobileOnly} />
+                  <span className={styles.symptomsText}>{lastAnalysis.symptoms}</span>
+                </span>
+              </div>
+                </div>
+              ) : (
+                <div className={styles.noAnalysis}>
+                  <FaStethoscope className={styles.icon} />
+                  <p>{t("profile.noAnalysis")}</p>
+                </div>
+              )}
             </section>
 
             {/* ─── CONTATO (telefone, email, emergência) ────────────────────────────── */}

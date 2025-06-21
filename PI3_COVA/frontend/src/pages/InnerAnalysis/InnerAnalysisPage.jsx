@@ -10,8 +10,9 @@ import {
   setDoc,
   fetchUserBasicInfo,
 } from '../../api/firebase';
-import { deleteDoc } from 'firebase/firestore';
+import { deleteDoc,  addDoc, collection, } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const InnerAnalysisPage = () => {
   const { analysisId } = useParams();
@@ -100,7 +101,7 @@ const InnerAnalysisPage = () => {
                   birthDate: birthDate,
                   symptoms: (() => {
                       const userMsg = data.messages.find(msg => msg.role === 'user');
-                      setUserMessage(userMsg?.content || "N/A"); // Armazena a mensagem no estado
+                      setUserMessage(userMsg?.content || "N/A"); 
                       return userMsg?.content || "N/A";
                   })()
               });
@@ -126,34 +127,67 @@ const InnerAnalysisPage = () => {
   };
 
   const handleSubmit = async () => {
-    const finalDiagnosisText = `Relatório de Triagem – Síndromes de algias cefálicas (grupo CID-10 ${reviewData.cidGroup}) - Nome da Doença: ${reviewData.diseaseName} - Recomendações: ${reviewData.recommendations} - Gravidade da Doença: ${reviewData.priority} - Precisão do Diagnóstico: ${reviewData.accuracy}%`;
-    const doctorId = getAuth().currentUser?.uid;
+  const finalDiagnosisText = `Relatório de Triagem – Síndromes de algias cefálicas (grupo CID-10 ${reviewData.cidGroup}) - Nome da Doença: ${reviewData.diseaseName} - Recomendações: ${reviewData.recommendations} - Gravidade da Doença: ${reviewData.priority} - Precisão do Diagnóstico: ${reviewData.accuracy}%`;
+  const doctorId = getAuth().currentUser?.uid;
 
-    const finalData = {
-      diagnosisText: finalDiagnosisText,
-      cidGroup: reviewData.cidGroup,
-      diseaseName: reviewData.diseaseName,
-      recommendations: reviewData.recommendations,
-      priority: reviewData.priority,
-      accuracy: reviewData.accuracy,
-      status: "finalizado",
-      visualizada: false,
-      deliveredAt: new Date(),
-      doctorId,
-      userMessage,
-    };
-
-    try {
-      const ref = doc(db, "Users", patientInfo.userId, "AnalysisResults", analysisId);
-      console.log("Caminho Firestore:", ref.path);
-      await setDoc(ref, finalData);
-      await deleteDoc(doc(db, "Pendings", analysisId));
-      alert('Relatório enviado ao paciente!');
-    } catch (error) {
-      console.error("Erro ao enviar:", error);
-      alert('Erro ao enviar atualização. Tente novamente.');
-    }
+  const finalData = {
+    diagnosisText: finalDiagnosisText,
+    cidGroup: reviewData.cidGroup,
+    diseaseName: reviewData.diseaseName,
+    recommendations: reviewData.recommendations,
+    priority: reviewData.priority,
+    accuracy: reviewData.accuracy,
+    status: "finalizado",
+    visualizada: false,
+    deliveredAt: new Date(),
+    doctorId,
+    userMessage,
   };
+
+  try {
+    const ref = doc(db, "Users", patientInfo.userId, "AnalysisResults", analysisId);
+    await setDoc(ref, finalData);
+
+    // 1. Salvar no banco de IA
+    await addDoc(collection(db, "Cases"), {
+      doctorId,
+      userId: patientInfo.userId,
+      CID: reviewData.cidGroup,
+      Descrição: reviewData.diseaseName || '',
+      Duração: reviewData.duration || 0,
+      Gênero: patientDetailsFromUserDoc.gender || '',
+      Idade: patientDetailsFromUserDoc.age || '',
+      Priority: reviewData.priority || '',
+      Sintomas: userMessage || [],
+      Timestamp: new Date(),
+    });
+
+    // 2. Salvar como última análise no perfil do médico
+    await setDoc(doc(db, "Users", doctorId), {
+      lastAnalysis: {
+        analysisText: finalDiagnosisText,
+        date: new Date(),
+        userId: patientInfo.userId,
+        chatId: patientInfo.chatId,
+        cidGroup: reviewData.cidGroup,
+        diseaseName: reviewData.diseaseName,
+        recommendations: reviewData.recommendations,
+        priority: reviewData.priority,
+        accuracy: reviewData.accuracy,
+        symptoms: userMessage,
+      }
+    }, { merge: true });
+
+    // 3. Remover da coleção Pendings
+    await deleteDoc(doc(db, "Pendings", analysisId));
+
+    toast.success('Relatório enviado ao paciente!');
+  } catch (error) {
+    console.error("Erro ao enviar:", error);
+    toast.error('Erro ao enviar atualização. Tente novamente.');
+  }
+};
+
 
   const getAccuracyColor = (accuracy) => {
     let r, g, b = 0;

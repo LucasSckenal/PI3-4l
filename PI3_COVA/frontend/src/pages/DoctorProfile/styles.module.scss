@@ -330,32 +330,220 @@
 }
 
 // Procedures List
-.proceduresList {
-  background: var(--DetailsBgLighter);
-  padding: 1.5rem;
-  border-radius: var(--BorderRadius);
-  box-shadow: var(--BoxShadow);
-  list-style: none;
-  margin-bottom: 10px;
-  color: var(--White);
+.analysisSection {
+  margin-bottom: 2rem;
   
-  li {
-    padding: 0.8rem 0;
-    border-bottom: 1px solid var(--TextGeneral);
-    display: flex;
-    align-items: center;
+  .sectionTitle {
+    margin-bottom: 1rem;
+  }
+}
+
+.analysisTable {
+  background: var(--DetailsBgLighter);
+  border-radius: var(--BorderRadius);
+  overflow: hidden;
+  box-shadow: var(--BoxShadow);
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr 2fr;
+  background: var(--PreferredColor);
+  color: var(--White);
+  padding: 0.8rem 1.2rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr 2fr;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    padding: 1.2rem;
     
-    &:last-child {
-      border-bottom: none;
-    }
-    
-    .icon {
-      color: var(--PreferredColor);
-      margin-right: 0.8rem;
-      font-size: 1.1rem;
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      
+      &:before {
+        content: attr(data-label);
+        font-weight: 600;
+        min-width: 100px;
+        display: inline-block;
+        color: var(--PreferredColor);
+      }
     }
   }
 }
+
+.diseaseName {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.symptomsText {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.severityBadge {
+  padding: 0.3rem 0.8rem 0.3rem 0;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: start;
+  text-transform: capitalize;
+  
+  &.alta {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid #dc3545;
+  }
+  
+  &.media {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+  }
+  
+  &.baixa {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 1px solid #28a745;
+  }
+}
+
+.noAnalysis {
+  background: var(--DetailsBgLighter);
+  padding: 2rem;
+  border-radius: var(--BorderRadius);
+  box-shadow: var(--BoxShadow);
+  text-align: center;
+  color: var(--TextGeneral);
+  
+  .icon {
+    font-size: 2rem;
+    color: var(--PreferredColor);
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin: 0;
+    font-style: italic;
+  }
+}
+
+.analysisIcon {
+  color: var(--PreferredColor);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.mobileOnly {
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: inline-flex;
+    margin-right: 0.8rem;
+    color: var(--PreferredColor);
+    font-size: 1.4rem;
+    vertical-align: middle; 
+  }
+}
+
+.symptomsContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.symptomsText {
+  flex: 1;
+
+  
+  @media (max-width: 768px) {
+    flex-direction: row; 
+    gap: 0.8rem; 
+    
+    .mobileOnly {
+      flex-shrink: 0; 
+      margin-top: -2px; 
+    }
+  }
+}
+
+.severityBadge {
+  padding: 0.4rem 1rem 0.4rem 0;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+  display: inline-flex; 
+  align-items: center;
+  justify-content: center; 
+  gap: 0.5rem; 
+  
+  // Manter as cores
+  &.alta {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid #dc3545;
+  }
+  
+  &.media {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+  }
+  
+  &.baixa {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 1px solid #28a745;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .tableRow {
+    > span {
+      align-items: center; 
+      padding: 1rem 0; 
+      gap: 0.8rem; 
+
+      &:before {
+        min-width: 90px;
+        flex-shrink: 0; 
+      }
+    }
+
+    .severityBadge{
+      padding: 0;
+    }
+  }
+}
+
 
 @media (max-width: 768px) {
     .profileFooter {
