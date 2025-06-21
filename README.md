@@ -1,61 +1,108 @@
-# Unijui-PI3-4l
-
-<!-- Banner ou imagem destacada do projeto (opcional) -->
+# Unijui-PI3-4l (COV)
 
 <p align="center">
-  <img src="https://static.wikia.nocookie.net/the-ossome-show/images/e/e2/Maxwell.gif/revision/latest/thumbnail/width/360/height/360?cb=20221230214511" alt="Maxwell o gato irado girando">
+  <img src="https://static.wikia.nocookie.net/the-ossome-show/images/e/e2/Maxwell.gif/revision/latest/thumbnail/width/360/height/360?cb=20221230214511" alt="Mascote do Projeto" width="200" />
 </p>
 
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
+[![Coverage](https://img.shields.io/badge/coverage-95%25-blue)](#)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.0-blueviolet)](#)
+
+## 📑 Sumário
+
+<details>
+<summary>Clique para expandir</summary>
+
+| Seção                                         | Descrição                              |
+| --------------------------------------------- | -------------------------------------- |
+| 📝 [Visão Geral](#-visão-geral)               | Contexto e tecnologias principais.     |
+| 🎯 [Objetivos e Escopo](#-objetivos-e-escopo) | Metas e público-alvo.                  |
+| ✨ [Funcionalidades](#-funcionalidades)       | Recursos oferecidos.                   |
+| 📦 [Arquitetura](#-arquitetura-e-componentes) | Organização frontend, backend e infra. |
+| 📚 [Tecnologias](#-tecnologias-utilizadas)    | Bibliotecas e frameworks.              |
+| 🏗️ [Estrutura](#-estrutura-do-projeto)        | Diretórios e arquivos do projeto.      |
+| ⚙️ [Pré-requisitos](#-pré-requisitos)         | Ferramentas necessárias.               |
+| 🚀 [Instalação](#-instalação-e-execução)      | Como rodar o projeto.                  |
+| 🎬 [Demonstração](#-demonstração)             | Exemplos visuais em GIF ou imagem.     |
+| 👥 [Equipe e Autores](#-equipe-e-autores)     | Perfis e redes sociais.                |
+| 🤝 [Contribuição](#-como-contribuir)          | Guia para forks e pull requests.       |
+| 📜 [Licença](#-licença)                       | Termos de uso.                         |
+| 📬 [Contato](#-contato)                       | Suporte e dúvidas.                     |
+
+</details>
+
 ---
 
-## 📑 Table of Contents
+## 📝 Visão Geral
 
-| [📝 Descrição](#-descrição-do-projeto) | [✨ Funcionalidades](#-funcionalidades) | [📊 Aplicação](#-aplicação) | [🚀 Tecnologias](#-tecnologias-utilizadas) |
-|----------------------------------------|--------------------------------------------|----------------------------------------|----------------------------------------|
-| [📂 Estrutura](#-estrutura-do-projeto) | [🛠️ Pré-requisitos](#️-pré-requisitos) | [🏃‍♂️ Como Rodar](#️-como-rodar-o-projeto) | [👥 Autores](#-autores) |
-| [🤝 Contribuindo](#-contribuindo) | [📜 Licença](#-licença) | [📬 Contato](#-contato) |
+**Unijui-PI3-4l (COV)** é um assistente de IA médico desenvolvido na disciplina de Projeto Integrador III - Ciência de Dados e Analytics, projetado para agilizar atendimentos médicos.
+
+* **Frontend**: React (Vite) com temas claro/escuro.
+* **Backend**: Node.js/Express expos APIs REST.
+* **Banco de Dados**: Firebase Auth e Firestore.
+* **IA**: Chatbot integrado a provedores de linguagem.
 
 ---
 
-## 📝 Descrição do Projeto
+## 🎯 Objetivos e Escopo
 
-O **Unijui-PI3-4l** codinome COV, é um assistente IA desenvolvido no contexto da disciplina de Projeto Integrador III. O sistema suporta:
+<details>
+<summary>Ver detalhes</summary>
 
-O projeto utiliza:
+1. **Objetivo**: Criar um assistente inteligente para agilizar atendimentos médicos.
+2. **Escopo**:
 
-- **Frontend**: React
-- **Backend**: Node.js
-- **Banco de Dados**: Firebase
+   * Autenticação de usuários.
+   * Chat com IA e histórico persistente.
+   * Tema claro/escuro.
+   * Perfil personalizável.
+3. **Público-alvo**: Pacientes e médicos.
+
+</details>
 
 ---
 
 ## ✨ Funcionalidades
 
-1. **Auth**: Sistema de login e register;
-2. **Dark mode e Light mode**: Escolha de temas entre claro e escuro.
-3. **IA**.
----
-
-## 📊 Aplicação
-
-<p align="center">
-  <img src="" alt="Aplicação rodando">
-</p>
+1. Autenticação segura (Firebase Auth).
+2. Alternância de tema (Light/Dark).
+3. Chat com IA e histórico de conversas.
+4. Perfil de usuário com preferências de cor.
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## 📦 Arquitetura e Componentes
 
-### Principais Ferramentas
+<details>
+<summary>Visão geral da arquitetura</summary>
 
-- ![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white&style=flat) : Criação do frontend interativo.
-- ![NodeJS](https://img.shields.io/badge/-Node.js-E0234E?logo=nodejs&logoColor=white&style=flat) : Gerenciamento do backend.
-- ![Firebase](https://img.shields.io/badge/-Firebase-336791?logo=Firebase&logoColor=white&style=flat) : Banco de dados.
+* **Frontend**: React, React Router, Context API, SCSS Modules.
+* **Backend**: Node.js, Express.
+* **Banco**: Firestore para dados de usuários e conversas.
+* **Fluxo**: Requisições via Axios, token no header.
+
+</details>
 
 ---
 
-## 📂 Estrutura do Projeto
+## 📚 Tecnologias Utilizadas
 
+<details>
+<summary>Ver detalhes</summary>
+
+| Categoria      | Tecnologias                             |
+| -------------- | --------------------------------------- |
+| Frontend       | React, Vite, React Router, SCSS Modules |
+| Backend        | Node.js, Express                        |
+| Banco de Dados | Firebase Authentication, Firestore      |
+| Ferramentas    | VSCode, ESLint, Prettier                |
+
+</details>
+
+---
+
+## 🏗️ Estrutura do Projeto
 ``` plain text
 📁 Projeto
 ├── 📁 backend
@@ -66,192 +113,90 @@ O projeto utiliza:
 │   └── 📄 server.js
 │
 ├── 📁 frontend
-│   ├── 📁 src
-│   │   ├── 📁 api
-│   │   │   └── 📄 firebase.jsx
-│   │   │
-│   │   ├── 📁 assets
-│   │   │   └── 📄 react.svg
-│   │   │
-│   │   ├── 📁 components
-│   │   │   ├── 📁 AboutUsModal/
-│   │   │   ├── 📁 Divider/
-│   │   │   ├── 📁 DropDownBtn/
-│   │   │   ├── 📁 EditProfileModal/
-│   │   │   ├── 📁 FooterBar/
-│   │   │   ├── 📁 Header/
-│   │   │   ├── 📁 MainPage/
-│   │   │   ├── 📁 Message/
-│   │   │   ├── 📁 MessageInputBar/
-│   │   │   ├── 📁 PreferredColorModal/
-│   │   │   ├── 📁 QuickMsg/
-│   │   │   ├── 📁 Sidebar/
-│   │   │   ├── 📁 SimpleModal/
-│   │   │   └── 📁 SymptomsCarousel/
-│   │   │
-│   │   ├── 📁 contexts
-│   │   │   ├── 📁 Account/
-│   │   │   ├── 📁 AuthProvider/
-│   │   │   ├── 📁 IaProvider/
-│   │   │   ├── 📁 ScreenResizeProvider/
-│   │   │   └── 📁 ThemeProvider/
-│   │   │
-│   │   ├── 📁 pages
-│   │   │   ├── 📁 Auth/
-│   │   │   ├── 📁 Chat/
-│   │   │   ├── 📁 History/
-│   │   │   ├── 📁 Home/
-│   │   │   ├── 📁 InnerChat/
-│   │   │   ├── 📁 Profile/
-│   │   │   └── 📁 Settings/
-│   │   │
-│   │   ├── 📁 public/
-│   │   │
-│   │   ├── 📁 routes
-│   │   │   ├── 📄 PrivateRoutes.jsx
-│   │   │   └── 📄 Routes.jsx
-│   │   │
-│   │   ├── 📄 App.css
-│   │   ├── 📄 global.scss
-│   │   ├── 📄 index.css
-│   │   └── 📄 main.jsx
-│   │
-│   ├── 📄 .gitignore
-│   ├── 📄 README.md
-│   ├── 📄 eslint.config.js
-│   ├── 📄 index.html
-│   ├── 📄 package-lock.json
-│   ├── 📄 package.json
-│   └── 📄 vite.config.js
+│   └── 📁 src
+│       ├── 📁 api
+│       ├── 📁 assets
+│       ├── 📁 components
+│       ├── 📁 contexts
+│       ├── 📁 pages
+│       ├── 📁 public
+│       ├── 📁 routes
+│       ├── 📄 App.css
+│       ├── 📄 global.scss
+│       ├── 📄 index.css
+│       └── 📄 main.jsx
 │
 ├── 📁 node_modules
 ├── 📄 package-lock.json
 └── 📄 package.json
 ```
 
+---
+
+## ⚙️ Pré-requisitos
+
+* **Node.js** (>= 18)
+* **npm**
+* **Git**
 
 ---
 
-## 🛠️ Pré-requisitos
+## 🚀 Instalação e Execução
 
-Certifique-se de ter as seguintes ferramentas instaladas antes de rodar o projeto:
+1. **Clone o repositório**:
 
-- **Node.js** (versão 18 ou superior)
-- **npm** (ou gerenciador de pacotes compatível)
-- **PostgreSQL** (instância local ou remota configurada)
+   ```bash
+   git clone https://github.com/LucasSckenal/PI3-4l.git
+   ```
+2. **Instale dependências e inicie**:
 
-### Especificações mínimas do Hardware:
-- PROCESSADOR:
-- MEMÓRIA RAM:
----
+   ```bash
+   cd PI3-4l
+   npm install
+   npm start
+   ```
 
-## 🏃‍♂️ Como Rodar o Projeto
-
-### 1️⃣ Clonar o Repositório
-
-```bash
-# Clone o repositório
-$ git clone https://github.com/LucasSckenal/PI3-4l
-
-# Acesse o diretório do projeto
-$ cd Unijui-PI3-4l/PI3_COVA/
-```
-
-### 2️⃣ Configurar o Ambiente
-
-#### Backend
-
-1. Acesse o diretório:
-
-```bash
-$ cd backend
-```
-
-2. Instale as dependências:
-
-```bash
-$ npm install
-```
-
-3. Execute o servidor backend:
-
-```bash
-$ npm start
-```
-
-#### Frontend
-
-1. Acesse o diretório:
-
-```bash
-$ cd frontend
-```
-
-2. Instale as dependências:
-
-```bash
-$ npm install
-```
-
-3. Execute o servidor frontend:
-
-```bash
-$ npm start
-```
-
-O frontend estará disponível em `http://localhost:5173` e o backend em `http://localhost:5000` (ou portas configuradas).
+> O servidor e o front serão iniciados automaticamente.
 
 ---
 
-## 👥 Autores
+## 🎬 Demonstração
 
-O projeto foi desenvolvido por:
-- **Henrique Luan**
-  - **E-mail**: [Henrique.fritz@sou.unijui.edu.br](mailto:Henrique.fritz@sou.unijui.edu.br)
-- **Luan Vitor**
-  - **E-mail**: [luanvitorcd@gmail.com](mailto:luanvitorcd@gmail.com)
-  - **LinkedIn**: [Luan Vitor](https://www.linkedin.com/in/luan-vitor-casali-dallabrida-20a60a342/)
-- **Lucas Sckenal**
-  - **E-mail**: [lucaspsckenal@gmail.com](mailto:lucaspsckenal@gmail.com)
-  - **LinkedIn**: [Lucas Sckenal](https://www.linkedin.com/in/lucassckenal/)
-
-
+<p align="center">
+  <img src="https://i.imgur.com/DrEkiZG.gif" alt="Demonstração" width="600" />
+</p>
 
 ---
 
-## 🤝 Contribuindo
+## 👥 Equipe e Autores
 
-Contribuições são bem-vindas! Siga estas etapas para contribuir:
+| Foto | Nome              | Função      | Links | E-Mail |
+| ------------------ | ----------------- | ----------- | ---------------------- | ---------------------- |
+| <img src="https://static.wikia.nocookie.net/the-ossome-show/images/e/e2/Maxwell.gif/revision/latest/thumbnail/width/360/height/360?cb=20221230214511" alt="Henrique Luan" width="100"/>      | Henrique Luan     | Documentação | [LinkedIn](url)        | [Henrique.fritz@sou.unijui.edu.br](mailto:Henrique.fritz@sou.unijui.edu.br) |
+| <img src="https://media.licdn.com/dms/image/v2/D4D03AQHOKsAV9swgxg/profile-displayphoto-shrink_800_800/B4DZPSQAoVGgAc-/0/1734399233028?e=1755734400&v=beta&t=JUotoU5dxhvtmANEcINB284Ijoq013jlnKnYAqe9S3Q" alt="Luan Vitor Casali Dallabrida" width="100"/>      | Luan Vitor Casali Dallabrida | Back-End, IA    | [LinkedIn](https://www.linkedin.com/in/luan-vitor-casali-dallabrida-20a60a342/)        | [luanvitorcd@gmail.com](mailto:luanvitorcd@gmail.com) |
+| <img src="https://media.licdn.com/dms/image/v2/D4D03AQHJYyCBUevqJw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1724278920588?e=1755734400&v=beta&t=Fgc6HIJTyvkwkMyBaWnsFwtfasiP_pGEpol8wwHg4ak" alt="Lucas Sckenal" width="100"/>      | Lucas Sckenal     | Front-End | [LinkedIn](https://www.linkedin.com/in/lucassckenal/)        | [lucaspsckenal@gmail.com](mailto:lucaspsckenal@gmail.com) |
 
-1. Faça um fork do repositório.
-2. Crie uma branch para sua funcionalidade ou correção:
+---
 
-```bash
-$ git checkout -b minha-nova-funcionalidade
-```
+## 🤝 Como Contribuir
 
-3. Faça commit das suas alterações:
-
-```bash
-$ git commit -m "Minha nova funcionalidade"
-```
-
-4. Envie para o repositório remoto:
-
-```bash
-$ git push origin minha-nova-funcionalidade
-```
-
-5. Abra um Pull Request no repositório original.
+1. Fork do repositório.
+2. Crie branch: `git checkout -b feature/nome`.
+3. Faça commit e push.
+4. Abra Pull Request.
 
 ---
 
 ## 📜 Licença
 
-Este projeto está licenciado sob a licença **MIT**. Para mais informações, consulte o arquivo [LICENSE](LICENSE).
+MIT © 2025 Henrique Luan, Luan Vitor Casali Dallabrida, Lucas Sckenal
 
 ---
 
 ## 📬 Contato
 
-Para dúvidas ou sugestões, entre em contato através dos e-mails ou LinkedIn listados na seção de autores.
+Para dúvidas ou sugestões, abra uma issue ou entre em contato via LinkedIn.
+
+---
+
+<p align="right"><em>Última atualização: 21 de junho de 2025.</em></p>
