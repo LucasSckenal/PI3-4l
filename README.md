@@ -172,7 +172,7 @@
 
 | Foto | Nome              | Função      | Links | E-Mail |
 | ------------------ | ----------------- | ----------- | ---------------------- | ---------------------- |
-| <img src="https://static.wikia.nocookie.net/the-ossome-show/images/e/e2/Maxwell.gif/revision/latest/thumbnail/width/360/height/360?cb=20221230214511" alt="Henrique Luan" width="100"/>      | Henrique Luan     | Documentação | [LinkedIn](url)        | [Henrique.fritz@sou.unijui.edu.br](mailto:Henrique.fritz@sou.unijui.edu.br) |
+| <img src="https://i.imgur.com/4kfR2ax.gif" alt="Henrique Luan" width="100"/>      | Henrique Luan     | Documentação | [LinkedIn](url)        | [Henrique.fritz@sou.unijui.edu.br](mailto:Henrique.fritz@sou.unijui.edu.br) |
 | <img src="https://media.licdn.com/dms/image/v2/D4D03AQHOKsAV9swgxg/profile-displayphoto-shrink_800_800/B4DZPSQAoVGgAc-/0/1734399233028?e=1755734400&v=beta&t=JUotoU5dxhvtmANEcINB284Ijoq013jlnKnYAqe9S3Q" alt="Luan Vitor Casali Dallabrida" width="100"/>      | Luan Vitor Casali Dallabrida | Back-End, IA    | [LinkedIn](https://www.linkedin.com/in/luan-vitor-casali-dallabrida-20a60a342/)        | [luanvitorcd@gmail.com](mailto:luanvitorcd@gmail.com) |
 | <img src="https://media.licdn.com/dms/image/v2/D4D03AQHJYyCBUevqJw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1724278920588?e=1755734400&v=beta&t=Fgc6HIJTyvkwkMyBaWnsFwtfasiP_pGEpol8wwHg4ak" alt="Lucas Sckenal" width="100"/>      | Lucas Sckenal     | Front-End | [LinkedIn](https://www.linkedin.com/in/lucassckenal/)        | [lucaspsckenal@gmail.com](mailto:lucaspsckenal@gmail.com) |
 
