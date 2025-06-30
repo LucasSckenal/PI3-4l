@@ -8,11 +8,28 @@ const cors = require('cors');
 
 const app = express();
 
-// Configuração do CORS para permitir requisições do seu frontend
-app.use(cors({ origin: 'http://localhost:5173' }));
+// Lista de origens permitidas
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://fourl-aplicativocov.onrender.com'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permite requisições sem 'origin' (como apps mobile ou Postman) ou se a origem estiver na lista
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+// Configuração do CORS para permitir requisições no frontend
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 
-// Inicializa o cliente do Gemini com sua chave de API
+// Inicializa o cliente do Gemini com a chave de API
 if (!process.env.GEMINI_API_KEY) {
   throw new Error('A variável de ambiente GEMINI_API_KEY não está definida.');
 }
