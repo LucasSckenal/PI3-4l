@@ -481,7 +481,7 @@
   box-shadow: 0 4px 10px rgba(60, 194, 127, 0.3);
   
   &:hover:not(:disabled) {
-    background: darken(#3CC27F, 8%);
+    background: adjust-color(#3CC27F, $lightness: -8%); 
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(60, 194, 127, 0.4);
   }
