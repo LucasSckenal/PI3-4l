@@ -48,7 +48,7 @@ const primaryModel = genAI.getGenerativeModel({
 
 // Define o modelo de fallback (robusto)
 const fallbackModel = genAI.getGenerativeModel({
-  model: "gemini-1.5-pro",
+  model: "gemini-1.5",
   generationConfig: { temperature: 0.1 },
   safetySettings,
 });
@@ -65,7 +65,7 @@ app.post('/api/stream', async (req, res) => {
   } catch (error) {
     // 2. Se falhar, verifica se o erro é de sobrecarga (503)
     if (error instanceof GoogleGenerativeAIFetchError && error.status === 503) {
-      console.warn("Modelo primário sobrecarregado. Acionando fallback para gemini-1.5-pro...");
+      console.warn("Modelo primário sobrecarregado. Acionando fallback para gemini-1.5...");
       
       try {
         // 3. Tenta com o modelo de fallback

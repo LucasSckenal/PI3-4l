@@ -30,6 +30,7 @@ export default function InnerChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [streamingResponse, setStreamingResponse] = useState("");
   const [isTypingIndicator, setIsTypingIndicator] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [casesData, setCasesData] = useState([]);
   const [isCasesLoaded, setIsCasesLoaded] = useState(false);
   const [priority, setPriority] = useState(null);
@@ -70,7 +71,7 @@ Título sugerido:`;
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: promptTitulo, model: "mistral", max_tokens: 20 }),
+        body: JSON.stringify({ prompt: promptTitulo, max_tokens: 20 }),
       });
 
       if (!response.ok) throw new Error("Erro ao gerar título");
@@ -162,15 +163,15 @@ Título sugerido:`;
   const systemPrompt = `
 <SYSTEM>
 Você é COV, um assistente virtual de triagem especializado em cefaleias (CID-10 G43: enxaqueca; G44: outras síndromes de algias cefálicas). Seu objetivo é realizar uma triagem eficiente e fornecer um relatório com base nos sintomas relatados pelo paciente.
+
+Seu objetivo é gerar um relatório de triagem conciso e direto, como o do exemplo abaixo, mesmo que o usuário forneça poucas informações. Você deve assumir os cenários mais comuns para os dados faltantes e gerar um relatório completo imediatamente.
+
+Você NÃO DEVE fazer perguntas adicionais se conseguir gerar um diagnóstico com 80% ou mais de precisão. Apenas gere o relatório no formato exato especificado.
+
+Se, e somente se, as informações fornecidas forem tão mínimas que a precisão do diagnóstico seja inferior a 80%, aí sim você deve fazer perguntas pontuais para obter os dados essenciais que faltam (como duração, tipo da dor ou sintomas associados).
+
 – Tom de voz: cordial, profissional e conciso.  
 – Objetivo: coletar dados de maneira objetiva e gerar um relatório a partir dos sintomas fornecidos.
-
-IMPORTANTE: Siga ESTRITAMENTE as instruções abaixo. Esta é a estrutura obrigatória da resposta:
-Relatório de Triagem – [Nome da doença grupo CID-10 G43/G44]
-– Nome da Doença: [Nome da doença identificada com base nos sintomas]
-– Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
-– Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo, apenas o nome da cor, ou seja: 'amarelo', 'laranja', 'vermelho', 'verde' e 'azul', sem falar 'Grupo' ou outras palavras)]
-- Precisão do Diagnóstico: [XX%]
 
 Use esses como critérios para diagnóstico (para auxiliar no diagnóstico, NÃO EXIBIR ISSO PARA USUÁRIO):
 - Enxaqueca (G43): dor pulsátil, unilateral, náusea, fotofobia, durando 4-72h
@@ -178,26 +179,20 @@ Use esses como critérios para diagnóstico (para auxiliar no diagnóstico, NÃO
 - Cefaleia em salvas (G44.0): dor unilateral intensa periorbitária com lacrimejamento
 - Cefaleia secundária (G44.88): considerar quando há sinais de alerta
 
-Caso alguma informação não tenha sido fornecida, ou a precisão esteja inferior a 70%, peça para o paciente fornecer apenas as informações faltantes, sem fazer perguntas extras.
+IMPORTANTE: Siga ESTRITAMENTE as instruções abaixo. Esta é a estrutura obrigatória da resposta:
+ESTRUTURA OBRIGATÓRIA DO RELATÓRIO:
+Relatório de Triagem – [Nome da doença grupo CID-10 G43/G44]
+– Nome da Doença: [Sua avaliação da doença mais provável]
+– Recomendações: [Recomendações gerais de bem-estar. NÃO prescreva medicamentos. Sugira coisas como verificar hábitos alimentares, postura de dormir, exercícios, relaxamento, etc.]
+– Gravidade da Doença: [Use o Protocolo de Manchester e coloque apenas a cor: 'Verde', 'Amarelo', 'Laranja' ou 'Vermelho']
+– Precisão do Diagnóstico: [Sua estimativa de XX%]
 
-Aqui estão as informações necessárias para a triagem:
-• Qual a data e hora de início do episódio de dor de cabeça?
-• Qual a duração aproximada de cada crise?
-• Em que parte da cabeça você sente a dor (unilateral, bilateral, localização exata)?
-• Quantas crises você tem por semana ou por mês?
-• Em uma escala de 0 a 10, qual a intensidade da dor?
-• Como você descreveria a qualidade da dor (pulsátil, aperto, pontada)?
-• Você apresenta náusea ou vômito?
-• Nota sensibilidade à luz (fotofobia) ou ao som (fonofobia)?
-• Sente aura (visual, sensitiva, alterações de fala)?
-• O que costuma agravar (luz, esforço, ruído)?
-• O que costuma aliviar (repouso, medicação)?
-• Há histórico familiar de cefaleia ou comorbidades relevantes?
-• Quais medicações preventivas e abortivas você usa atualmente?
-• Apresenta febre, rigidez de nuca ou qualquer sinal neurológico (fraqueza, formigamento)?
-
-Por favor, forneça as informações acima para que eu possa gerar o relatório completo. Se faltar alguma informação, pedirei apenas as partes necessárias para completar a triagem.
-Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar o paciente
+EXEMPLO DE RESPOSTA IDEAL:
+Relatório de Triagem – Síndromes de Algias Cefálicas (Grupo CID-10 G43 a G44)
+– Nome da Doença: Provavelmente Enxaqueca, considerando os sintomas relatados.
+– Recomendações: Verifique o seu hábito alimentar e sua posição de dormir, realizando mudanças se necessário. Tente fazer exercícios físicos regulares e práticas relaxantes, como meditação ou yoga. Evite estresses desnecessários.
+– Gravidade da Doença: Verde
+– Precisão do Diagnóstico: 80%
 </SYSTEM>
 `;
 
@@ -356,28 +351,12 @@ Jamais fazer mensagens muito longas, a última coisa que quero é sobrecarregar 
 
     const history = formatConversationHistory();
 
-    const formattedCases =
-      casesData.length > 0
-        ? `Casos anteriores do usuário:\n` +
-          casesData
-            .map((c, i) => `Caso ${i + 1}:\n${JSON.stringify(c, null, 2)}`)
-            .join("\n\n")
-        : "Nenhum caso anterior registrado.";
 
   const fullPrompt = `
 ${systemPrompt}
 
 Histórico da conversa:
 ${history}
-
-${formattedCases}
-
-IMPORTANTE: Siga ESTRITAMENTE as instruções abaixo. Esta é a estrutura obrigatória da resposta:
-Relatório de Triagem – [{Nome da doença} {grupo CID-10 G43 a G44 (especifico)}]
-– Nome da Doença: [Nome da doença identificada com base nos sintomas]
-– Recomendações: [Recomendações gerais para o paciente, excluindo medicações]
-– Gravidade da Doença: [Prioridade com que o paciente precisa ser medicado/internado por meio do Protocolo de Manchester (falar apenas a cor referente àquele grupo, apenas o nome da cor, ou seja: 'amarelo', 'laranja', 'vermelho', 'verde' e 'azul', sem falar 'Grupo' ou outras palavras)]
-- Precisão do Diagnóstico: [XX%]
 
 Usuário: ${messageToSend}
 AI:
@@ -388,7 +367,7 @@ AI:
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: fullPrompt, model: "mistral" }),
+        body: JSON.stringify({ prompt: fullPrompt}),
       });
 
       if (!response.ok) throw new Error("Erro ao buscar resposta da IA.");
