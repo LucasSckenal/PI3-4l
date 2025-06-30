@@ -6,8 +6,8 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../api/firebase";
 import { getAuth } from "firebase/auth";
 
-import logoDark from "../../assets/logo4l.png";
-import logoLight from "../../assets/logo4l_LightMode.png";
+import logoDark from "../../assets/Logo4l.png";
+import logoLight from "../../assets/Logo4l_LightMode.png";
 
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
