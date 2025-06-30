@@ -42,12 +42,31 @@ app.post('/api/stream', async (req, res) => {
 
     // Seleciona o modelo do Gemini. 'gemini-1.5-flash' é rápido e poderoso.
     // Configurações como temperature: 0.0 garantem respostas mais determinísticas.
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      generationConfig: {
-        temperature: 0.1, // Um pouco de criatividade, mas ainda consistente
-      }
-    });
+    // NOVO CÓDIGO COM AJUSTE DE SEGURANÇA
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+  generationConfig: {
+    temperature: 0.1,
+  },
+  safetySettings: [
+    {
+      category: "HARM_CATEGORY_HARASSMENT",
+      threshold: "BLOCK_NONE",
+    },
+    {
+      category: "HARM_CATEGORY_HATE_SPEECH",
+      threshold: "BLOCK_NONE",
+    },
+    {
+      category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      threshold: "BLOCK_NONE",
+    },
+    {
+      category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+      threshold: "BLOCK_NONE",
+    },
+  ],
+});
 
     // Configura os headers para streaming (Server-Sent Events)
     res.setHeader('Content-Type', 'text/event-stream');
