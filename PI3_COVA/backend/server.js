@@ -1,53 +1,65 @@
+// server.js - Versão atualizada para usar a API do Gemini
+
+// Importa as bibliotecas necessárias
+require('dotenv').config(); // Carrega as variáveis do arquivo .env
 const express = require('express');
-const axios = require('axios');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const cors = require('cors');
+
 const app = express();
 
-// Configurar CORS APENAS para o frontend na porta 5173
+// Configuração do CORS para permitir requisições do seu frontend
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json({ limit: '10mb' }));
 
-// Rota para Streaming
+// Inicializa o cliente do Gemini com sua chave de API
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error('A variável de ambiente GEMINI_API_KEY não está definida.');
+}
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Rota para Streaming, o contrato com o frontend permanece o mesmo
 app.post('/api/stream', async (req, res) => {
   try {
     const { prompt } = req.body;
 
-    // Configurar headers para streaming
+    // Seleciona o modelo do Gemini. 'gemini-1.5-flash' é rápido e poderoso.
+    // Configurações como temperature: 0.0 garantem respostas mais determinísticas.
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      generationConfig: {
+        temperature: 0.1, // Um pouco de criatividade, mas ainda consistente
+      }
+    });
+
+    // Configura os headers para streaming (Server-Sent Events)
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    // Chamar Ollama com streaming
-    const ollamaResponse = await axios({
-      method: 'post',
-      url: 'http://localhost:11434/api/generate',
-      responseType: 'stream',
-      data: {
-        model: 'mistral',
-        prompt: prompt,
-        stream: true,
-        temperature: 0.0
-      }
-    });
+    // Inicia a chamada de streaming para a API do Gemini
+    const result = await model.generateContentStream(prompt);
 
-    // Encaminhar cada chunk do Ollama para o frontend
-    ollamaResponse.data.on('data', (chunk) => {
-      const data = chunk.toString();
-      res.write(`data: ${data}\n\n`); // Formato SSE (EventSource)
-    });
+    // Itera sobre cada chunk da resposta do Gemini
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      // O frontend espera um objeto JSON com uma propriedade "response"
+      // Nós recriamos essa estrutura para manter a compatibilidade
+      const responseData = { response: chunkText };
+      res.write(`data: ${JSON.stringify(responseData)}\n\n`); // Envia no formato SSE
+    }
 
-    ollamaResponse.data.on('end', () => {
-      res.end(); // Fecha a conexão quando terminar
-    });
+    // Fecha a conexão quando o streaming terminar
+    res.end();
 
   } catch (error) {
-    console.error('Erro:', error);
-    res.status(500).end();
+    console.error('Erro no streaming do Gemini:', error);
+    res.status(500).end('Erro no servidor ao se comunicar com a API do Gemini');
   }
 });
 
-// Iniciar servidor
+// Inicia o servidor
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`Backend pronto para streaming em http://localhost:${PORT}`);
+  console.log(`Backend pronto para streaming com Gemini em http://localhost:${PORT}`);
 });

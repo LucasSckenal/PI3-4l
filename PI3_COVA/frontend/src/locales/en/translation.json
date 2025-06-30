@@ -187,6 +187,7 @@
     "changePhoto": "Change photo",
     "cidSpecialties": "CID Specialties",
     "selectCid": "Select CID",
+    "noCidSelected": "No CID Selected",
     "country": "Country"
   },
   "sidebar": {

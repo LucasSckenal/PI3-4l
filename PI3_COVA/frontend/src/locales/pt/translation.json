@@ -187,6 +187,7 @@
     "changePhoto": "Trocar foto de perfil",
     "cidSpecialties": "Especialização do CID",
     "selectCid": "Selecionar CID",
+    "noCidSelected": "Nenhum CID foi selecionado",
     "country": "País",
     "email": "E-mail"
   },
