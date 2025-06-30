@@ -67,7 +67,7 @@ ${conversa.map(msg => `${msg.sender === "user" ? "Paciente" : "Médico"}: ${msg.
 
 Título sugerido:`;
 
-      const response = await fetch("http://localhost:5000/api/stream", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: promptTitulo, model: "mistral", max_tokens: 20 }),
@@ -385,7 +385,7 @@ AI:
 
 
     try {
-      const response = await fetch("http://localhost:5000/api/stream", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: fullPrompt, model: "mistral" }),
