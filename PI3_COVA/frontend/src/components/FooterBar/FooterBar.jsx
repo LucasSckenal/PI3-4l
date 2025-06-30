@@ -52,6 +52,7 @@ const FooterBar = () => {
       { icon: <IoPerson />, path: "/profile" },
       { icon: <IoSettingsSharp />, path: "/settings" },
     ];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role]);
 
   const activeIndex = useMemo(() => {

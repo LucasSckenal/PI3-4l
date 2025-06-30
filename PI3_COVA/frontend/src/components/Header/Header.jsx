@@ -6,8 +6,8 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../api/firebase";
 import { getAuth } from "firebase/auth";
 
-import logoDark from "../../public/logo4l.png";
-import logoLight from "../../public/logo4l_LightMode.png";
+import logoDark from "../../assets/logo4l.png";
+import logoLight from "../../assets/logo4l_LightMode.png";
 
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
@@ -62,6 +62,7 @@ const Header = () => {
         unsubscribeSnapshot();
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, chatId, t]);
 
   useEffect(() => {

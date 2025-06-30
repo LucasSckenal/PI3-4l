@@ -8,8 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoEye, IoEyeOff, IoAdd, IoClose } from "react-icons/io5";
 import styles from "./styles.module.scss";
-import registerImg from "../../../public/RegisterPage.png";
-import defaultProfileIcon from "../../../public/UserDefault.webp";
+import registerImg from "../../../assets/RegisterPage.png";
+import defaultProfileIcon from "../../../assets/UserDefault.webp";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -61,6 +61,7 @@ const RegisterPage = () => {
   useEffect(() => {
     if (accountType === "doctor") validateDoctorFields();
     else if (accountType === "user") validateUserFields();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doctorFormData, userFormData, accountType]);
 
   const formatProfessionalId = (country, value) => {

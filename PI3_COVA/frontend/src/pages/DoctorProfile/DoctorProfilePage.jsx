@@ -1,7 +1,7 @@
 // DoctorProfilePage.jsx
 import { useState, useEffect } from "react";
 import { useAccount } from "../../contexts/Account/AccountProvider";
-import defaultProfileIcon from "../../public/UserDefault.webp";
+import defaultProfileIcon from "../../assets/UserDefault.webp";
 import { useTranslation } from "react-i18next";
 import { FaRegEdit, FaSave, FaTimes, FaCalendarAlt, FaVirus, FaExclamationTriangle, FaCommentDots, FaStethoscope } from "react-icons/fa";
 import ExperienceSection from "../../components/ExperienceSection/ExperienceSection";

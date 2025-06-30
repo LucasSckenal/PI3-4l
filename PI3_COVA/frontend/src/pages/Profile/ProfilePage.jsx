@@ -2,7 +2,7 @@ import { useState } from "react";
 import EditProfileModal from "../../components/EditProfileModal/EditProfileModal";
 import styles from "./styles.module.scss";
 import { useAccount } from "../../contexts/Account/AccountProvider";
-import defaultProfileIcon from "../../public/UserDefault.webp";
+import defaultProfileIcon from "../../assets/UserDefault.webp";
 import { useTranslation } from "react-i18next";
 import {
   IoCalendarOutline,

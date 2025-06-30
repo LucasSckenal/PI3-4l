@@ -1,5 +1,5 @@
-import tutorial from "../../public/tutorial.mp4";
-import tutorialMobile from "../../public/tutorialMobile.mp4";
+import tutorial from "../../assets/tutorial.mp4";
+import tutorialMobile from "../../assets/tutorialMobile.mp4";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider"
 
 import styles from "./styles.module.scss";

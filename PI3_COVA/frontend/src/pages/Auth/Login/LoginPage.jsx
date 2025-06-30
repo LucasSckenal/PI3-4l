@@ -21,9 +21,9 @@ import { toast } from "react-toastify";
 
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
-import GoogleIcon from "../../../public/Google icon.webp";
-import LoginPageImg from "../../../public/LoginPage.png";
-import LoginPageImgWeb from "../../../public/AuthPage_Web_1920x1080.png";
+import GoogleIcon from "../../../assets/Google icon.webp";
+import LoginPageImg from "../../../assets/LoginPage.png";
+import LoginPageImgWeb from "../../../assets/AuthPage_Web_1920x1080.png";
 
 import styles from "./styles.module.scss";
 

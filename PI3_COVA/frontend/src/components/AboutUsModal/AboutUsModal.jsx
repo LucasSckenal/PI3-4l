@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
-import photo1 from "../../public/lucas.png";
-import photo2 from "../../public/Luan.jpg";
+import photo1 from "../../assets/lucas.png";
+import photo2 from "../../assets/Luan.jpg";
 import { useTranslation } from "react-i18next";
 
 const team = [

@@ -13,7 +13,7 @@ import { db } from "../../api/firebase";
 import MessageInputBar from "../../components/MessageInputBar/MessageInputBar";
 import QuickMessagesCarousel from "../../components/QuickMsg/QuickMsg";
 import styles from "./styles.module.scss";
-import Ia from "../../public/IaChat.gif";
+import Ia from "../../assets/IaChat.gif";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";

@@ -19,8 +19,8 @@ import { BsBrightnessAltLow } from "react-icons/bs";
 import SymptomsCarousel from "../../components/SymptomsCarousel/SymptomsCarousel";
 import { useScreenResize } from "../../contexts/ScreenResizeProvider/ScreenResizeProvider";
 import { useTranslation } from "react-i18next";
-import defaultProfileIcon from "../../public/UserDefault.webp";
-import tutorialPreview from "../../public/tutorial-preview.png";
+import defaultProfileIcon from "../../assets/UserDefault.webp";
+import tutorialPreview from "../../assets/tutorial-preview.png";
 import TutorialModal from "../../components/tutorialModal/tutorialModal";
 import {fetchUserBasicInfo } from "../../api/firebase";
 
