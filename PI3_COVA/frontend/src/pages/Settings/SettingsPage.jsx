@@ -51,7 +51,7 @@ const SettingsPage = () => {
     localStorage.clear();
     await signOut(auth);
     console.log("Usuário deslogado com sucesso!");
-    navigate(0);
+    navigate('/', { replace: true });
   } catch (error) {
     console.error("Erro ao deslogar:", error.message);
   }
