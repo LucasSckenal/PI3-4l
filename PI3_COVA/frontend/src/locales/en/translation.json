@@ -156,7 +156,10 @@
     "update": "Update",
     "save": "Save",
     "emailLocked": "Email is locked",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "unknownBloodType": "Bloodtype Unknown",
+    "unknownGender": "Gender Unknown",
+    "unknownLocation": "Location Unknown"
   },
   "editProfile": {
     "title": "Edit Profile",

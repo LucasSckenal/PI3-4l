@@ -156,7 +156,10 @@
     "update": "Actualizar",
     "emailLocked": "Correo electrónico bloqueado",
     "save": "Guardar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "unknownBloodType": "Tipo de sangre desconocido",
+    "unknownGender": "Género desconocido",
+    "unknownLocation": "Ubicación desconocida"
   },
   "editProfile": {
     "title": "Editar perfil",

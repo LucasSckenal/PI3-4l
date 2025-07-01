@@ -157,7 +157,11 @@
     "update": "Atualizar",
     "emailLocked": "E-mail bloqueado",
     "save": "Salvar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "unknownBloodType": "Tipo sanguíneo desconhecido",
+    "unknownGender": "Gênero desconhecido",
+    "unknownLocation": "Localização desconhecida"
+
   },
   "editProfile": {
     "title": "Editar Perfil",

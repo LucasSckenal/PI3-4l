@@ -71,7 +71,7 @@ const ProfilePage = () => {
         </div>
         <div className={styles.infoItem}>
           <IoWaterOutline className={styles.icon} />
-          <span>{userData?.bloodType || "O-"}</span>
+          <span>{userData?.bloodType || t("profile.bloodTypeUnknown")}</span>
         </div>
         <div className={styles.infoItem}>
           <IoMaleFemaleOutline className={styles.icon} />
@@ -83,7 +83,7 @@ const ProfilePage = () => {
         </div>
         <div className={styles.infoItem}>
           <IoLocationOutline className={styles.icon} />
-          <span>{userData?.location || "New York, USA"}</span>
+          <span>{userData?.location || t("profile.locationUnknown")}</span>
         </div>
         <div className={styles.infoItem}>
           <IoMailOutline className={styles.icon} />
